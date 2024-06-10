@@ -1,0 +1,169 @@
+<app-breadcrumbs title="Manage Transactions" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="PendingTransactionsForm" [formGroup]="PendingTransactionsForm">
+  <div class="card rounded-4 ">
+    <div class="card-header">
+      <div class="row align-items-center g-3">
+        <div class="col-md-3">
+          <p class="fs-16 fw-medium">Pending Transactions</p>
+        </div>
+      </div>
+    </div>
+    <div class="card-body border border-dashed border-start-0 border-end-0">
+      <div class="row g-4">
+        <div class="col-md-3">
+          <label for="start_date">Service Category</label>
+          <div class="input-light">
+            <select id="category_id" class="form-select rounded-pill" formControlName="service_category">
+              <option *ngFor="let category of categorys;" [value]="category.id">{{category.name | titlecase}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <label for="start_date">Service Name</label>
+          <div class="input-light">
+            <select id="service" class="form-select rounded-pill bg-light border-light cursor-pointer"
+              formControlName="service_name">
+              <option value="" selected>Service 1</option>
+              <option value="" selected>Service 2</option>
+
+            </select>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <label for="start_date">Start Date</label>
+          <div class="input-group btn-block btn-rounded bg-light border-light">
+            <input type="text" id="start_date" mwlFlatpickr class="form-control rounded-pill" placeholder="dd/MM/yyyy"
+              formControlName="start_date" />
+          </div>
+        </div>
+        <div class="col-md-3">
+          <label for="start_date">End Date</label>
+          <div class="input-group btn-block btn-rounded bg-light border-light">
+            <input type="text" id="start_date" mwlFlatpickr class="form-control rounded-pill" placeholder="dd/MM/yyyy"
+              formControlName="end_date" />
+          </div>
+        </div>
+        <!-- app.component.html -->
+        <div class="col-md-3">
+          <label for="filter_mode" class="form-label">Filter Mode</label>
+          <div class="input-group">
+            <select id="filter_mode" class="form-select rounded-pill bg-light border-light cursor-pointer"
+              formControlName="filter_mode" (change)="onFilterModeChange()">
+              <option value="1">For Specific User</option>
+              <option value="2">For All</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-3" *ngIf="select_role">
+          <label for="specific_user_select" class="form-label">Specific User</label>
+          <div class="input-group">
+            <select id="specific_user_select" class="form-select rounded-pill bg-light border-light cursor-pointer"
+              formControlName="select_role" (change)="onUserRoleChange()">
+              <option value="1">Distributor</option>
+              <option value="2">consumer</option>
+              <option value="2">Customer</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-3" *ngIf="select_user">
+          <label for="select_user_select" class="form-label">Select User</label>
+          <div class="input-group">
+            <select id="select_user_select" class="form-select rounded-pill bg-light border-light cursor-pointer"
+              formControlName="select_user">
+              <option value="1">User 1</option>
+              <option value="2">User 2</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="md-3">
+          <div class="row col-md-auto ms-auto">
+            <div class="col d-flex align-items-center">
+              <button type="button" class="btn btn-primary me-3 btn-rounded" (click)="onSubmit()">
+                Submit
+              </button>
+              <button type="button" class="btn btn-warning btn-rounded" (click)="onReset()">
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card rounded-4">
+
+  <div class="card-header pd-3">
+    <div class="row">
+      <div class="col-12">
+        <div class="d-flex justify-content-start align-items-center gap-2">
+          <div class="search-box w-100">
+            <input type="text" class="form-control rounded-pill" placeholder="Search Transaction Id, Category, Remark"
+              #search (keyup)="onSearch(search.value)" />
+            <i class="ri-search-line search-icon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row p-2">
+      <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center gap-2">
+          <div class="d-flex align-items-center justify-content-center">
+            <label for="page" class="me-2">Show</label>
+            <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1">
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
+            <label for="page" class="ms-2">entries</label>
+          </div>
+          <button type="button" class="btn btn-success btn-rounded me-2 mb-2" (onclick)="export_to_excel()">
+            Export To Excel
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body border border-dashed border-start-0 border-end-0">
+    <div class="table-responsive">
+      <table class="table align-middle table-nowrap" id="customerTable">
+        <thead>
+          <tr>
+            <th>SR</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Transaction Id</th>
+            <th>Amount</th>
+            <th>Category</th>
+            <th>Retailer</th>
+            <th>Distributer</th>
+            <th>Remark</th>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+
+    </div>
+    <div class="row justify-content-md-between align-items-md-center mt-3">
+      <div class="col col-sm-6">
+        <p class="mb-2">
+          Showing to of entries
+        </p>
+      </div>
+      <div class="col col-sm-6">
+        <div class="text-sm-right float-sm-end listjs-pagination">
+          <ngb-pagination [collectionSize]=10 [pageSize]=10 [maxSize]="2">
+          </ngb-pagination>
+        </div>
+      </div>
+    </div>
+  </div>

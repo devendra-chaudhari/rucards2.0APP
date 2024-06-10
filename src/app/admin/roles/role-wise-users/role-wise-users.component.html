@@ -1,0 +1,190 @@
+<app-breadcrumbs title="Role-wise Users list" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-animate rounded-4">
+            <div class="card-header border-0">
+                <div class="row g-3 mb-2">
+                    <div class="col-md-6">
+                        <h4 class="fw-medium">{{role.role_name |  uppercase}} USERS LIST</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="search-box">
+                            <input class="form-control search bg-light border-light rounded-pill"
+                                   placeholder="Search by Company Name, Contact Name, Email, Mobile No">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="hstack gap-3">
+                            Show <select name="page" id="page" class="form-select rounded-4 px-4 py-1" style="max-width:80px;">
+                            <option>10</option>
+                            <option>25</option>
+                            <option>50</option>
+                            <option>100</option>
+                        </select> Entries
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+
+                        <button class="btn btn-success btn-rounded float-end me-3" style="width: 100px;"><i
+                                class="ri-file-excel-line me-1"></i> Export
+                        </button>
+                    </div>
+                </div>
+                <div class="table-responsive mt-3" simplebar>
+                    <table class="table align-middle table-nowrap">
+                        <thead>
+                        <tr>
+                            <th>SR</th>
+                            <th>Name</th>
+                            <th>Contact</th>
+                            <th>Email</th>
+                            <th>Identification</th>
+                            <th>Status</th>
+                            <th>Created At</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="cursor-pointer card-animate"
+                            *ngFor="let user of users | slice: (page-1) * pageSize : page * pageSize; let i = index;">
+                            <td>{{i + 1}}</td>
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <!-- <span class="fs-16 mb-1">{{user?.full_name | uppercase}}</span> -->
+                                    <a class="d-flex flex-column justify-content-center align-items-start" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModalScrollable" (click)="scrollModal(scrollDataModal,user)">{{user?.full_name | uppercase}}
+                                    </a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-0"> 
+                                        <i class="ri-phone-line me-1"></i>
+                                        {{user?.mobile}}
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="text-muted mb-0"> 
+                                        <i class="ri-mail-check-line me-1"></i>
+                                        {{user?.email | lowercase}}
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-0 "> PAN: {{user?.pan ?? 'N/A' | uppercase}} </span>
+                                    <span class="fs-16 mb-0 "> Aadhaar: {{user?.aadhar_no ?? 'N/A' | uppercase}} </span>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-0"> {{user?.role | uppercase}}</span>
+                                    <span class="badge rounded-pill text-bg-success"
+                                          *ngIf="user.active">Active</span>
+                                    <span class="badge rounded-pill text-bg-danger"
+                                          *ngIf="!user.active">Inactive</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <!-- <span class="fs-16 mb-0"> DOB: {{user?.dob | date:'dd-MM-yyyy'}}</span> -->
+                                    <span class="text-muted mb-0"> {{user?.created_at | dateago}}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <a class="btn bg-info btn-sm me-2 btn-rounded" title="Assign Permission" 
+                                [routerLink]="['/admin/roles/assign-user-permission', user?.id, user?.full_name]">
+                                    <i class="ri-edit-line align-middle text-white"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row justify-content-md-between align-items-md-center mt-2">
+                    <div class="col col-sm-6">
+                        <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                            Showing {{ (page - 1) * pageSize + 1 }} to {{ Math.min(page * pageSize, totalUsers) }}
+                            of {{ totalUsers }} entries
+                        </div>
+                    </div>
+
+
+                    <div class="col col-sm-6">
+                        <div class="text-sm-right float-sm-end">
+                            <ngb-pagination [collectionSize]=totalUsers [(page)]="page" [pageSize]=pageSize
+                                            [maxSize]="2">
+                            </ngb-pagination>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Scroll Modal -->
+<ng-template #scrollDataModal role="document" let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalScrollableTitle">View  Permissions</h5>
+        <button type="button" class="btn-close" aria-hidden="true" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+
+        <div *ngFor="let group of groupPermissionsByGroupName() | keyvalue">
+            <div class="col-12">
+              <div class="card card-animate">
+                <div class="card-header">
+                  <h5>
+                    {{ group.key }}
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <ngx-simplebar style="max-height: 300px">
+                    <div *ngFor="let permission of group.value">
+                      <label class="mx-4">
+                        <!-- <input
+                          class="check"
+                          type="checkbox"
+                          [name]="permission.display_name"
+                          [id]="permission.display_name"
+                          [checked]="permission.active"
+                        /> -->
+                        <span>
+                            {{ permission.display_name }}
+                        </span>
+                        <span  *ngIf="permission.active">
+                            <span class="badge rounded-pill text-bg-success">Active</span>
+                        </span>
+                        <span  *ngIf="permission.active == false">
+                            <span class="badge rounded-pill text-bg-danger">Inactive</span>
+                        </span>
+                      </label>
+                    </div>
+                  </ngx-simplebar>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn rounded-4" style="background-color:#112558; color: white;" (click)="modal.close('Close click')">Close</button>
+    </div>
+</ng-template>

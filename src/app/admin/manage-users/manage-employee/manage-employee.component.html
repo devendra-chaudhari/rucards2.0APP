@@ -1,0 +1,484 @@
+<app-breadcrumbs title="Manage Employee" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+
+<div class="card rounded-4 p-3">
+    <div class="card-header border-0">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <h4 class="fw-medium">Manage Employee User</h4>
+            </div>
+            <div class="col-md-6">
+                <div class="float-end">
+                    <button class="btn btn-rounded  mb-2"  style="background-color: #3FA5D3; color: white;"  (click)="centerAddModal(AddEmployee)">
+                        Add Employee
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-start align-items-center gap-2">
+                    <div class="search-box w-100">
+                        <input class="form-control rounded-pill search bg-light border-light"
+                               placeholder="Search User Details By Username..." >
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center gap-2">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <label for="page" class="me-2">Show</label>
+                        <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1" [(ngModel)]="page_size" (change)="onChange()">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <label for="page" class="ms-2">entries</label>
+                    </div>
+                    <button type="button" class="btn btn-success  btn-rounded me-2 mb-2" >
+                        Export
+                    </button>
+                </div>
+            </div>
+        </div>
+        <ngx-simplebar class="table-responsive mt-3">
+            <table class="table table-sm table-striped table-hover align-middle table-nowrap">
+                <thead>
+                    <tr>
+                        <th class="text-uppercase">#</th>
+                        <th class="text-uppercase cursor-pointer">
+                            Name
+                        </th>
+                        <th class="text-uppercase">Username</th>
+                        <th class="text-uppercase">Email Id</th>
+                        <th class="text-uppercase">Mobile</th>
+                        <th class="text-uppercase">Status</th>
+                        <th class="text-uppercase">Created At</th>
+                        <th class="text-uppercase">Action</th>
+                    </tr>
+                </thead>
+                <tbody style="min-height: 300px;">
+                    <tr class="cursor-pointer card-animate"
+                        *ngFor="let user of employees ; let i = index;">
+                        <td>{{(page - 1) * page_size + i+ 1 }}</td>
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                <span class="fs-16 mb-1">{{user?.name | uppercase}}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                <span class=" mb-0">&#64; {{user?.username | uppercase}}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                <span class="mb-0">&#64; {{user?.email_id | uppercase}}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                                <span class="fs-16 mb-0"> <i
+                                                        class="ri-phone-line me-1"></i>{{user?.mobile_no}}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="badge rounded-pill text-bg-success"
+                                          *ngIf="user.active">Active</span>
+                                <span class="badge rounded-pill text-bg-danger"
+                                      *ngIf="!user.active">Inactive</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                <span class="mb-0"> {{user?.created_at | dateago}}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn bg-info btn-sm me-2 btn-rounded" title="Edit User Details" (click)="centerEditModal(EditEmployee,user)">
+                                <i class="ri-edit-line align-middle text-white"></i>
+                            </button>
+                            <button class="btn bg-primary btn-sm me-2 btn-rounded" title="Reset Password" (click)="centerResetPasswordModal(ResetPasswordEmployee, user)">
+                                <i class="ri-key-2-line align-middle text-white"></i>
+                            </button>
+                            <button class="btn bg-success btn-sm me-2 btn-rounded" title="Map Department" (click)="centerResetPasswordModal(MapDepartmentEmployee, user)">
+                                <i class="ri-mind-map align-middle text-white"></i>
+                            </button>
+                            <button class="btn  btn-danger btn-sm me-2 btn-rounded" title="Delete User" (click)="centerModal(DeleteEmployee)">
+                                <i class="ri-delete-bin-line align-middle text-white"></i>
+                            </button>
+                        </td>
+                        <ng-template #DeleteEmployee role="document" let-modal>
+                            <div class="modal-header">
+                                <h5 class="modal-title mt-0">Delete Sub Admin User</h5>
+                                <button
+                                        type="button"
+                                        class="btn-close"
+                                        aria-hidden="true"
+                                        (click)="modal.dismiss('Cross click')"
+                                ></button>
+                            </div>
+                            <div class="modal-body">
+                                <h5>Do You Want to Delete Sub Admin Username is {{user?.username}}??</h5>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" (click)="modal.close('Close click')">
+                                    No
+                                </button>
+                                <button type="button" class="btn btn-primary" (click)="deleteEmployee(user)">
+                                    Yes
+                                </button>
+                            </div>
+                        </ng-template>
+                    </tr>
+                </tbody>
+            </table>
+        </ngx-simplebar>
+        <div class="row justify-content-md-between align-items-md-center mt-2">
+            <div class="col col-sm-4">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    Showing {{ (page - 1) * page_size + 1 }} to {{ getMax() }} of {{ total }} entries
+                </div>
+            </div>
+
+            <div class="col col-sm-4">
+                <div class="text-sm-right float-sm-end listjs-pagination">
+                    <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="page_size" [maxSize]="2" (pageChange)="onPageChange($event)">
+                    </ngb-pagination>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<ng-template #AddEmployee role="document" let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title mt-0">Create Employee User</h5>
+        <button
+                type="button"
+                class="btn-close"
+                aria-hidden="true"
+                (click)="modal.dismiss('Cross click')"
+        ></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="AddEmployeeForm">
+            <div class="row mb-3 mt-4">
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <label for="name">
+                            Full Name
+                            <span class="text-danger mx-2">
+                                *
+                            </span>
+                        </label>
+                        <input type="text" maxlength="20" name="name" id="name" class="form-control rounded-4"
+                               placeholder="Enter Name" formControlName="name">
+                        <div *ngIf="isAddEmployeeFormSubmit && af['name'].errors" class="text-danger mt-1">
+                            <div *ngIf="af['name'].errors['required']">Name is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 me-2">
+                        <label for="father_name">
+                            Father Name
+                            <span class="text-danger mx-2">
+                                *
+                            </span>
+                        </label>
+                        <input type="text" maxlength="20" name="father_name" id="father_name" class="form-control rounded-4"
+                               placeholder="Enter Father Name" formControlName="father_name">
+                        <div *ngIf="isAddEmployeeFormSubmit && af['father_name'].errors" class="text-danger mt-1">
+                            <div *ngIf="af['father_name'].errors['required']">Father Name is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 ">
+                        <label for="email_id">
+                            Email Id
+                            <span class="text-danger mx-2">
+                            *
+                        </span>
+                        </label>
+                        <input type="text" maxlength="20" name="email_id" id="email_id" class="form-control rounded-4"
+                               placeholder="Enter Email Id" formControlName="email_id">
+                        <div *ngIf="isAddEmployeeFormSubmit && af['email_id'].errors" class="text-danger mt-1">
+                            <div *ngIf="af['email_id'].errors['required']">Email ID is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12  ">
+                        <label for="mobile_no">
+                            Mobile No
+                            <span class="text-danger mx-2">
+                            *
+                        </span>
+                        </label>
+                        <input type="text" maxlength="20" name="mobile_no" id="mobile_no" class="form-control rounded-4"
+                               placeholder="Enter Mobile Number" formControlName="mobile_no">
+                        <div *ngIf="isAddEmployeeFormSubmit && af['mobile_no'].errors" class="text-danger mt-1">
+                            <div *ngIf="af['mobile_no'].errors['required']">Mobile Number is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12  ">
+                        <label for="gender">
+                            Gender
+                            <span class="text-danger mx-2">
+                            *
+                        </span>
+                        </label>
+                        <select name="gender" id="gender" class="form-select rounded-4" formControlName="gender">
+                            <option value="">select gender</option>
+                            <option value="MALE">MALE</option>
+                            <option value="FEMALE">FEMALE</option>
+                            <option value="OTHER">OTHER</option>
+                        </select>
+                        <div *ngIf="isAddEmployeeFormSubmit && af['gender'].errors" class="text-danger mt-1">
+                            <div *ngIf="af['gender'].errors['required']">Gender is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center m-3">
+                        <button type="button" class="btn btn-danger btn-rounded mx-2" (click)="modal.close('Close click')">
+                            Cancel
+                        </button>
+                        <button class="btn btn-primary btn-rounded" (click)="onAddEmployeeSubmit();">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<ng-template #EditEmployee role="document" let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title mt-0">Create Sub Admin User</h5>
+        <button
+                type="button"
+                class="btn-close"
+                aria-hidden="true"
+                (click)="modal.dismiss('Cross click')"
+        ></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="EditEmployeeForm">
+            <div class="row mb-3 mt-4">
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <label for="name">
+                            Full Name
+                            <span class="text-danger mx-2">
+                                *
+                            </span>
+                        </label>
+                        <input type="text" maxlength="20" name="name" id="name" class="form-control rounded-4"
+                               placeholder="Enter Name" formControlName="name">
+                        <div *ngIf="isEditEmployeeFormSubmit && ef['name'].errors" class="text-danger mt-1">
+                            <div *ngIf="ef['name'].errors['required']">Name is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 me-2">
+                        <label for="father_name">
+                            Father Name
+                            <span class="text-danger mx-2">
+                                *
+                            </span>
+                        </label>
+                        <input type="text" maxlength="20" name="father_name" id="father_name" class="form-control rounded-4"
+                               placeholder="Enter Father Name" formControlName="father_name">
+                        <div *ngIf="isEditEmployeeFormSubmit && ef['father_name'].errors" class="text-danger mt-1">
+                            <div *ngIf="ef['father_name'].errors['required']">Father Name is required.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 ">
+                        <label for="email_id">
+                            Email Id
+                            <span class="text-danger mx-2">
+                            *
+                        </span>
+                        </label>
+                        <input type="text" maxlength="20" name="email_id" id="email_id" class="form-control rounded-4"
+                               placeholder="Enter Email Id" formControlName="email_id">
+                        <div *ngIf="isEditEmployeeFormSubmit && ef['email_id'].errors" class="text-danger mt-1">
+                            <div *ngIf="ef['email_id'].errors['required']">Email ID is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12  ">
+                        <label for="mobile_no">
+                            Mobile No
+                            <span class="text-danger mx-2">
+                            *
+                        </span>
+                        </label>
+                        <input type="text" maxlength="20" name="mobile_no" id="mobile_no" class="form-control rounded-4"
+                               placeholder="Enter Mobile Number" formControlName="mobile_no">
+                        <div *ngIf="isEditEmployeeFormSubmit && ef['mobile_no'].errors" class="text-danger mt-1">
+                            <div *ngIf="ef['mobile_no'].errors['required']">Mobile Number is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12  ">
+                        <label for="gender">
+                            Gender
+                            <span class="text-danger mx-2">
+                            *
+                        </span>
+                        </label>
+                        <select name="gender" id="gender" class="form-select rounded-4" formControlName="gender">
+                            <option value="">select gender</option>
+                            <option value="MALE">MALE</option>
+                            <option value="FEMALE">FEMALE</option>
+                            <option value="OTHER">OTHER</option>
+                        </select>
+                        <div *ngIf="isEditEmployeeFormSubmit && ef['gender'].errors" class="text-danger mt-1">
+                            <div *ngIf="ef['gender'].errors['required']">Gender is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center m-3">
+                        <button type="button" class="btn btn-danger btn-rounded mx-2" (click)="modal.close('Close click')">
+                            Cancel
+                        </button>
+                        <button class="btn btn-primary btn-rounded" (click)="onEditEmployeeSubmit();">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</ng-template>
+
+<ng-template #ResetPasswordEmployee role="document" let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title mt-0">Reset Sub Admin User Password</h5>
+        <button
+                type="button"
+                class="btn-close"
+                aria-hidden="true"
+                (click)="modal.dismiss('Cross click')"
+        ></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="ResetPasswordEmployeeForm">
+            <div class="row mb-3 mt-4">
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <label for="password">
+                            Password
+                            <span class="text-danger mx-2">
+                                *
+                            </span>
+                        </label>
+                        <input type="text" maxlength="20" name="password" id="password" class="form-control rounded-4"
+                               placeholder="Enter Password" formControlName="password">
+                        <div *ngIf="isResetPassEmployeeFormSubmit && rpf['password'].errors" class="text-danger mt-1">
+                            <div *ngIf="rpf['password'].errors['required']">Password is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label for="confirm_password">
+                            Confirm Password
+                            <span class="text-danger mx-2">
+                                *
+                            </span>
+                        </label>
+                        <input type="text" maxlength="20" name="confirm_password" id="confirm_password" class="form-control rounded-4"
+                               placeholder="Enter Confirm Password" formControlName="confirm_password">
+                        <div *ngIf="isResetPassEmployeeFormSubmit && rpf['confirm_password'].errors" class="text-danger mt-1">
+                            <div *ngIf="rpf['confirm_password'].errors['required']">Confirm Password is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center m-3">
+                        <button type="button" class="btn btn-danger btn-rounded mx-2" (click)="modal.close('Close click')">
+                            Cancel
+                        </button>
+                        <button class="btn btn-primary btn-rounded" (click)="onResetPasswordEmployeeSubmit();">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</ng-template>
+<ng-template #MapDepartmentEmployee role="document" let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title mt-0">Map Employee User To Department</h5>
+        <button
+                type="button"
+                class="btn-close"
+                aria-hidden="true"
+                (click)="modal.dismiss('Cross click')"
+        ></button>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="MapDepartmentEmployeeForm">
+            <div class="row mb-3 mt-4">
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <label for="department_name">
+                            Department Name
+                            <span class="text-danger mx-2">
+                                *
+                            </span>
+                        </label>
+                        <select name="department_name" id="department_name" class="form-control rounded-4" formControlName="department_name"
+                                (change)="onDepartmentSelectionChange()">
+                            <option value="" selected>Select Department</option>
+                            <ng-container *ngFor="let department of departments">
+                                    <option value="{{ department.id }}">{{ department.name }}</option>
+                            </ng-container>
+                        </select>
+                        <div *ngIf="isMapDepartmentEmployeeFormSubmit && muf['department_name'].errors" class="text-danger mt-1">
+                            <div *ngIf="muf['department_name'].errors['required']">Department is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label for="role_name">
+                            Role Name
+                            <span class="text-danger mx-2">
+                                *
+                            </span>
+                        </label>
+                        <select name="role_name" id="role_name" class="form-control rounded-4" formControlName="role_name">
+                            <option value="" selected>Select Role</option>
+                            <ng-container *ngFor="let role of roles">
+                                <option value="{{ role.id }}">{{ role.name }}</option>
+                            </ng-container>
+                        </select>
+                        <div *ngIf="isMapDepartmentEmployeeFormSubmit && muf['role_name'].errors" class="text-danger mt-1">
+                            <div *ngIf="muf['role_name'].errors['required']">Department is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center m-3">
+                        <button type="button" class="btn btn-danger btn-rounded mx-2" (click)="modal.close('Close click')">
+                            Cancel
+                        </button>
+                        <button class="btn btn-primary btn-rounded" (click)="onMapDepartmentEmployee()">
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</ng-template>
+

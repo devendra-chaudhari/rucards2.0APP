@@ -1,0 +1,253 @@
+<app-breadcrumbs title="Manage Advertisement" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="card rounded-4">
+  <div class="card-header">
+    <div class="row align-items-center g-3">
+      <div class="col-md-3">
+        <p class="fs-16 fw-medium">Manage Advertisement Slider</p>
+      </div>
+      <div class="col-md-auto ms-auto">
+        <div class="d-flex gap-2">
+          <div class="search-box">
+            <input type="text" class="form-control rounded-pill" placeholder="Search..." #search
+              (keyup)="onSearch(search.value)" />
+            <i class="ri-search-line search-icon"></i>
+          </div>
+          <button class="btn btn-primary btn-rounded" (click)="openManageAdvertisement(add_advertisement)">
+            Add Advertisement
+          </button>
+          <button class="btn btn-success btn-rounded" (click)="export_to_excel()">
+            Export
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row p-2">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center gap-2">
+        <div class="d-flex align-items-center justify-content-center">
+          <label for="page" class="me-2">Show</label>
+          <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+          <label for="page" class="ms-2">entries</label>
+        </div>
+        <button type="button" class="btn btn-success btn-rounded me-2 mb-2" (onclick)="export_to_excel()">
+          Export To Excel
+        </button>
+
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div>
+      <div class="table-responsive">
+        <table class="table align-middle table-nowrap" id="customerTable">
+          <thead>
+            <tr>
+              <th>SR</th>
+              <th class="cursor-pointer">Title</th>
+              <th>Description</th>
+              <th>Image</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="
+                let advertisement of advertisements.slice(
+                  (page - 1) * pageSize,
+                  page * pageSize
+                );
+                let i = index
+              ">
+              <tr class="cursor-pointer card-animate">
+                <td>{{ i + 1 }}</td>
+                <td>{{ advertisement.title }}</td>
+                <td>{{ advertisement.description }}</td>
+                <td>{{ advertisement.image_url }}</td>
+                <td>{{ advertisement.start_date | date : "dd/MM/yyyy" }}</td>
+                <td>{{ advertisement.end_date | date : "dd/MM/yyyy" }}</td>
+                <td>
+                  <ui-switch (valueChange)="onValueChange($event, advertisement)"
+                    [checked]="advertisement.status"></ui-switch>
+                </td>
+                <td>
+                  <button class="btn btn-primary btn-sm me-2 btn-rounded" title="Edit" (click)="
+                      editManageAdvertisement(editadvertisement, advertisement)
+                    ">
+                    <i class="ri-edit-line align-middle text-white"></i>
+                  </button>
+                  <button class="btn bg-danger btn-sm me-2 btn-rounded" title="Delete"
+                    (click)="deleteAdvertisement(advertisement.id)">
+                    <i class="ri-delete-bin-line align-middle text-white"></i>
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row justify-content-md-between align-items-md-center mt-3">
+      <div class="col col-sm-6">
+        <p class="mb-2">
+          Showing {{ (page - 1) * pageSize + 1 }} to {{ getMax() }} of
+          {{ advertisements?.length ?? 0 }}
+          entries
+        </p>
+      </div>
+      <div class="col col-sm-6">
+        <div class="text-sm-right float-sm-end listjs-pagination">
+          <ngb-pagination [collectionSize]="advertisements?.length ?? 0" [(page)]="page" [pageSize]="pageSize"
+            [maxSize]="2">
+          </ngb-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #add_advertisement let-offcanvas>
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title">Add Advertisement</h4>
+    <button type="button" class="btn btn-primary btn-rounded ms-auto" (click)="offcanvas.close('Close click')">
+      Close
+    </button>
+  </div>
+  <div class="offcanvas-body">
+    <form class="advertisementForm" [formGroup]="advertisementForm">
+      <div class="mb-3">
+        <label for="exampleDropdownFormmessage">Title</label>
+        <input type="text" class="form-control rounded-pill" id="exampleDropdownFormmessage" placeholder="Title"
+          formControlName="title" />
+      </div>
+      <div class="mb-3">
+        <label for="exampleDropdownFormmessage">Description</label>
+        <input type="text" class="form-control rounded-pill" id="exampleDropdownFormmessage" placeholder="Description"
+          formControlName="description" />
+      </div>
+      <div class="mb-3">
+        <label for="start_date">Start Date <small class="text-muted">(dd-mm-yyyy)</small><span
+            class="text-danger">*</span></label>
+        <div class="input-group btn-block btn-rounded me-5 w-100">
+          <input type="text" id="start_date" mwlFlatpickr class="form-control rounded-pill" placeholder="dd/MM/yyyy"
+            formControlName="start_date" />
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="end_date">End Date <small class="text-muted">(dd-mm-yyyy)</small><span
+            class="text-danger">*</span></label>
+        <div class="input-group btn-block btn-rounded me-5 w-100">
+          <input type="text" id="end_date" mwlFlatpickr class="form-control rounded-pill" placeholder="dd/MM/yyyy"
+            formControlName="end_date" />
+        </div>
+      </div>
+      <div class="mb-5">
+        <div class="card rounded-4">
+          <div class="card-body">
+            <div class="col-md-12 text-center">
+              Drag files here
+              <a href="javascript:void(0)" (click)="file.click()">
+                or click to open
+              </a>
+              <input type="file" #file style="display: none" formControlName="image_url" />
+            </div>
+          </div>
+        </div>
+        <p class="text-center text-muted">
+          PNG, JPEG File Supported Upto 100kb
+        </p>
+      </div>
+      <div class="mb-5">
+        <label for="exampleDropdownFormmessage">Detail Description</label>
+        <textarea class="form-control rounded-4" id="exampleDropdownFormmessage" placeholder="Detailed Description"
+          formControlName="detail_description"></textarea>
+      </div>
+      <div class="mb-3">
+        <div class="text-end">
+          <button type="button" class="btn btn-primary btn-rounded" (click)="onSubmit()">
+            Save
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #editadvertisement let-offcanvas>
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title">Edit Advertisement</h4>
+    <button type="button" class="btn btn-primary btn-rounded ms-auto" (click)="offcanvas.close('Close click')">
+      Close
+    </button>
+  </div>
+  <div class="offcanvas-body">
+    <form class="editAdvertisementForm" [formGroup]="editAdvertisementForm">
+      <div class="mb-3">
+        <label for="exampleDropdownFormmessage">Title</label>
+        <input type="text" class="form-control rounded-pill" id="exampleDropdownFormmessage" placeholder="Title"
+          formControlName="title" />
+      </div>
+      <div class="mb-3">
+        <label for="exampleDropdownFormmessage">Description</label>
+        <input type="text" class="form-control rounded-pill" id="exampleDropdownFormmessage" placeholder="Description"
+          formControlName="description" />
+      </div>
+      <div class="mb-3">
+        <label for="start_date">Start Date <small class="text-muted">(dd-mm-yyyy)</small><span
+            class="text-danger">*</span></label>
+        <div class="input-group btn-block btn-rounded me-5 w-100">
+          <input type="text" id="start_date" mwlFlatpickr class="form-control rounded-pill" placeholder="dd/MM/yyyy"
+            formControlName="start_date" />
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="end_date">End Date <small class="text-muted">(dd-mm-yyyy)</small><span
+            class="text-danger">*</span></label>
+        <div class="input-group btn-block btn-rounded me-5 w-100">
+          <input type="text" id="end_date" mwlFlatpickr class="form-control rounded-pill" placeholder="dd/MM/yyyy"
+            formControlName="end_date" />
+        </div>
+      </div>
+      <div class="mb-5">
+        <div class="card rounded-4">
+          <div class="card-body">
+            <div class="col-md-12 text-center">
+              <div class="text-center mt-4">
+                <div class="d-inline-flex">
+                  <a href="javascript:void(0)" >
+                    Upload Advertisement Image
+                  </a>
+                    <input type="file" id="image_url" hidden accept="image/png, image/jpeg" formControlName="image_url"
+                      (change)="uploadAdvertisementImage($event)">
+                </div>
+                <br>
+                <small class="text-muted">Allowed JPG,JPEG or PNG. Max size of 500KB</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mb-5">
+        <label for="exampleDropdownFormmessage">Detail Description</label>
+        <textarea class="form-control rounded-4" id="exampleDropdownFormmessage" placeholder="Detailed Description"
+          formControlName="detail_description"></textarea>
+      </div>
+      <div class="mb-3">
+        <div class="text-end">
+          <button type="button" class="btn btn-primary btn-rounded" (click)="onSubmit()">
+            Save
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>

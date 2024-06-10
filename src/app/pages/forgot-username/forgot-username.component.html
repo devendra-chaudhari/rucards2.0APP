@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-center flex-column px-3">
+    <div class="text-center">
+      <i class="ri ri-record-circle-line"></i>
+    </div>
+    <div class="alert alert-borderless alert-warning text-center mb-4 mx-2 rounded-pill" role="alert"
+         *ngIf="!usernameFound">
+        <span>Kindly fill all required information</span>
+    </div>
+    <div class="alert alert-borderless alert-success text-center mb-4 mx-2 rounded-pill" role="alert"
+         *ngIf="usernameFound">
+        <span>List of Related User Accounts</span>
+    </div>
+
+    <form [formGroup]="forgotUsernameForm" *ngIf="!usernameFound">
+        <div class="row gy-3">
+            <div class="col-md-12">
+                <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                <input class="form-control rounded-pill fw-semibold"
+                       placeholder="Enter Email Address" id="email" formControlName="email">
+                <div *ngIf="isSubmitted && fu['email'].errors" class="text-danger">
+                    <div *ngIf="fu['email'].errors['required']">Email is required</div>
+                    <div *ngIf="fu['email'].errors['email']">Invalid Email Address</div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <label for="mobile" class="form-label">Mobile No <span class="text-danger">*</span></label>
+                <input class="form-control rounded-pill fw-semibold" maxlength="10" appNumberOnly
+                       placeholder="Enter Mobile No" id="mobile" formControlName="mobile">
+                <div *ngIf="isSubmitted && fu['mobile'].errors" class="text-danger">
+                    <div *ngIf="fu['mobile'].errors['required']">Mobile No is required</div>
+                    <div *ngIf="fu['mobile'].errors['pattern']">Invalid Mobile No</div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <button class="btn btn-primary fs-16 w-50 btn-rounded" (click)="submit()">Submit</button>
+        </div>
+    </form>
+
+    <div class="card rounded-4 bg-transparent border" *ngIf="usernameFound">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center border-bottom mb-2 py-0"
+                 *ngFor="let item of usernameData">
+                <p class="fs-16 fw-medium"><i class="ri-user-line me-1"></i>{{item.username}}</p>
+                <i class="ri-file-copy-line fs-16 cursor-pointer" (click)="copyUsername(item.username)"></i>
+            </div>
+        </div>
+    </div>
+
+</div>

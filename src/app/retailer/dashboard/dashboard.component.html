@@ -1,0 +1,257 @@
+<app-breadcrumbs title="Retailer Dashboard" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="row dash-nft">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="card overflow-hidden card-animate rounded-4">
+                    <div class="card-body bg-marketplace d-flex">
+                        <div class="flex-grow-1">
+                            <h4 class="fs-18 lh-base mb-0">Welcome Back <span
+                                    class="text-primary">{{user.name | titlecase}}</span>
+                            </h4>
+                            <p class="mb-0 mt-2 pt-1 text-muted">There's no shortage of remarkable ideas, what's missing
+                                is the will to execute them</p>
+                            <div class="d-flex gap-3 mt-4">
+                                <a routerLink="/users/profile" class="btn btn-rounded btn-primary">Manage Profile </a>
+                                <a routerLink="/users/manage-account" class="btn btn-rounded btn-soft-primary">
+                                    Change Password</a>
+                            </div>
+                        </div>
+                       <i class="ri ri-record-circle-line"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-height-100 card-animate rounded-4">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar-sm flex-shrink-0">
+                                <span class="avatar-title bg-soft-primary rounded fs-3">
+                                    <i class="bx bx-wallet text-primary"></i>
+                                </span>
+                            </div>
+                            <div class="flex-grow-1 ps-3">
+                                <h5 class="text-muted text-uppercase fs-13 mb-0">GPR Card Balance</h5>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-1">
+                            <h4 class="fs-22 fw-semibold ff-secondary mb-0">
+                                &#8377; <span class="counter-value">0</span>
+                            </h4>
+                            <p class="mt-4 mb-0 text-muted">
+                                <span class="badge bg-soft-danger text-danger mb-0 me-1">
+                                    <i class="align-middle ri-arrow-down-line"></i>
+                                    3.96% </span> vs. previous month</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card card-height-100 card-animate rounded-4 cursor-pointer"
+                     (click)="openWallet(walletDetails)">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar-sm flex-shrink-0">
+                                <span class="avatar-title bg-soft-primary rounded fs-3">
+                                    <i class="bx bx-wallet text-primary"></i>
+                                </span>
+                            </div>
+                            <div class="flex-grow-1 ps-3">
+                                <h5 class="text-muted text-uppercase fs-13 mb-0">Total Wallet Balance</h5>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-1">
+                            <h4 class="fs-22 fw-semibold ff-secondary mb-0">
+                                <span class="counter-value" >{{ total_balance ?? 0 | currency:'INR': 'symbol'}}</span>
+                            </h4>
+                            <p class="mt-4 mb-0 text-muted"><span class="badge bg-soft-success text-success mb-0 me-1">
+                                <i class="align-middle ri-arrow-up-line"></i>
+                                16.24% </span> vs. previous month</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card crm-widget rounded-4">
+                    <div class="card-body p-0">
+                        <div class="row row-cols-md-3 row-cols-1">
+                            <div class="col col-lg">
+                                <owl-carousel-o [options]="customOptions">
+                                    <ng-template carouselSlide *ngFor="let item of mySeries">
+                                        <div class="py-4 px-3 border-end">
+                                            <h5 class="text-muted text-uppercase fs-13">{{item.title}}
+                                                <i class="ri-checkbox-circle-line fs-18 float-end align-middle text-success"></i>
+                                            </h5>
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <i class="ri ri-record-circle-line"></i>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <h2 class="mb-0 fw-semibold">
+                                                        {{item.count}}</h2>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </owl-carousel-o>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xxl-12">
+                <div class="card rounded-4">
+                    <div class="card-body p-0">
+                        <div class="row g-0">
+                            <div class="col-12">
+                                <div class="">
+                                    <div class="card-header border-0 align-items-center d-flex">
+                                        <h4 class="card-title mb-0 flex-grow-1">Revenue Analysis</h4>
+                                        <div class="hstack gap-1">
+                                            <button type="button" class="btn btn-rounded btn-soft-secondary btn-sm"
+                                                    (click)="setmarketplacevalue('all')">
+                                                ALL
+                                            </button>
+                                            <button type="button" class="btn btn-rounded btn-soft-secondary btn-sm"
+                                                    (click)="setmarketplacevalue('1M')">
+                                                1M
+                                            </button>
+                                            <button type="button" class="btn btn-rounded btn-soft-secondary btn-sm"
+                                                    (click)="setmarketplacevalue('6M')">
+                                                6M
+                                            </button>
+                                            <button type="button" class="btn btn-rounded btn-soft-primary btn-sm"
+                                                    (click)="setmarketplacevalue('1Y')">
+                                                1Y
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="row g-0 text-center">
+                                        <div class="col-6 col-sm-4">
+                                            <div class="p-3 border border-dashed border-start-0">
+                                                <h5 class="mb-1">15k</h5>
+                                                <p class="text-muted mb-0">Gift Cards</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-sm-4">
+                                            <div class="p-3 border border-dashed border-start-0">
+                                                <h5 class="mb-1">1k</h5>
+                                                <p class="text-muted mb-0">GPR Cards</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-6 col-sm-4">
+                                            <div class="p-3 border border-dashed border-end-0">
+                                                <h5 class="mb-1">k</h5>
+                                                <p class="text-muted mb-0">BBPS</p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <apx-chart [series]="MarketplaceChart.series" [chart]="MarketplaceChart.chart"
+                                               [dataLabels]="MarketplaceChart.dataLabels"
+                                               [stroke]="MarketplaceChart.stroke"
+                                               [xaxis]="MarketplaceChart.xaxis" [colors]="MarketplaceChart.colors"
+                                               dir="ltr">
+                                    </apx-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #walletDetails let-offcanvas>
+    <div class="offcanvas-header shadow-md">
+        <p class="fs-18 fw-medium">Wallet Balance</p>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <ngx-simplebar class="offcanvas-body p-3" style="max-height: calc(100vh - 73px); background-color: #F2F3F4;">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-animate rounded-4" *ngFor="let wallet of wallets; let i = index;">
+                    <div class="card-body" >
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <p class="fw-medium fs-18 mb-0">{{wallet.name}}</p>
+                                <h2 class="mt-4 ff-secondary fw-semibold mb-1">{{wallet.balance}}</h2>
+                                <span *ngIf="!wallet?.active" class="badge badge-label bg-success">
+                                    <i class="mdi mdi-circle-medium"></i>
+                                    Active
+                                </span>
+                                <span *ngIf="wallet?.active" class="badge badge-label bg-danger">
+                                    <i class="mdi mdi-circle-medium"></i>
+                                    Inactive
+                                </span>
+                            </div>
+                            <div>
+                                <div class="avatar-sm flex-shrink-0">
+                                    <span class="avatar-title bg-light rounded-circle fs-2 cursor-pointer"
+                                          (click)="openCardModal(cardModal)" title="Fund Request">
+                                        <i class="bx bx-cog text-black"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ngx-simplebar>
+</ng-template>
+
+
+<ng-template #cardModal let-modal>
+    <div class="modal-content">
+        <div class="modal-header">
+            <p class="fs-24">Fund Request</p>
+            <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+            <form action="javascript:void(0);">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="balance_amount" class="form-label">Balance Amount</label>
+                        <input class="form-control rounded-pill" placeholder="Enter Balance Amount" id="balance_amount"
+                               appNumberOnly>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="transaction_details" class="form-label">Transaction Details</label>
+                        <input type="text" class="form-control rounded-pill" placeholder="Enter Transaction Details"
+                               id="transaction_details">
+                    </div>
+                    <div class="col-md-12">
+                        <label for="remark" class="form-label">Remarks</label>
+                        <input type="text" class="form-control rounded-pill" placeholder="Enter Remark" id="remark">
+                    </div>
+
+                    <div class="col-12">
+                        <label for="attachment" class="form-label">Trxn Attechment</label>
+                        <input type="file" class="form-control rounded-pill" id="attachment">
+                    </div>
+
+                    <div class="col-lg-12">
+                        <div class="hstack gap-2 justify-content-end">
+                            <button type="button" class="btn btn-rounded btn-light" data-bs-dismiss="modal"
+                                    (click)="modal.close('Close click')">Close
+                            </button>
+                            <button type="submit" class="btn btn-rounded btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>

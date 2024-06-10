@@ -1,0 +1,162 @@
+<app-breadcrumbs title="Roles Management" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card rounded-4">
+            <div class="card-body p-0">
+                <div class="row">
+                    <div class="col col-lg">
+                        <owl-carousel-o [options]="customOptions">
+
+                            <ng-template carouselSlide *ngFor="let item of statistics_list">
+                                <div class="py-4 px-3 border-end">
+                                    <h5 class="text-muted text-uppercase fs-13">{{ item?.name}}
+                                        <i class="ri-checkbox-circle-line fs-18 float-end align-middle text-success"></i>
+                                    </h5>
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <i class="ri-admin-line display-6 text-muted"></i>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h2 class="mb-0">{{ item?.user_count}}</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </owl-carousel-o>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card rounded-4">
+    <div class="card-header">
+        <div class="row align-items-center g-3">
+            <div class="col-md-3">
+                <p class="fs-16 fw-medium">Roles</p>
+            </div>
+            <div class="col-md-auto ms-auto">
+                <div class="d-flex gap-2">
+                    <div class="search-box">
+                        <input type="text" class="form-control rounded-pill" placeholder="Search..."
+                               #search (keyup)="onSearch(search.value)">
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive table-card">
+            <table class="table align-middle table-nowrap">
+                <thead>
+                <tr>
+                    <th>SR</th>
+                    <th (click)="sort('name')" class="cursor-pointer">
+                        Role <i class='bx bxs-sort-alt fs-12'></i>
+                    </th>
+                    <th>Prefix</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="cursor-pointer card-animate"
+                    *ngFor="let role of roles | slice: (page-1) * pageSize : page * pageSize; index as i">
+                    <td>{{(page - 1) * pageSize + i + 1 }}</td>
+                    <td>
+                        <a class="border-0" data-bs-toggle="modal"
+                            data-bs-target="#exampleModalScrollable" (click)="scrollModal(scrollDataModal,role)">{{ role?.name.replace('_', ' ') | titlecase }}
+                        </a>
+                    </td>
+                    <td>{{ role?.prefix }}</td>
+                    <td>Manage {{ role?.name.replace('_', ' ') | titlecase }} Activities</td>
+                    <td>
+                        <span class="badge rounded-pill text-bg-success">Active</span>
+                    </td>
+                    <td>
+                        <a class="btn btn-dark btn-sm btn-icon btn-rounded me-1"
+                           [routerLink]="['/admin/roles/default-permission', role?.id,role?.name]"
+                           [title]="'Set ' + (role?.name.replace('_', ' ') | titlecase) + ' Role Default Permission'">
+                            <i class="ri-file-add-line"></i>
+                        </a>
+
+                        <a class="btn btn-dark btn-sm btn-icon btn-rounded me-1"
+                           [routerLink]="['/admin/roles/role-wise-users', role?.id,role?.name]"
+                           [title]="'View ' + (role?.name.replace('_', ' ') | titlecase) + ' Users List'">
+                            <i class="ri-list-unordered"></i>
+                        </a>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row justify-content-md-between align-items-md-center mt-2">
+            <div class="col col-sm-6">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    Showing {{ (page - 1) * pageSize + 1 }} to {{ getMax() }} of {{ roles?.length ?? 0 }} entries
+                </div>
+            </div>
+            <div class="col col-sm-6">
+                <div class="text-sm-right float-sm-end">
+                    <ngb-pagination [collectionSize]="roles?.length ?? 0" [(page)]="page" [pageSize]="pageSize"
+                                    [maxSize]="2"></ngb-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Scroll Modal -->
+<ng-template #scrollDataModal role="document" let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalScrollableTitle">View Default {{ role?.name.replace('_', ' ') | titlecase }} Permissions</h5>
+        <button type="button" class="btn-close" aria-hidden="true" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+
+        <div *ngFor="let group of groupPermissionsByGroupName() | keyvalue">
+            <div class="col-12">
+              <div class="card card-animate">
+                <div class="card-header">
+                  <h5>
+                    {{ group.key }}
+                  </h5>
+                </div>
+                <div class="card-body">
+                  <ngx-simplebar style="max-height: 300px">
+                    <div *ngFor="let permission of group.value">
+                      <label class="mx-4">
+                        <!-- <input
+                          class="check"
+                          type="checkbox"
+                          [name]="permission.display_name"
+                          [id]="permission.display_name"
+                          [checked]="permission.active"
+                        /> -->
+                        <span>
+                            {{ permission.display_name }}
+                        </span>
+                        <span  *ngIf="permission.active">
+                            <span class="badge rounded-pill text-bg-success">Active</span>
+                        </span>
+                        <span  *ngIf="permission.active == false">
+                            <span class="badge rounded-pill text-bg-danger">Inactive</span>
+                        </span>
+                      </label>
+                    </div>
+                  </ngx-simplebar>
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn rounded-4" style="background-color:#112558; color: white;" (click)="modal.close('Close click')">Close</button>
+    </div>
+</ng-template>

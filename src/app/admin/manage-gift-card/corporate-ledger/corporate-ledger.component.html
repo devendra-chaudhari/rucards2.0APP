@@ -1,0 +1,94 @@
+
+<app-breadcrumbs title="Corporate Ledger" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-animate rounded-4">
+                        <div class="card-header border-0">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="search-box">
+                                        <input class="form-control search bg-light border-light rounded-pill"
+                                               placeholder="Search by Company Name, Contact Name, Email, Mobile No">
+                                        <i class="ri-search-line search-icon"></i>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <a class="col-md-12 btn btn-info btn-rounded me-3 float-end" >
+                                        <i class="ri-filter-line me-1"></i> Filters
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="hstack gap-3">
+                                        Show <select name="page" id="page" class="form-select rounded-3" style="max-width:80px;">
+                                        <option>10</option>
+                                        <option>25</option>
+                                        <option>50</option>
+                                        <option>100</option>
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive mt-3" simplebar>
+                                <table class="table align-middle table-nowrap">
+                                    <thead>
+                                    <tr>
+                                        <th>SR</th>
+                                        <th>Transaction ID</th>
+                                        <th>Ref ID</th>
+                                        <th>Type</th>
+                                        <th>
+                                            <div>Opening</div>Balance
+                                        </th>
+                                        <th>
+                                            <div>Closing</div>Balance
+                                        </th>
+                                        <th>Amount</th>
+                                        <th><div>Date</div>Time</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of txn_list; index as i">
+                                            <td class="text-uppercase">{{ i + 1}}</td>
+                                            <td>
+                                                {{item?.TransactionId }}
+                                            </td>
+                                            <td>{{item?.TxnRefId}}</td>
+                                            <td>{{item?.TxnType}}</td>
+                                            <td>{{item?.OpeningBalance  }}</td>
+                                            <td>{{item?.ClosingBalance  }}</td>
+                                            <td>{{item?.Amount}}</td>
+                                            <td>{{item?.TxnDateTime | date:'EEEE, MMMM d, y'}}</td>
+                                          </tr> 
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row justify-content-md-between align-items-md-center mt-2">
+                                <div class="col col-sm-6">
+                                    <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                                        Showing {{ (page - 1) * pageSize + 1 }} to {{ Math.min(page * pageSize, totalRecords) }}
+                                        of {{ totalRecords }} entries
+                                    </div>
+                                </div>
+            
+            
+                                <div class="col col-sm-6">
+                                    <div class="text-sm-right float-sm-end">
+                                        <ngb-pagination [collectionSize]=totalRecords [(page)]="page" [pageSize]=pageSize
+                                                        [maxSize]="2">
+                                        </ngb-pagination>
+                                    </div>
+                                </div>
+            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                

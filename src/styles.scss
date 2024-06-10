@@ -1,0 +1,37 @@
+::selection {
+  background: #112558;
+  color: #fff;
+}
+
+
+.btn-grad {
+  background-image: linear-gradient(to right, #1A2980 0%, #26D0CE 51%, #1A2980 100%);
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.5s;
+  background-size: 200% auto;
+  color: white;
+  box-shadow: 0 0 20px #eee;
+  display: block;
+  padding: 15px;
+  cursor: pointer;
+  border: none !important;
+  border-radius: 50px;
+}
+
+.btn-grad:hover {
+  background-position: right center; /* change the direction of the change here */
+  color: #fff;
+  text-decoration: none;
+}
+
+.bg {
+  background: rgb(17, 37, 87);
+  background: linear-gradient(0deg, rgba(17, 37, 88, 1) 0%, rgba(63, 165, 211, 1) 100%);
+}
+
+.toast-top-right {
+  position: fixed !important;
+  z-index: 9999 !important;
+}
+

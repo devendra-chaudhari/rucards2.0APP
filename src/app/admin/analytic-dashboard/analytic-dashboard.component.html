@@ -1,0 +1,418 @@
+<div class="row">
+    <div class="col-xxl-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card overflow-hidden card-animate rounded-4">
+                    <div class="card-body bg-marketplace d-flex">
+                        <div class="flex-grow-1">
+                            <h4 class="fs-18 lh-base mb-0">Welcome Back <span
+                                    class="text-primary">{{user.name | titlecase}}</span>
+                            </h4>
+                            <p class="mb-0 mt-2 pt-1 text-muted">There's no shortage of remarkable ideas, what's missing
+                                is the will to execute them</p>
+                            <div class="d-flex gap-3 mt-4">
+                                <a routerLink="/users/profile" class="btn btn-primary btn-rounded">Manage Profile </a>
+                                <a routerLink="/users/manage-account" class="btn btn-primary btn-rounded">
+                                    Change Password</a>
+                            </div>
+                        </div>
+                        <i class="ri ri-record-circle-line"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div *ngFor="let stat of statData" class="col-md-6">
+                <app-analatics-stat [title]="stat.title" [value]="stat.value" [icon]="stat.icon"
+                                    [persantage]="stat.percentage" [profit]="stat.profit"></app-analatics-stat>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xxl-7">
+        <div class="row h-100">
+            <div class="col-xl-6">
+                <div class="card card-height-100 card-animate rounded-4">
+                    <div class="card-header align-items-center d-flex">
+                        <h4 class="card-title mb-0 flex-grow-1">Daily Closing Balances</h4>
+<!--                        <div class="">-->
+<!--&lt;!&ndash;                            [(ngModel)]="userData.role_id" (change)="onChange()"&ndash;&gt;-->
+<!--                            <select name="page" id="page" class="btn btn-rounded btn-soft-secondary btn-sm mb-2 me-2 form-select d-flex" >-->
+<!--                                <option value="" selected>All</option>-->
+<!--                                <option value="2">Admin</option>-->
+<!--                                <option value="8">Customer</option>-->
+<!--                                <option value="7">Retailer</option>-->
+<!--                                <option value="5">Distributor</option>-->
+<!--                                <option value="4">Super Distributor</option>-->
+<!--                            </select>-->
+<!--                        </div>-->
+<!--                        <div class="">-->
+<!--                            &lt;!&ndash;                            [(ngModel)]="userData.role_id" (change)="onChange()"&ndash;&gt;-->
+<!--                            <select name="page" id="page" class="btn btn-rounded btn-soft-secondary btn-sm mb-2 me-2 ms-2 form-select d-flex" style="width: 130px;">-->
+<!--                                <option value="" selected>Sum Total</option>-->
+<!--                                <option value="8">wallet1</option>-->
+<!--                                <option value="7">wallet2</option>-->
+<!--                                <option value="5">wallet3</option>-->
+<!--                            </select>-->
+
+<!--                        </div>-->
+                    </div>
+
+                    <div class="card-body">
+                        <ngx-simplebar class="table-responsive table-card" style="max-height: 480px;">
+                            <table class="table table-sm table-centered align-middle table-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Date</th>
+                                        <th>Closing Balance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let transaction of transactions; let i = index;">
+                                        <td>{{i+1}}</td>
+                                        <td>{{transaction.date}}</td>
+                                        <td>{{transaction.closing_balance_sum}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </ngx-simplebar>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-6">
+                <div class="card card-height-100 card-animate rounded-4">
+                    <div class="card-header align-items-center d-flex">
+                        <h4 class="card-title mb-0 flex-grow-1">Sessions by State</h4>
+                        <div class="d-flex gap-1">
+                            <button class="btn btn-rounded btn-soft-secondary btn-sm" (click)="selectvalue('all')">
+                                ALL
+                            </button>
+                            <button class="btn btn-rounded btn-soft-primary btn-sm" (click)="selectvalue('1M')">
+                                1M
+                            </button>
+                            <button class="btn btn-rounded btn-soft-secondary btn-sm" (click)="selectvalue('6M')">
+                                6M
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div>
+                            <apx-chart [series]="basicBarChart.series" [colors]="basicBarChart.colors"
+                                       [chart]="basicBarChart.chart"
+                                       [dataLabels]="basicBarChart.dataLabels" [plotOptions]="basicBarChart.plotOptions"
+                                       dir="ltr" [xaxis]="basicBarChart.xaxis"></apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card card-animate rounded-4">
+            <div class="card-header border-0 align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Customer Metrics</h4>
+                <div class="d-flex gap-1">
+                    <button class="btn btn-rounded btn-soft-secondary btn-sm" (click)="setcolumnchartvalue('all')">
+                        ALL
+                    </button>
+                    <button class="btn btn-rounded btn-soft-secondary btn-sm" (click)="setcolumnchartvalue('1M')">
+                        1M
+                    </button>
+                    <button class="btn btn-rounded btn-soft-secondary btn-sm" (click)="setcolumnchartvalue('6M')">
+                        6M
+                    </button>
+                    <button class="btn btn-rounded btn-soft-primary btn-sm" (click)="setcolumnchartvalue('1Y')">
+                        1Y
+                    </button>
+                </div>
+            </div>
+            <div class="card-header p-0 border-0 bg-soft-light">
+                <div class="row g-0 text-center">
+                    <div class="col-6 col-sm-4">
+                        <div class="p-3 border border-dashed border-start-0">
+                            <h5 class="mb-1">
+                                                 <span class="text-success ms-1 fs-12">49%<i
+                                        class="ri-arrow-right-up-line ms-1 align-middle"></i></span>
+                            </h5>
+                            <p class="text-muted mb-0">Avg. Session</p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-4">
+                        <div class="p-3 border border-dashed border-start-0">
+                            <h5 class="mb-1">
+                                <span class="text-success ms-1 fs-12">60%<i
+                                        class="ri-arrow-right-up-line ms-1 align-middle"></i></span>
+                            </h5>
+                            <p class="text-muted mb-0">Conversion Rate</p>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-4">
+                        <div class="p-3 border border-dashed border-start-0 border-end-0">
+                            <h5 class="mb-1">10sec
+                                <span class="text-success ms-1 fs-12">37%<i
+                                        class="ri-arrow-right-up-line ms-1 align-middle"></i></span>
+                            </h5>
+                            <p class="text-muted mb-0">Avg. Session Duration</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0 pb-2">
+                <div class="mb-n2">
+                    <apx-chart [series]="basicColumnChart.series" [chart]="basicColumnChart.chart"
+                               [colors]="basicColumnChart.colors" [dataLabels]="basicColumnChart.dataLabels"
+                               [plotOptions]="basicColumnChart.plotOptions" [yaxis]="basicColumnChart.yaxis"
+                               [legend]="basicColumnChart.legend"
+                               [fill]="basicColumnChart.fill" [stroke]="basicColumnChart.stroke"
+                               [tooltip]="basicColumnChart.tooltip"
+                               [xaxis]="basicColumnChart.xaxis" dir="ltr"></apx-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-6">
+        <div class="card card-height-100 card-animate rounded-4">
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Customer Sessions by Country</h4>
+                <div class="flex-shrink-0">
+                    <div class="dropdown card-header-dropdown" ngbDropdown>
+                        <a class="text-reset dropdown-btn arrow-none" href="javascript:void(0);"
+                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>
+                            <span class="fw-semibold text-uppercase fs-12">Sort by: </span><span class="text-muted">Current Week<i
+                                class="mdi mdi-chevron-down ms-1"></i></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>
+                            <a class="dropdown-item" href="javascript:void(0);">Today</a>
+                            <a class="dropdown-item" href="javascript:void(0);">Last Week</a>
+                            <a class="dropdown-item" href="javascript:void(0);">Last Month</a>
+                            <a class="dropdown-item" href="javascript:void(0);">Current Year</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="mb-n2">
+                    <apx-chart [series]="basicHeatmapChart.series" [chart]="basicHeatmapChart.chart"
+                               [dataLabels]="basicHeatmapChart.dataLabels" [legend]="basicHeatmapChart.legend"
+                               [plotOptions]="basicHeatmapChart.plotOptions"
+                               [colors]="basicHeatmapChart.colors" [tooltip]="basicHeatmapChart.tooltip"
+                               dir="ltr"></apx-chart>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<div class="row">-->
+<!--    <div class="col-xl-4">-->
+<!--        <div class="card card-height-100 card-animate rounded-4">-->
+<!--            <div class="card-header align-items-center d-flex">-->
+<!--                <h4 class="card-title mb-0 flex-grow-1">Users by Device</h4>-->
+<!--                <div class="flex-shrink-0">-->
+<!--                    <div class="dropdown card-header-dropdown" ngbDropdown>-->
+<!--                        <a class="text-reset dropdown-btn arrow-none" href="javascript:void(0);"-->
+<!--                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>-->
+<!--                            <span class="text-muted fs-16"><i class="mdi mdi-dots-vertical align-middle"></i></span>-->
+<!--                        </a>-->
+<!--                        <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>-->
+<!--                            <a class="dropdown-item" href="javascript:void(0);"-->
+<!--                               (click)="setdevicevalue('today')">Today</a>-->
+<!--                            <a class="dropdown-item" href="javascript:void(0);" (click)="setdevicevalue('last_week')">Last-->
+<!--                                Week</a>-->
+<!--                            <a class="dropdown-item" href="javascript:void(0);" (click)="setdevicevalue('last_month')">Last-->
+<!--                                Month</a>-->
+<!--                            <a class="dropdown-item" href="javascript:void(0);"-->
+<!--                               (click)="setdevicevalue('current_year')">Current Year</a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="card-body">-->
+<!--                <apx-chart [series]="simpleDonutChart.series" [labels]="simpleDonutChart.labels"-->
+<!--                           [chart]="simpleDonutChart.chart" [plotOptions]="simpleDonutChart.plotOptions"-->
+<!--                           [dataLabels]="simpleDonutChart.dataLabels" [legend]="simpleDonutChart.legend"-->
+<!--                           [stroke]="simpleDonutChart.stroke" [yaxis]="simpleDonutChart.yaxis"-->
+<!--                           [colors]="simpleDonutChart.colors" dir="ltr"></apx-chart>-->
+
+<!--                <div class="table-responsive mt-3">-->
+<!--                    <table class="table table-borderless table-sm table-centered align-middle table-nowrap mb-0">-->
+<!--                        <tbody class="border-0">-->
+<!--                        <tr>-->
+<!--                            <td><h4 class="text-truncate fs-14 fs-medium mb-0"><i-->
+<!--                                    class="ri-stop-fill align-middle fs-18 text-primary me-2"></i>Desktop Users</h4>-->
+<!--                            </td>-->
+<!--                            <td>-->
+<!--                                <p class="text-muted mb-0">-->
+<!--                                    <i-feather name="users" class="me-2 icon-sm"></i-feather>-->
+<!--                                    78.56k-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                            <td class="text-end"><p class="text-success fw-medium fs-12 mb-0"><i-->
+<!--                                    class="ri-arrow-up-s-fill fs-5 align-middle"></i>2.08%</p></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td><h4 class="text-truncate fs-14 fs-medium mb-0"><i-->
+<!--                                    class="ri-stop-fill align-middle fs-18 text-warning me-2"></i>Mobile Users</h4></td>-->
+<!--                            <td>-->
+<!--                                <p class="text-muted mb-0">-->
+<!--                                    <i-feather name="users" class="me-2 icon-sm"></i-feather>-->
+<!--                                    105.02k-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                            <td class="text-end"><p class="text-danger fw-medium fs-12 mb-0"><i-->
+<!--                                    class="ri-arrow-down-s-fill fs-5 align-middle"></i>10.52%</p></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td><h4 class="text-truncate fs-14 fs-medium mb-0"><i-->
+<!--                                    class="ri-stop-fill align-middle fs-18 text-info me-2"></i>Tablet Users</h4></td>-->
+<!--                            <td>-->
+<!--                                <p class="text-muted mb-0">-->
+<!--                                    <i-feather name="users" class="me-2 icon-sm"></i-feather>-->
+<!--                                    42.89k-->
+<!--                                </p>-->
+<!--                            </td>-->
+<!--                            <td class="text-end"><p class="text-danger fw-medium fs-12 mb-0"><i-->
+<!--                                    class="ri-arrow-down-s-fill fs-5 align-middle"></i>7.36%</p></td>-->
+<!--                        </tr>-->
+<!--                        </tbody>-->
+<!--                    </table>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="col-xl-4 col-md-6">-->
+<!--        <div class="card card-height-100 card-animate rounded-4">-->
+<!--            <div class="card-header align-items-center d-flex">-->
+<!--                <h4 class="card-title mb-0 flex-grow-1">Top Referrals Pages</h4>-->
+<!--                <div class="flex-shrink-0">-->
+<!--                    <button class="btn btn-soft-primary btn-sm btn-rounded">-->
+<!--                        Export Report-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="card-body">-->
+
+<!--                <div class="row align-items-center">-->
+<!--                    <div class="col-6">-->
+<!--                        <h6 class="text-muted text-uppercase fw-semibold text-truncate fs-12 mb-3">Total Referrals-->
+<!--                            Page</h6>-->
+<!--                        <h4 class="fs- mb-0">725,800</h4>-->
+<!--                        <p class="mb-0 mt-2 text-muted"><span class="badge badge-soft-success mb-0">-->
+<!--                            <i class="ri-arrow-up-line align-middle"></i> 15.72 %-->
+<!--                        </span> vs. previous month</p>-->
+<!--                    </div>-->
+<!--                    <div class="col-6">-->
+<!--                        <div class="text-center">-->
+<!--                            <img src="assets/images/illustrator-1.png" class="img-fluid" alt="">-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="mt-3 pt-2">-->
+<!--                    <div class="progress progress-lg rounded-pill">-->
+<!--                        <div class="progress-bar bg-primary" role="progressbar" style="width: 25%" aria-valuenow="25"-->
+<!--                             aria-valuemin="0" aria-valuemax="100"></div>-->
+<!--                        <div class="progress-bar bg-info" role="progressbar" style="width: 18%" aria-valuenow="18"-->
+<!--                             aria-valuemin="0" aria-valuemax="100"></div>-->
+<!--                        <div class="progress-bar bg-success" role="progressbar" style="width: 22%" aria-valuenow="22"-->
+<!--                             aria-valuemin="0" aria-valuemax="100"></div>-->
+<!--                        <div class="progress-bar bg-warning" role="progressbar" style="width: 16%" aria-valuenow="16"-->
+<!--                             aria-valuemin="0" aria-valuemax="100"></div>-->
+<!--                        <div class="progress-bar bg-danger" role="progressbar" style="width: 19%" aria-valuenow="19"-->
+<!--                             aria-valuemin="0" aria-valuemax="100"></div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <div class="mt-3 pt-2">-->
+<!--                    <div class="d-flex mb-2">-->
+<!--                        <div class="flex-grow-1">-->
+<!--                            <p class="text-truncate text-muted fs-14 mb-0"><i-->
+<!--                                    class="mdi mdi-circle align-middle text-primary me-2"></i>www.google.com</p>-->
+<!--                        </div>-->
+<!--                        <div class="flex-shrink-0">-->
+<!--                            <p class="mb-0">24.58%</p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="d-flex mb-2">-->
+<!--                        <div class="flex-grow-1">-->
+<!--                            <p class="text-truncate text-muted fs-14 mb-0"><i-->
+<!--                                    class="mdi mdi-circle align-middle text-info me-2"></i>www.youtube.com</p>-->
+<!--                        </div>-->
+<!--                        <div class="flex-shrink-0">-->
+<!--                            <p class="mb-0">17.51%</p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="d-flex mb-2">-->
+<!--                        <div class="flex-grow-1">-->
+<!--                            <p class="text-truncate text-muted fs-14 mb-0"><i-->
+<!--                                    class="mdi mdi-circle align-middle text-success me-2"></i>www.meta.com</p>-->
+<!--                        </div>-->
+<!--                        <div class="flex-shrink-0">-->
+<!--                            <p class="mb-0">23.05%</p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="d-flex mb-2">-->
+<!--                        <div class="flex-grow-1">-->
+<!--                            <p class="text-truncate text-muted fs-14 mb-0"><i-->
+<!--                                    class="mdi mdi-circle align-middle text-warning me-2"></i>www.medium.com</p>-->
+<!--                        </div>-->
+<!--                        <div class="flex-shrink-0">-->
+<!--                            <p class="mb-0">12.22%</p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="d-flex">-->
+<!--                        <div class="flex-grow-1">-->
+<!--                            <p class="text-truncate text-muted fs-14 mb-0"><i-->
+<!--                                    class="mdi mdi-circle align-middle text-danger me-2"></i>Other</p>-->
+<!--                        </div>-->
+<!--                        <div class="flex-shrink-0">-->
+<!--                            <p class="mb-0">17.58%</p>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <div class="mt-2 text-center">-->
+<!--                    <a href="javascript:void(0);" class="text-muted text-decoration-underline">Show All</a>-->
+<!--                </div>-->
+
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="col-xl-4 col-md-6">-->
+<!--        <div class="card card-height-100 card-animate rounded-4">-->
+<!--            <div class="card-header align-items-center d-flex">-->
+<!--                <h4 class="card-title mb-0 flex-grow-1">Top Pages</h4>-->
+<!--                <div class="flex-shrink-0">-->
+<!--                    <div class="dropdown card-header-dropdown" ngbDropdown>-->
+<!--                        <a class="text-reset dropdown-btn arrow-none" href="javascript:void(0);"-->
+<!--                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ngbDropdownToggle>-->
+<!--                            <span class="text-muted fs-16"><i class="mdi mdi-dots-vertical align-middle"></i></span>-->
+<!--                        </a>-->
+<!--                        <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu>-->
+<!--                            <a class="dropdown-item" href="javascript:void(0);">Today</a>-->
+<!--                            <a class="dropdown-item" href="javascript:void(0);">Last Week</a>-->
+<!--                            <a class="dropdown-item" href="javascript:void(0);">Last Month</a>-->
+<!--                            <a class="dropdown-item" href="javascript:void(0);">Current Year</a>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="card-body">-->
+<!--                <div class="table-responsive table-card">-->
+<!--                    <app-top-pages [TopPages]="TopPages"></app-top-pages>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->

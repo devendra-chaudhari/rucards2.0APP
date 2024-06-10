@@ -1,0 +1,184 @@
+<app-breadcrumbs title="Permissions" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="row">
+    <div class="col-12">
+      <div class="card card-animate">
+        <div class="card-header mb-0">
+          <h4>
+            Set {{user.user_name}}'s Permissions
+            <!-- {{ role_name.replace("_", " ") | titlecase }} Permission -->
+            <div class="float-end">
+              <div class="d-flex justify-items-center align-items-center gap-2">
+                <a
+                [routerLink]="['/admin/roles/role-wise-users', user?.user_id]"
+                  class="btn btn-sm btn-warning btn-rounded px-2"
+                >
+                  <i class="ri-arrow-left-line"></i> Back to Roles</a
+                >
+              </div>
+            </div>
+          </h4>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div *ngFor="let group of groupPermissionsByGroupName() | keyvalue">
+              <div class="col-12">
+                <div class="card card-animate">
+                  <div class="card-header">
+                    <h5>
+                      {{ group.key }}
+                      <a
+                        class="border-0 float-end me-3"
+                        (click)="selectAll(group.value)"
+                      >
+                        Select All/ Unselect All
+                      </a>
+                    </h5>
+                  </div>
+                  <div class="row mt-1">
+                    <div class="col-md-6">
+                      <div class="card-body">
+                        <ngx-simplebar style="max-height: 300px">
+                          <div class="card-header">
+                            Assign permission
+                          </div>
+                          <div class="card-body">
+                            <div *ngFor="let permission of group.value">
+                              <label class="mx-4"  *ngIf="permission.active">
+                                <input
+                                  class="check"
+                                  type="checkbox"
+                                  [name]="permission.display_name"
+                                  [id]="permission.display_name"
+                                  [checked]="
+                                    selectAllChecked[group.key] || permission.active
+                                  "
+                                  (change)="togglePermission(permission, group.key)"
+                                />
+                                {{ permission.display_name }}
+                              </label>
+                            </div>
+                          </div>
+                        </ngx-simplebar>
+                      </div>
+                    </div>
+  
+                    <div class="col-md-6">
+                      <div class="card-body">
+                        <ngx-simplebar style="max-height: 300px">
+                          <div class="card-header">
+                            Unassign permission
+                          </div>
+                          <div class="card-body">
+                            <div *ngFor="let permission of group.value">
+                              <label class="mx-4" *ngIf="!permission.active">
+                                <input
+                                  class="check"
+                                  type="checkbox"
+                                  [name]="permission.display_name"
+                                  [id]="permission.display_name"
+                                  [checked]="
+                                    selectAllChecked[group.key] || permission.active
+                                  " 
+                                  (change)="togglePermission(permission, group.key)"
+                                />
+                                {{ permission.display_name }}
+                              </label>
+                            </div>
+                          </div>
+                        </ngx-simplebar>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="row">
+            <div class="col-md-4">
+              <button
+                class="btn btn-primary rounded-4"
+                (click)="submitPermissions()"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="row">
+    <!-- ... (previous content) ... -->
+
+    <!-- User-Specific Permissions Section -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5>User-Specific Permissions</h5>
+                <p>
+                    While default role permissions provide a general framework for user access,
+                    individual user permissions allow for fine-grained control based on specific needs.
+                    Follow these steps to manage user-specific permissions:
+                </p>
+                <ul>
+                    <li>
+                        <strong>Identify Users:</strong> Begin by identifying specific users or user groups
+                        for whom you need to set customized permissions. This could include users with unique roles,
+                        responsibilities, or access requirements.
+                    </li>
+                    <li>
+                        <strong>Define User-Specific Permissions:</strong> Determine the access levels and permissions
+                        that each individual user or user group should have. Consider what functionalities and features
+                        they should be able to access, edit, or delete.
+                    </li>
+                    <li>
+                        <strong>Document User-Specific Permissions:</strong> Create a clear and organized document to record
+                        the customized permissions for each user or group. Include the user's name or identifier and list
+                        the permissions they have.
+                    </li>
+                    <li>
+                        <strong>Access User Management Section:</strong> Log in to the application's admin or user management panel,
+                        where you can configure individual user permissions.
+                    </li>
+                    <li>
+                        <strong>Set User-Based Permissions:</strong> Within the user management section, locate the user for whom you
+                        want to set custom permissions. Edit their user profile or access settings.
+                    </li>
+                    <li>
+                        <strong>Assign Custom Permissions:</strong> Assign the specific permissions to the user based on the document
+                        you created earlier. This may involve selecting checkboxes, toggling switches, or entering values to specify
+                        their access rights to different functionalities.
+                    </li>
+                    <li>
+                        <strong>Save and Apply Changes:</strong> After configuring the user-specific permissions, save the changes.
+                        Ensure that the customized permissions are correctly applied to the user's account.
+                    </li>
+                    <li>
+                        <strong>Test User Permissions:</strong> It's essential to test the user's permissions to make sure they can
+                        access the intended functionalities and features and that their access aligns with your requirements.
+                    </li>
+                    <li>
+                        <strong>Regularly Review and Update User Permissions:</strong> Just as with default role permissions,
+                        regularly review and update user-specific permissions as needed.
+                    </li>
+                    <li>
+                        <strong>Audit User Permissions:</strong> Consider conducting periodic security audits to identify any potential
+                        vulnerabilities or areas that require tighter access controls for specific users.
+                    </li>
+                    <li>
+                        <strong>Provide Administrative Control:</strong> Allow administrators or managers to have the authority to grant,
+                        modify, or revoke user-specific permissions as necessary. Ensure that there are clear processes in place for
+                        requesting and approving changes to user permissions.
+                    </li>
+                    <li>
+                        <strong>Document Changes:</strong> Keep a log or record of all changes made to user-specific permissions for
+                        auditing and accountability purposes.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

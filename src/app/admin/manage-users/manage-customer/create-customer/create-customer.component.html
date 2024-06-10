@@ -1,0 +1,318 @@
+<app-breadcrumbs title="Add Customer" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="card rounded-4 card-animate">
+    <div class="card-header mb-0">
+        <h4>Create New Customer
+            <a routerLink="/admin/manage-users/manage-customer" class="btn btn-primary btn-rounded float-end">Customer List</a>
+        </h4>
+    </div>
+    <div class="card-body">
+        <form [formGroup]="customerForm"  *ngIf="customerCurrentStep==1">
+            <div class="row gy-3 px-3">
+                <div class="col-md-4">
+                    <label for="name">Applicant Name <span class="text-danger">*</span></label>
+                    <input type="text" id="name" formControlName="name"
+                           class="form-control rounded-pill" maxlength="50"
+                           placeholder="Enter Applicant Name" appAlphabeticInput>
+                    <div *ngIf="isCustomerSubmit && sf['name'].errors"
+                         class="text-danger">
+                        <div *ngIf="sf['name'].errors['required']">Name is required
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="father_name">Father Name <span
+                            class="text-danger">*</span></label>
+                    <input type="text" id="father_name" formControlName="father_name"
+                           class="form-control rounded-pill" maxlength="50"
+                           placeholder="Enter Father Name" appAlphabeticInput>
+                    <div *ngIf="isCustomerSubmit && sf['father_name'].errors"
+                         class="text-danger">
+                        <div *ngIf="sf['father_name'].errors['required']">Father Name is
+                            required
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="email2">Email <span class="text-danger">*</span></label>
+                    <input type="text" id="email2" class="form-control rounded-pill"
+                           placeholder="Email Address" formControlName="email">
+                    <div *ngIf="isCustomerSubmit && sf['email'].errors"
+                         class="text-danger">
+                        <div *ngIf="sf['email'].errors['required']">Email Address is
+                            required
+                        </div>
+                        <div *ngIf="sf['email'].errors['email']">Invalid Email Address
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="mobile">Mobile No <span
+                            class="text-danger">*</span></label>
+                    <input type="text" id="mobile" class="form-control rounded-pill"
+                           placeholder="Mobile No" formControlName="mobile_no"
+                           maxlength="10" appNumberOnly>
+                    <div *ngIf="isCustomerSubmit && sf['mobile_no'].errors"
+                         class="text-danger">
+                        <div *ngIf="sf['mobile_no'].errors['required']">Mobile no is
+                            required
+                        </div>
+                        <div *ngIf="sf['mobile_no'].errors['pattern']">Invalid Mobile No
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="dob">DOB <small
+                            class="text-muted">(dd-mm-yyyy)</small><span
+                            class="text-danger">*</span></label>
+                    <input type="text" id="dob" formControlName="dob"
+                           class="form-control rounded-pill" mwlFlatpickr
+                           [altInput]="true" altFormat="d-m-Y" [allowInput]="true"
+                           [maxDate]="maxDate" placeholder="Date Of Birth">
+                    <div *ngIf="isCustomerSubmit && sf['dob'].errors"
+                         class="text-danger">
+                        <div *ngIf="sf['dob'].errors['required']">DOB is required</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="gender">Gender <span
+                            class="text-danger">*</span></label>
+                    <select id="gender" formControlName="gender"
+                            class="form-control rounded-pill form-select">
+                        <option value="" selected>Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="trans_gender">Trans Gender</option>
+                    </select>
+                    <div *ngIf="isCustomerSubmit && sf['gender'].errors"
+                         class="text-danger">
+                        <div *ngIf="sf['gender'].errors['required']">Gender is
+                            required
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="pincode">Pincode <span
+                            class="text-danger">*</span></label>
+                    <input type="text" id="pincode" formControlName="pincode"
+                           class="form-control rounded-pill" appNumberOnly maxlength="6"
+                           placeholder="Enter Pincode" #pincode
+                           (input)="onPincode(pincode.value)">
+                    <div *ngIf="isCustomerSubmit && sf['pincode'].errors"
+                         class="text-danger">
+                        <div *ngIf="sf['pincode'].errors['required']">Pincode is
+                            required
+                        </div>
+                        <div *ngIf="sf['pincode'].errors['minlength']">Invalid Pincode
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label [for]="isPincodeData ? 'state' : 'state2'">State <span
+                            class="text-danger">*</span></label>
+                    <input type="text" id="state2" class="form-control rounded-pill"
+                           placeholder="Enter State" formControlName="state">
+                    <div *ngIf="isCustomerSubmit && sf['state'].errors"
+                         class="text-danger">
+                        <div *ngIf="sf['state'].errors['required']">State is required
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label [for]="isPincodeData ? 'district' : 'district2'">District
+                        <span class="text-danger">*</span></label>
+
+                    <input type="text" id="district2" class="form-control rounded-pill"
+                           placeholder="Enter District" formControlName="district">
+                    <div *ngIf="isCustomerSubmit && sf['district'].errors"
+                         class="text-danger">
+                        <div *ngIf="sf['district'].errors['required']">District is
+                            required
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label for="city">City <span class="text-danger">*</span></label>
+                    <input type="text" id="city" formControlName="city"
+                           class="form-control rounded-pill" placeholder="Enter City">
+                    <div *ngIf="isCustomerSubmit && sf['city'].errors"
+                         class="text-danger">
+                        <div *ngIf="sf['city'].errors['required']">City is required
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <label for="address">Address <span
+                            class="text-danger">*</span></label>
+                    <input type="text" id="address" formControlName="address"
+                           class="form-control rounded-pill"
+                           placeholder="Enter Address">
+                    <div *ngIf="isCustomerSubmit && sf['address'].errors"
+                         class="text-danger">
+                        <div *ngIf="sf['address'].errors['required']">Address is
+                            required
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="text-end">
+                        <button class="btn btn-primary btn-rounded"
+                                (click)="onCustomerStepOne()">Next
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <ngx-simplebar class="table-responsive mb-2" *ngIf="customerCurrentStep==2">
+            <h5>Verify below Details and Set Password.</h5>
+            <div class="card card-animate">
+                <div class="card-body">
+                    <table class="table table-bordered table-striped table-hover text-nowrap mt-4">
+                        <tbody>
+                        <tr>
+                            <td colspan="6">
+                                <span class="fw-bold">Applicant Name : </span>
+                                <span>{{sf['name'].value | titlecase}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <span class="fw-bold">Father Name : </span>
+                                <span>{{sf['father_name'].value | titlecase}}</span>
+                            </td>
+                            <td colspan="3">
+                                <span class="fw-bold">Mobile No : </span>
+                                <span>{{sf['mobile_no'].value}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <span class="fw-bold">Email : </span>
+                                <span>{{sf['email'].value}}</span></td>
+                            <td colspan="3">
+                                <span class="fw-bold">DOB : </span>
+                                <span>{{sf['dob'].value |date:'dd-MM-yyyy'}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <span class="fw-bold">Gender : </span>
+                                <span>{{sf['gender'].value | titlecase}}</span>
+                            </td>
+                            <td colspan="3">
+                                <span class="fw-bold">State : </span>
+                                <span *ngIf="isPincodeData">{{state_name | titlecase}}</span>
+                                <span *ngIf="!isPincodeData">{{sf['state'].value | titlecase}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <span class="fw-bold">District : </span>
+                                <span>{{sf['district'].value | titlecase}}</span>
+                            </td>
+                            <td colspan="3">
+                                <span class="fw-bold">City : </span>
+                                <span>{{sf['city'].value | titlecase}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <span class="fw-bold">Pincode : </span>
+                                <span>{{sf['pincode'].value}}</span>
+                            </td>
+                            <td colspan="3">
+                                <span class="fw-bold">Address : </span>
+                                <span>{{sf['address'].value | titlecase}}</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </ngx-simplebar>
+        <div class="row my-3 gy-3" *ngIf="customerCurrentStep==2">
+            <div class="col-12">
+                <div class="card card-animate">
+                    <div class="card-body">
+                        <form>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="customer_password"
+                                           class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control"
+                                               id="customer_password"
+                                               name="customer_password"
+                                               [(ngModel)]="customer_password"
+                                               [type]="showPassword ? 'text' : 'password'"
+                                               placeholder="Enter password">
+                                        <button class="btn btn-secondary"
+                                                type="button"
+                                                (click)="togglePassword()">
+                                            <i class="{{ showPassword ? 'ri-eye-line' : 'ri-eye-off-line' }}"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="confirmCustomerPassword"
+                                           class="form-label">Confirm
+                                        Password</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control"
+                                               id="confirmCustomerPassword"
+                                               name="confirmCustomerPassword"
+                                               [(ngModel)]="customer_confirm_password"
+                                               [type]="showConfirmPassword ? 'text' : 'password'"
+                                               placeholder="Confirm password">
+                                        <button class="btn btn-secondary"
+                                                type="button"
+                                                (click)="toggleConfirmPassword()">
+                                            <i class="{{ showConfirmPassword ? 'ri-eye-line' : 'ri-eye-off-line' }}"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox"
+                                               name="terms"
+                                               id="terms2" [(ngModel)]="customer_terms">
+                                        <label class="form-check-label fw-medium"
+                                               for="terms2">
+                                            I Accept Rucards
+                                            [<a href="http://rucards.in/terms-and-conditions.php"
+                                                target="_blank"
+                                                title="View terms and Conditions">T&amp;C</a>]
+                                            [ <a
+                                                href="http://rucards.in/privacy-policy.php"
+                                                target="_blank"
+                                                title="View Privacy Policy">Privacy
+                                            Policy </a>]
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="text-center text-md-end">
+                                        <button class="btn btn-info btn-rounded me-3"
+                                                (click)="changeCustomerDetails()">Back
+                                        </button>
+                                        <button class="btn btn-primary btn-rounded"
+                                                (click)="registerCustomer()">Register
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

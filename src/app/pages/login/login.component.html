@@ -1,0 +1,368 @@
+
+<div class="parent">
+    <div class="child">
+        <div class="marquee-container">
+
+            <div class="marquee-content">
+                <span class="fs-5 fw-semibold p-3 text-primary-emphasis">{{ marqueeNotification}}</span>
+            </div>
+        </div>
+        <div class="card shadow-login rounded-4 w-100">
+            <div class="row">
+                <div class="col-md-6 px-5 py-3">
+                    <div class="text-center my-3">
+                        <img src="assets/images/logo-dark.png" alt="logo" width="170" height="30">
+                    </div>
+                    <div class="text-center">
+                        <h4 class="text-black mb-0 mt-1 fw-semibold" *ngIf="!firstTimeLogin">Rucards Account Login</h4>
+                        <h4 class="text-black mb-0 mt-1 fw-semibold"
+                            *ngIf="firstTimeLogin && userType=='retailer' && currentStep==1">Set Your
+                            New Password</h4>
+                        <h4 class="text-black mb-0 mt-1 fw-semibold" *ngIf="currentStep == 2 && userType=='retailer' ">
+                            Set Your New T-PIN</h4>
+                        <h4 class="text-black mb-0 mt-1 fw-semibold" *ngIf="firstTimeLogin && userType=='customer'">Set
+                            Your New T-PIN</h4>
+                    </div>
+                    <div class="d-flex justify-content-start align-items-center mt-5 gap-3 px-3"
+                         *ngIf="!firstTimeLogin">
+                        <label class="form-label fw-semibold">Login As</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="customer"
+                                       value="customer" name="userType" [(ngModel)]="userType">
+                                <label for="customer" class="fw-semibold">Customer</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="retailer"
+                                       value="retailer" name="userType" [(ngModel)]="userType">
+                                <label for="retailer" class="fw-semibold">Corporate</label>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="mt-4" [formGroup]="loginForm" *ngIf="!firstTimeLogin">
+                        <div class="row gy-3">
+                            <div class="col-12">
+                                <label for="username" class="form-label">
+                                    <span *ngIf="userType == 'retailer'">User ID</span>
+                                    <span *ngIf="userType == 'customer'">Mobile No</span>
+                                    <span class="text-danger">*</span></label>
+                                <div class="form-icon right">
+                                    <input type="text" class="form-control rounded-pill fw-semibold"
+                                           [placeholder]="userType === 'retailer' ? 'ie:R00451245' : 'Enter Mobile No'"
+                                           id="username" formControlName="username" maxlength="10">
+                                    <i class="ri-information-line fs-18"
+                                       [title]="userType === 'retailer' ? 'Enter Username' : 'Enter Mobile No'"></i>
+                                </div>
+                                <div class="row mt-1">
+                                    <div class="col-6">
+                                        <div *ngIf="isLoginSubmit && lf['username'].errors" class="text-danger">
+                                            <div *ngIf="lf['username'].errors['required'] && userType == 'retailer'">
+                                                Username is required
+                                            </div>
+                                            <div *ngIf="lf['username'].errors['required'] && userType == 'customer'">
+                                                Mobile no is required
+                                            </div>
+                                            <div *ngIf="userType == 'retailer' && lf['username'].errors['pattern']">
+                                                Invalid Username
+                                            </div>
+                                            <div *ngIf="userType == 'customer' && lf['username'].errors['pattern']">
+                                                Invalid Mobile No
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="text-end">
+                                            <a (click)="openUsernameModal(usernameModal)" href="javascript:void(0)"
+                                               class="text-muted">Forgot Username?</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label for="password" class="form-label">Password <span
+                                        class="text-danger">*</span></label>
+                                <div class="form-icon right">
+                                    <input class="form-control rounded-pill fw-semibold"
+                                           [type]="showPass ? 'text' : 'password'" id="password"
+                                           placeholder="Enter Password" formControlName="password">
+                                    <i class="fs-18 cursor-pointer"
+                                       [ngClass]="{'ri-eye-off-line': showPass, 'ri-eye-line': !showPass}"
+                                       (click)="showPass = ! showPass"></i>
+                                </div>
+                                <div class="row mt-1">
+                                    <div class="col-6">
+                                        <div *ngIf="isLoginSubmit && lf['password'].errors" class="text-danger">
+                                            <div *ngIf="lf['password'].errors['required']">
+                                                Password is required
+                                            </div>
+                                            <div *ngIf="lf['password'].errors['minlength']">
+                                                Password length must be 8 characters
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="text-end">
+                                            <a (click)="openPasswordModal(passwordModal)" href="javascript:void(0)"
+                                               class="text-muted">Forgot Password?</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <button class="btn-grad" style="width: 60%" (click)="onLoginSubmit()">Login</button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="retailer_first_time_login_form">
+                        <form [formGroup]="setPasswordForm"
+                              *ngIf="firstTimeLogin && currentStep == 1 && userType=='retailer'">
+                            <div class="row mt-2 gy-3">
+                                <div class="col-md-12">
+                                    <label for="old_password">Current Password <span
+                                            class="text-danger">*</span></label>
+                                    <div class="form-icon right">
+                                        <input [type]="oldShowPass ? 'text' : 'password'"
+                                               class="form-control rounded-pill"
+                                               id="old_password" placeholder="Enter Current Password"
+                                               formControlName="old_password">
+                                        <i class="fs-18 cursor-pointer"
+                                           [ngClass]="{'ri-eye-off-line': oldShowPass, 'ri-eye-line': !oldShowPass}"
+                                           (click)="oldShowPass = ! oldShowPass"></i>
+                                    </div>
+                                    <div *ngIf="isPasswordSubmit && pf['old_password'].errors" class="text-danger">
+                                        <div *ngIf="pf['old_password'].errors['required']">
+                                            Current password is required
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="new_password">New Password <span class="text-danger">*</span></label>
+                                    <div class="form-icon right">
+                                        <input [type]="showPass ? 'text' : 'password'" class="form-control rounded-pill"
+                                               id="new_password" placeholder="Enter New Password"
+                                               formControlName="new_password">
+                                        <i class="fs-18 cursor-pointer"
+                                           [ngClass]="{'ri-eye-off-line': showPass, 'ri-eye-line': !showPass}"
+                                           (click)="showPass = ! showPass"></i>
+                                    </div>
+                                    <div *ngIf="isPasswordSubmit && pf['new_password'].errors" class="text-danger">
+                                        <div *ngIf="pf['new_password'].errors['required']">Password is required</div>
+                                        <div *ngIf="pf['new_password'].errors['minlength']">Password minimum length must
+                                            8
+                                            digits
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="confirm_password">Confirm Password <span
+                                            class="text-danger">*</span></label>
+                                    <div class="form-icon right">
+                                        <input [type]="showconfirmPass ? 'text' : 'password'"
+                                               class="form-control rounded-pill"
+                                               id="confirm_password" placeholder="Enter New Password"
+                                               formControlName="confirm_password">
+                                        <i class="fs-18 cursor-pointer"
+                                           [ngClass]="{'ri-eye-off-line': showconfirmPass, 'ri-eye-line': !showconfirmPass}"
+                                           (click)="showconfirmPass = ! showconfirmPass"></i>
+                                    </div>
+                                    <div *ngIf="isPasswordSubmit && pf['confirm_password'].errors" class="text-danger">
+                                        <div *ngIf="pf['confirm_password'].errors['required']">Confirm password is
+                                            required
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="text-center">
+                                        <button class="btn btn-info btn-rounded me-2" (click)="onBack()"><i
+                                                class="ri-arrow-left-line align-middle"></i>
+                                        </button>
+                                        <button class="btn btn-primary btn-rounded" (click)="passwordStepOne()">Next
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="row mt-2 gy-3" *ngIf="firstTimeLogin && currentStep == 2 && userType=='retailer'">
+                            <div class="col-md-12">
+                                <label class="form-label">New T-PIN <span class="text-danger">*</span></label>
+                                <ng-otp-input [config]="otpNew" (onInputChange)="onsetTpin($event)"></ng-otp-input>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Confirm T-PIN <span class="text-danger">*</span></label>
+                                <ng-otp-input [config]="otpConfirm"
+                                              (onInputChange)="onConfirmTpin($event)"></ng-otp-input>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="d-flex justify-content-center align-items-center gap-3 my-2">
+                                    <button class="btn btn-info btn-rounded" (click)="currentStep = 1"><i
+                                            class="ri-arrow-left-line align-middle"></i> Back
+                                    </button>
+                                    <button class="btn btn-primary btn-rounded"
+                                            [disabled]="newTpin == '' || confirmTpin == ''" (click)="updateSecurity()">
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="customer_first_time_login">
+                        <div class="row mt-2 gy-3" *ngIf="firstTimeLogin && userType=='customer'">
+                            <div class="col-md-12">
+                                <label class="form-label">New T-PIN <span class="text-danger">*</span></label>
+                                <ng-otp-input [config]="otpNew"
+                                              (onInputChange)="onCustomerSetTpin($event)"></ng-otp-input>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label">Confirm T-PIN <span class="text-danger">*</span></label>
+                                <ng-otp-input [config]="otpConfirm"
+                                              (onInputChange)="onCustomerConfirmTpin($event)"></ng-otp-input>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="d-flex justify-content-center align-items-center gap-3 my-2">
+                                    <button class="btn btn-info btn-rounded" (click)="firstTimeLogin=false"><i
+                                            class="ri-arrow-left-line align-middle"></i> Back
+                                    </button>
+                                    <button class="btn btn-primary btn-rounded"
+                                            [disabled]="customer_mobile == '' || customerTin == '' || customerConfirmTpin == ''"
+                                            (click)="onUpdateCustomerPinSecurity()">
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <p class="sm-text mx-auto mt-5">Don't have an account?
+                            <a routerLink="/register" class="btn btn-sm btn-primary rounded-4 py-0 px-2">Register  Now</a>
+                        </p>
+                        <div class="hstack justify-content-between mt-4 ">
+                            <span>Version:2.5.8</span>
+                            <span>Last Updated: 27-04-2024</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 rounded-start rounded-4 bg d-none d-md-block px-5 py-3">
+                    <h2 class="text-white my-3">Welcome to Rucards!</h2>
+                    <div class="text-center mt-4">
+                        <owl-carousel-o [options]="customOptions">
+                            <ng-template carouselSlide>
+                                <img src="assets/images/home2.png" alt="img" class="img-fluid">
+                                <h2 class="text-white mt-5">Metal Card</h2>
+                                <p class="fs-13 mt-3 text-white">Millionaire is a state of mind , one card to
+                                    take care all of your luxury purchases, from grocery shopping to fine-dining
+                                    restaurants.</p>
+                            </ng-template>
+
+                            <ng-template carouselSlide>
+                                <img src="assets/images/home3.png" alt="img" class="img-fluid">
+                                <h2 class="text-white mt-5">Meal Card</h2>
+                                <p class="fs-13 mt-3 text-white">We Offers the ease and convenience of
+                                    providing employees with meal allowance on card platform.</p>
+                            </ng-template>
+
+
+                            <ng-template carouselSlide>
+                                <img src="assets/images/home5.png" alt="img" class="img-fluid">
+                                <h2 class="text-white mt-5">Reimbursement Card</h2>
+                                <p class="fs-13 mt-3 text-white">Our incentive cards, which may me used as a prepaid
+                                    reward card, are a simple and cost effective method to acknowledge your staff and
+                                    lasting business partnership.</p>
+                            </ng-template>
+
+                            <ng-template carouselSlide>
+                                <img src="assets/images/home6.png" alt="img" class="img-fluid">
+                                <h2 class="text-white mt-5">Salary Card</h2>
+                                <p class="fs-13 mt-3 text-white">Keep Things easy with our salary card, it is Simple
+                                    and cost effective method for incentives, rewards for your staff</p>
+                            </ng-template>
+                        </owl-carousel-o>
+                    </div>
+                    <div class="text-center mt-5">
+                        <p class="text-white">Copyright &copy; {{ year }} All Rights Reserved By <br>
+                            <a href="javascript:void(0)" class="text-white" style="font-weight: bolder; border: none">
+                                Crescent Business Solutions Pvt Ltd.</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-sm-column  flex-lg-row justify-content-center align-items-center gap-3">
+            <a target="_blank" href="https://payswap.in/?page_id=942">Terms &amp; Condition</a>
+            <a target="_blank" href="https://payswap.in/?page_id=960">Refund &amp; cancellation</a>
+            <a target="_blank" href="https://payswap.in/?page_id=1020">Privacy policy</a>
+            <a target="_blank" href="https://payswap.in/?page_id=1131">Disclaimer</a>
+            <a target="_blank" href="https://payswap.in/?page_id=763">About us</a>
+            <a target="_blank" href="https://payswap.in/?page_id=776">Contact us</a>
+            <a (click)="openChangeLogModal(changeLog)">Change Log</a>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #usernameModal role="document" let-modal>
+    <div class="modal-content">
+        <div class="modal-header p-3 pb-0">
+            <p class="fs-18 fw-medium" id="exampleModalLabel1">Forgot Username</p>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal1"
+                    (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+            <app-forgot-username></app-forgot-username>
+        </div>
+    </div>
+</ng-template>
+<ng-template #passwordModal role="document" let-modal>
+    <div class="modal-content">
+        <div class="modal-header p-3 pb-0">
+            <p class="fs-18 fw-medium" id="exampleModalLabel">Forgot Password</p>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+                    (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+            <app-forgot-password></app-forgot-password>
+        </div>
+    </div>
+</ng-template>
+<ng-template #changeLog role="document" let-modal>
+    <div class="modal-content">
+        <div class="modal-header py-0 border-bottom border-bottom-dashed">
+            <div class="d-flex justify-content-start align-items-center gap-2 ">
+                <i class="ri-history-line fs-18 "></i>
+                <p class="fs-18 fw-medium mt-3">Rucards Web Version History</p>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal2"
+                    (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+            <h5 class="text-start fw-medium">What is web version?</h5>
+            <p class="text-start">It's refers to a version of the website that is designed specifically for use on a web
+                browser. It is the version of the website that is accessed when you enter the website's URL into the
+                address bar of your web browser.</p>
+            <p class="mb-1">It's decided into three parts seperated by comma (eg. 1.0.1).</p>
+            <ul>
+                <li>The first part represents <code><b>Major Changes</b></code>.</li>
+                <li>The second part represents <code><b>Intermediate Changes</b></code>.</li>
+                <li>The third part represents <code><b>Minor Changes</b></code>.</li>
+            </ul>
+            <p class="w-100 border-bottom-dashed border-bottom"></p>
+            <ngx-simplebar style="max-height: 200px;">
+                <strong>Version 1.0.1</strong>
+                <ul>
+                    <li>Added support for exporting data in CSV format.</li>
+                    <li>Improved error handling for network connectivity issues.</li>
+                    <li>Fixed a bug causing the application to crash when switching between tabs.</li>
+                </ul>
+
+                <strong>Version 1.0.0</strong>
+                <ul>
+                    <li>Added a new feature to automatically save data every 5 minutes.</li>
+                    <li>Fixed a bug causing incorrect data to be displayed in certain cases.</li>
+                    <li>Improved performance and reduced memory usage.</li>
+                </ul>
+            </ngx-simplebar>
+        </div>
+    </div>
+</ng-template>
+<ngx-spinner></ngx-spinner>
+

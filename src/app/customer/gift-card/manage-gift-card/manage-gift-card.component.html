@@ -1,0 +1,711 @@
+
+<app-breadcrumbs title="Manage Gift Cards" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>      
+<div class="row">
+                <div class="col-md-3">
+                    <div class="col-md-12">
+                        <div class="card card-animate rounded-4 bg-soft-success">
+                            <div class="card-body">
+                                <div class="d-flex flex-column justify-content-start gap-2">
+                                    <i class="bx bx-wallet display-6 text-success"></i>
+                                    <h6 class="text-success">Total Number Of Gift Cards {{total_gift_cards}}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card card-animate rounded-4 bg-soft-primary">
+                            <div class="card-body">
+                                <div class="d-flex flex-column justify-content-start gap-2">
+                                    <i class="bx bx-wallet display-6 text-primary"></i>
+                                    <h6 class="text-primary">Total Balance In Cards &#x20B9;15423</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-md-5">
+                    <div class="card card-animate card-height-100 rounded-4 bg-soft">
+                        <div class="card-body ">
+                            <!-- <h4 class="card-title mb-0 text-muted">Spend Pie Chart</h4> -->
+                            <div class="d-flex flex-column justify-content-start gap-2">
+                                <h6 class="text-muted-info">Spend Pie Chart</h6>
+                            </div>
+                            <!-- Chart Component Here -->
+                            <div  class="row fixed-bottom m-2 align-items-center">
+                                <apx-chart [series]="simpleDonutChart.series" [chart]="simpleDonutChart.chart"
+                            [labels]="simpleDonutChart.labels" [responsive]="simpleDonutChart.responsive"
+                            [legend]="simpleDonutChart.legend" [dataLabels]="simpleDonutChart.dataLabels"
+                            [colors]="simpleDonutChart.colors" dir="ltr">
+                            </apx-chart>
+                            </div>
+                        </div><!-- end card header -->
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                <div class="card card-animate card-height-100 rounded-4" style="background-color: #112558;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start gap-2">
+                            <p></p>
+                            <h6 class="text-info">Yes bank</h6>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-start gap-2 mt-3 ms-3">
+                            <h6 class="text-white text-xl text-uppercase">{{CardDetails[0].name}}</h6>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-start gap-2 ms-3 mb-2">
+                            <h6 class="text-info">
+                                <span class="fs-24 text-white fs-1" style="width: 80rem; ">{{CardDetails[0].card_number}} </span> 
+                                    <i class="ri-file-copy-line" title="Copy Card No"></i>
+                            </h6>
+                        </div>
+                        <div class="row">
+                            <div class="d-flex justify-content-between align-items-start gap-2 ms-3">
+                                <div class="col-md-4">
+                                    <h6 class="text-info text-white text-sm">
+                                        EXPIRY
+                                    </h6>
+                                    <h6 class="text-white text-sm ">
+                                        2028-02
+                                    </h6>
+                                </div>
+                                <div class="col-md-8">
+                                    <h6 class="text-info  text-sm text-white">
+                                        CVV
+                                    </h6>
+                                    <h6 class="text-info">
+                                        <i class="ri-eye-off-line ri-1x"></i>
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row fixed-bottom m-2 align-items-center">
+                            <div class="col-md-5 text-center">
+                                <button class="btn btn-sm btn-ghost-warning border-0"><i class="ri-eye-line me-1"></i>
+                                    View More Details
+                                </button>
+                            </div>
+                            <div class="col-md-2 text-center align-items-center">
+                                <button class="btn btn-sm btn-ghost-primary border-0">
+                                    <i class="ri-restart-line" style="font-size: 1.5rem; width: 1.5rem; height: 1.5rem;"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-5 text-center">
+                                <button class="btn btn-sm btn-ghost-info border-0"><i class="ri-lock-password-line me-1"></i>
+                                    Set Card Pin
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+<div class="row">
+                <div class="col-md-12">
+                    <div class="card card-animate rounded-4">
+                        <div class="card-header border-0">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="search-box">
+                                        <input class="form-control search bg-light border-light rounded-pill"
+                                               placeholder="Search by Company Name, Contact Name, Email, Mobile No"
+                                               [(ngModel)]="search_input_text"
+                                               #search (keyup)="onTextSearch(search.value)">
+                                        <i class="ri-search-line search-icon"></i>
+                                    </div>
+                                </div>
+<!--                                <div class="col-md-2">-->
+<!--                                    <a class="col-md-12 btn btn-info btn-rounded me-3 float-end" (click)="onGenerateGiftCard(generate_gift_card)" style="background-color: #3FA5D3; color: white;" >-->
+<!--                                        <i class="ri-gift-2-line"></i> Search-->
+<!--                                    </a>-->
+<!--                                </div>-->
+                                <div class="col-md-2">
+                                    <a class="col-md-12 btn btn-info btn-rounded me-3 float-end" (click)="onFilterByDate(filterDetails)">
+                                        <i class="ri-filter-line me-1"></i> Filters
+                                    </a>
+                                </div>
+                                <div class="col-md-2">
+                                    <a class="col-md-12 btn btn-info btn-rounded me-3 float-end" (click)="onGenerateGiftCard(generate_gift_card)" style="background-color: #3FA5D3; color: white;" >
+                                        <i class="ri-gift-2-line"></i> Generate Gift Card
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-between align-items-center gap-2">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <label for="page" class="me-2">Show</label>
+                                            <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1"
+                                                    [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+                                                <option value="10">10</option>
+                                                <option value="25">25</option>
+                                                <option value="50">50</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                            <label for="page" class="ms-2">entries</label>
+                                        </div>
+                                        <button type="button" class="btn btn-success  btn-rounded me-2 mb-2" (click)="export_to_excel()">Export
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <ngx-simplebar class="table-responsive mt-3" simplebar>
+                                <table class="table align-middle table-nowrap">
+                                    <thead>
+                                    <tr>
+                                        <th>SR</th>
+                                        <th>Name</th>
+                                        <th>Card Number</th>
+                                        <th>Kit Number</th>
+                                        <th>Status</th>
+                                        <th>Issued On</th>
+                                        <th>Expired On</th>
+                                        <th>Action</th>
+            
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let item of giftCardList; index as i">
+                                        <td class="text-uppercase">{{ (page - 1) * pageSize + i +1 }}</td>
+                                        <td>
+                                            <a routerLink="gift-cards"
+                                               [queryParams]="{ kit_no: item.card_id }">
+                                                {{ item?.name | uppercase }}
+                                            </a>
+                                        </td>
+                                        <td>
+                                            {{ item?.mobile }}
+                                        </td>
+                                        <td>
+                                            XXXX-XXXX-XXXX-{{ item?.card_number | slice : 12 : 16 }}
+                                        </td>
+                                        <td>
+                                            {{ item?.card_id }}
+                                        </td>
+                                        <td>
+                                        <div class="badge bg-success rounded-pill">Active</div>
+                                        <div>{{ item?.activated_on | date : "EEEE, MMMM d, y" }}</div>
+                                        </td>
+                                        <td>
+                                            {{ item?.expiry_date | date : " MMMM d, y" }}
+                                        </td>
+                                        <td>
+                                            <div class="dropdown topbar-head-dropdown ms-1 header-item" ngbDropdown>
+                                                <button type="button"
+                                                        class="btn btn-sm rounded-4"
+                                                        data-bs-toggle="dropdown"
+                                                        aria-haspopup="true"
+                                                        aria-expanded="false"
+                                                        ngbDropdownToggle>
+                                                    <i class="ri-more-line"></i>
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-lg p-0 dropdown-menu-end" ngbDropdownMenu>
+                                                    <div class="p-3 border-top-0 border-start-0 border-end-0 border-dashed border">
+                                                        <div class="row align-items-center">
+                                                            <div class="col">
+                                                                <h6 class="m-0 fw-semibold fs-15">Actions</h6>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="p-2">
+                                                        <div class="row g-0">
+                                                            <div class="col">
+                                                                <a class="dropdown-icon-item"
+                                                                   href="javascript:void(0);"
+                                                                   (click)="openModal(content)"
+                                                                   *ngIf="item.gc_flag == 'UL'">
+                                                                    <i class="ri-key-line fs-2"></i>
+                                                                    <span>Set Pin</span>
+                                                                </a>
+                                                            </div>
+                                                            <div class="col">
+                                                                <a class="dropdown-icon-item"
+                                                                   href="javascript:void(0);"
+                                                                   (click)="cardDetails(item)"
+                                                                   *ngIf="item.gc_flag == 'UL'">
+                                                                    <i class="ri-bank-card-line fs-2"></i>
+                                                                    <span>Card Details</span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-0" *ngIf="item.gc_flag == 'UL'">
+                                                            <div class="col">
+                                                                <a class="dropdown-icon-item"
+                                                                   href="javascript:void(0);"
+                                                                   *ngIf="item.gc_flag == 'UL'"
+                                                                   (click)="onGenerate_gc_preferneces(generate_gc_card_prefernces,item)">
+                                                                    <i class="ri-list-check-2 fs-2"></i>
+                                                                    <span>Preferences</span>
+                                                                </a>
+                                                            </div>
+                                                            <div class="col">
+                                                                <a class="dropdown-icon-item"
+                                                                   href="javascript:void(0);"
+                                                                   title="View Card Txns"
+                                                                   routerLink="gift-card-statement"
+                                                                   [queryParams]="{ kit_no: item.card_id }" >
+                                                                    <i class="ri-exchange-funds-line fs-2"></i>
+                                                                    <span>Transactions</span>
+                                                                </a>
+                                                            </div>
+                                                            <div class="col" *ngIf="item.gc_flag == 'UL'">
+                                                                <a class="dropdown-icon-item"
+                                                                   href="javascript:void(0);"
+                                                                   (click)="openLockModal(Lockcontent)" >
+                                                                    <i class="ri-lock-line fs-2"></i>
+                                                                    <span>Lock</span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row g-0" *ngIf="item.gc_flag == 'L'">
+                                                            <div class="col">
+                                                                <a class="dropdown-icon-item"
+                                                                   href="javascript:void(0);"
+                                                                   title="View Card Txns"
+                                                                   routerLink="gift-card-statement"
+                                                                   [queryParams]="{ kit_no: item.card_id }">
+                                                                    <i class="ri-exchange-funds-line fs-2"></i>
+                                                                    <span>Transactions</span>
+                                                                </a>
+                                                            </div>
+                                                            <div class="col-4" *ngIf="item.gc_flag == 'L'">
+                                                                <a class="dropdown-icon-item"
+                                                                   href="javascript:void(0);"
+                                                                   (click)="openUnLockModal(UnLockcontent)">
+                                                                    <i class="ri-lock-unlock-line fs-2"></i>
+                                                                    <span>Unlock</span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Collapse section -->
+
+                                            <!--card Preferneces gift Card offcanvas-->
+<ng-template #generate_gc_card_prefernces let-offcanvas>
+    <div class="offcanvas-header">
+        <p class="fs-18 fw-medium">Gift Card Preferences</p>
+        <button
+                type="button"
+                class="btn-close"
+                aria-label="Close"
+                (click)="offcanvas.dismiss()"
+        ></button>
+    </div>
+    <ngx-simplebar
+            class="offcanvas-body p-3"
+            style="
+max-height: calc(100vh - 75px);
+background-color: #f2f3f4;
+"
+    >
+        <div class="card rounded-4 card-animate">
+            <div class="card-body">
+                <div class="col-12 mb-3">
+                    <label for="flexCheckpos">Preferences</label>
+                    <div class="form-check">
+                        <input
+                                class="form-check-input"
+                                type="checkbox"
+                                value=""
+                                id="flexCheckpos"
+                                [(ngModel)]="item.gc_preferences_pos"
+                                [checked]="item.gc_preferences_pos"
+                        />
+                        <label class="form-check-label" for="flexCheckpos">
+                            POS
+                        </label>
+                    </div>
+
+                    <div class="form-check">
+                        <input
+                                mdbCheckbox
+                                class="form-check-input"
+                                type="checkbox"
+                                value=""
+                                id="flexCheckecom"
+                                [(ngModel)]="item.gc_preferences_ecom"
+                                [checked]="item.gc_preferences_ecom"
+                        />
+                        <label class="form-check-label" for="flexCheckecom">
+                            ECOM
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input
+                                mdbCheckbox
+                                class="form-check-input"
+                                type="checkbox"
+                                value=""
+                                id="flexCheckcontactless"
+                                [(ngModel)]="item.gc_preferences_contactless"
+                                [checked]="item.gc_preferences_contactless"
+                        />
+                        <label
+                                class="form-check-label"
+                                for="flexCheckcontactless"
+                        >
+                            CONTACTLESS
+                        </label>
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-12 mb-3 mt-2">
+                        <button
+                                class="btn btn-primary btn-grad px-3 py-2"
+                                title="Validate Details before Submit"
+                                type="submit"
+                                (click)="
+openSetPreferencesModal(setCardPreferencescontent)
+"
+                        >
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ngx-simplebar>
+</ng-template>
+<!--card Preferneces gift Card -->
+
+<!-- Set Pin Modal -->
+<ng-template #content role="document" let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title mt-0">Set Pin</h5>
+        <button
+                type="button"
+                class="btn-close"
+                aria-hidden="true"
+                (click)="modal.dismiss('Cross click')"
+        ></button>
+    </div>
+    <div class="modal-body">
+        <h5>Do You Want to Set Pin??</h5>
+    </div>
+    <div class="modal-footer">
+        <button
+                type="button"
+                class="btn btn-light"
+                (click)="modal.close('Close click')"
+        >
+            No
+        </button>
+        <button type="button" class="btn btn-primary" (click)="setPin(item)" (click)="modal.close('Close click')">
+            Yes
+        </button>
+    </div>
+</ng-template>
+
+<!-- Lock Modal -->
+<ng-template #Lockcontent role="document" let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title mt-0">Lock Gift Card</h5>
+        <button
+                type="button"
+                class="btn-close"
+                aria-hidden="true"
+                (click)="modal.dismiss('Cross click')"
+        ></button>
+    </div>
+    <div class="modal-body">
+        <h5>Do You Want to Lock Gift card??</h5>
+    </div>
+    <div class="modal-footer">
+        <button
+                type="button"
+                class="btn btn-light"
+                (click)="modal.close('Close click')"
+        >
+            No
+        </button>
+        <button
+                type="button"
+                class="btn btn-primary"
+                (click)="lock(item)"
+        >
+            Yes
+        </button>
+    </div>
+</ng-template>
+
+<!-- UnLock Modal -->
+<ng-template #UnLockcontent role="document" let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title mt-0">Unlock Gift Card</h5>
+        <button
+                type="button"
+                class="btn-close"
+                aria-hidden="true"
+                (click)="modal.dismiss('Cross click')"
+        ></button>
+    </div>
+    <div class="modal-body">
+        <h5>Do You Want to UnLock Gift card??</h5>
+    </div>
+    <div class="modal-footer">
+        <button
+                type="button"
+                class="btn btn-light"
+                (click)="modal.close('Close click')"
+        >
+            No
+        </button>
+        <button
+                type="button"
+                class="btn btn-primary"
+                (click)="unlock(item)"
+                (click)="modal.close('Close click')"
+        >
+            Yes
+        </button>
+    </div>
+</ng-template>
+
+<!-- set Preferences Modal -->
+<ng-template #setCardPreferencescontent role="document" let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title mt-0">Set Gift Card Preferences</h5>
+        <button
+                type="button"
+                class="btn-close"
+                aria-hidden="true"
+                (click)="modal.dismiss('Cross click')"
+        ></button>
+    </div>
+    <div class="modal-body">
+        <h5>Do You Want to change in Gift card preferences??</h5>
+    </div>
+    <div class="modal-footer">
+        <button
+                type="button"
+                class="btn btn-light"
+                (click)="modal.close('Close click')"
+        >
+            No
+        </button>
+        <button
+                type="button"
+                class="btn btn-primary"
+                (click)="gc_set_preferences(item)"
+                (click)="modal.close('Close click')"
+        >
+            Yes
+        </button>
+    </div>
+</ng-template>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </ngx-simplebar>
+                            <div class="row justify-content-md-between align-items-md-center mt-2">
+                                <div class="col col-sm-6">
+                                    <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                                        Showing {{ (page - 1) * pageSize + 1 }} to {{ getMax() }} of {{ total }} entries
+                                    </div>
+                                </div>
+                                <div class="col col-sm-6">
+                                    <div class="text-sm-right float-sm-end listjs-pagination">
+                                        <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="pageSize" [maxSize]="2"
+                                                        (pageChange)="onPageChange($event)">
+                                        </ngb-pagination>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<!--Generate gift Card | Create Wallet Start-->
+<ng-template #generate_gift_card let-offcanvas>
+    <div class="offcanvas-header">
+        <p class="fs-18 fw-medium">Generate Gift Card</p>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <ngx-simplebar class="offcanvas-body p-3" style="max-height: calc(100vh - 75px); background-color: #F2F3F4;">
+        <div class="card rounded-4 card-animate">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label for="product_name">Select Product Name</label>
+                        <div class="d-flex justify-content-between align-items-center gap-1">
+                            <select name="product_name" id="product_name" class="form-select rounded-4"
+                                    [(ngModel)]="gc_data.product_id" (change)="onProductSelectionChange()">
+                                <option value="">Select Product</option>
+                                <ng-container *ngFor="let product of products">
+                                    <ng-container
+                                            *ngIf="product.product_type === 'gift' && product.product_name.trim() !== '' && product.wallet_id !== null">
+                                        <option value="{{ product.id }}">{{ product.product_name }}
+                                            | {{product.product_series}}</option>
+                                    </ng-container>
+                                </ng-container>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-2 p-3">
+                        <label for="virtualCard">Choose Card Type</label> <br>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="virtualCard" name="cardType"
+                                   [(ngModel)]="gc_data.card_category" value="virtual" checked required>
+                            <label class="form-check-label" for="virtualCard">Virtual Card</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="physicalCard" name="cardType"
+                                   [(ngModel)]="gc_data.card_category" value="physical">
+                            <label class="form-check-label" for="physicalCard">Physical Card</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label for="amount" class="form-label mt-2">Amount</label>
+                    <input class="form-control rounded-pill" placeholder="0" id="amount" name="amount"
+                           [(ngModel)]="gc_data.amount" appNumberOnly required>
+                    <div class="text-danger small">{{ amountError }}</div> <!-- Display amountError here -->
+                </div>
+
+                <div class="col-12">
+                    <label for="quantity" class="form-label mt-2">Quantity</label>
+                    <input class="form-control rounded-pill" placeholder="Enter Quantity" id="quantity" name="quantity"
+                           [(ngModel)]="gc_data.quantity" maxlength="4" appNumberOnly required>
+                    <div class="text-danger small">{{ quantityError }}</div> <!-- Display quantityError here -->
+                </div>
+
+
+                <div class="row">
+                    <div class="col-12 mb-3 mt-2">
+                        <button class="btn btn-primary btn-grad px-3 py-2" title="Validate Details before Submit"
+                                type = "submit" [disabled]=" gc_data.amount == '0' || gc_data.quantity == 0  == null "
+                                (click)="validateGiftCardDetails()">Generate
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </ngx-simplebar>
+</ng-template>
+<!--Generate gift Card  end -->
+<ng-template #filterDetails let-offcanvas>
+        <div class="offcanvas-header">
+            <p class="fs-18 fw-medium">Filter Customers By Date</p>
+            <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+        </div>
+        <ngx-simplebar class="offcanvas-body p-3" style="max-height: calc(100vh - 75px); background-color: #F2F3F4;">
+            <div class="card rounded-4 card-animate">
+                <div class="card-body">
+                    <div class="col-12">
+                        <label for="from_date" class="form-label mt-2">From Date:</label>
+                        <input id="from_date" class="form-control flatpickr-input rounded-4" type="text" mwlFlatpickr [altInput]="true"
+                               [convertModelValue]="true" altFormat="F j, Y" dateFormat="Y-m-d" [(ngModel)]="from_date">
+                    </div>
+
+                    <div class="col-12">
+                        <label for="to_date" class="form-label mt-2">To Date:</label>
+                        <input id="to_date" class="form-control flatpickr-input rounded-4" type="text" mwlFlatpickr [altInput]="true"
+                               [convertModelValue]="true" altFormat="F j, Y" dateFormat="Y-m-d" data-maxDate="{{todayDate}}" [(ngModel)]="to_date">
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-12 mb-3 mt-2">
+                            <button class="btn btn-primary btn-grad px-3 py-2" title="Validate Details before Submit"
+                                    type = "submit"
+                                    (click)="onSearchFilterByDate()">Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </ngx-simplebar>
+    </ng-template>
+<!--Generate gift Card -->
+<ng-template #generate_gift_card let-offcanvas>
+        <div class="offcanvas-header">
+            <p class="fs-18 fw-medium">Generate Gift Card</p>
+            <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+        </div>
+        <ngx-simplebar class="offcanvas-body p-3" style="max-height: calc(100vh - 75px); background-color: #F2F3F4;">
+            <div class="card rounded-4 card-animate">
+                <div class="card-body">
+                    <form method="post">
+                        <label for="test" >Test</label>
+                        <input  id="test" type="text"  appNumberOnly>
+                        <button class="btn btn-success">send</button>
+                    </form>
+                    <div class="col-12 mb-3">
+                        <label for="product_name">Select Product Name</label>
+                        <div class="d-flex justify-content-between align-items-center gap-1">
+                            <select name="product_name" id="product_name" class="form-select rounded-4"
+                                    [(ngModel)]="data.product_id" (change)="onProductSelectionChange()">
+                                <option value="">Select Product</option>
+                                <option value="{{product?.id}}"
+                                        *ngFor="let product of products">{{ product?.product_name}}</option>
+                            </select>
+                            <input type="text" maxlength="10" name="product_bin" id="product_bin"
+                                   class="form-control rounded-4" [(ngModel)]="data.product_bin"
+                                   placeholder="BIN No" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mb-2 p-3">
+                            <label for="virtualCard">Choose Card Type</label> <br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="virtualCard" name="cardType"
+                                    [(ngModel)]="gc_data.card_category" value="virtual" checked required>
+                                <label class="form-check-label" for="virtualCard">Virtual Card</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="physicalCard" name="cardType"
+                                    [(ngModel)]="gc_data.card_category" value="physical" disabled>
+                                <label class="form-check-label" for="physicalCard">Physical Card</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="amount" class="form-label mt-2">Amount</label>
+                        <input class="form-control rounded-pill" placeholder="0" id="amount" name="amount" appNumberOnly
+                            [(ngModel)]="gc_data.amount" required>
+                        <div class="text-danger small">{{ amountError }}</div> <!-- Display amountError here -->
+                    </div>
+
+                    <div class="col-12">
+                        <label for="quantity" class="form-label mt-2">Quantity</label>
+                        <input type="text"  class="form-control rounded-pill" placeholder="Enter Quantity" id="quantity" name="quantity"
+                            [(ngModel)]="gc_data.quantity" appNumberOnly >
+                        <div class="text-danger small">{{ quantityError }}</div> <!-- Display quantityError here -->
+                    </div>
+
+
+                        <div class="row">
+                            <div class="col-12 mb-3 mt-2">
+                                <button class="btn btn-primary btn-grad px-3 py-2" title="Validate Details before Submit"
+                                    type = "submit" [disabled]=" gc_data.amount == '0' || gc_data.quantity == 0  == null "
+                                    (click)="validateGiftCardDetails()">Generate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>>
+            
+        </ngx-simplebar>
+    </ng-template>
+<!--Generate gift Card  end -->
+            
+            

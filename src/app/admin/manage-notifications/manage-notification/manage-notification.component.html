@@ -1,0 +1,202 @@
+<app-breadcrumbs title="Manage Notification" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="card rounded-4">
+  <div class="card-header">
+    <div class="row align-items-center g-3">
+      <div class="col-md-3">
+        <p class="fs-16 fw-medium">Notification History</p>
+      </div>
+      <div class="col-md-auto ms-auto">
+        <div class="d-flex gap-2">
+          <div class="search-box">
+            <input type="text" class="form-control rounded-pill" placeholder="Search..." #search
+              (keyup)="onSearch(search.value)" />
+            <i class="ri-search-line search-icon"></i>
+          </div>
+          <button class="btn btn-primary btn-rounded" (click)="openManageNotifications(addNotification)">
+            Add Notification
+          </button>
+          <button class="btn btn-success btn-rounded" (click)="export_to_excel()">
+            Export
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row p-2">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center gap-2">
+        <div class="d-flex align-items-center justify-content-center">
+          <label for="page" class="me-2">Show</label>
+          <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+          <label for="page" class="ms-2">entries</label>
+        </div>
+        <button type="button" class="btn btn-success btn-rounded me-2 mb-2" (onclick)="export_to_excel()">
+          Export To Excel
+        </button>
+
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div>
+      <div class="table-responsive">
+        <table class="table align-middle table-nowrap" id="customerTable">
+          <thead>
+            <tr>
+              <th>SR</th>
+              <th class="cursor-pointer">Message</th>
+              <th>Visible At</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Created At</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <ng-container *ngFor="
+                let notification of notifications.slice(
+                  (page - 1) * pageSize,
+                  page * pageSize
+                );
+                let i = index
+              ">
+              <tr class="cursor-pointer card-animate">
+                <td>{{ i + 1 }}</td>
+                <td>{{ notification.message }}</td>
+                <td>{{ notification.visible_at }}</td>
+                <td>{{ notification.start_date | date : "dd/MM/yyyy" }}</td>
+                <td>{{ notification.end_date | date : "dd/MM/yyyy" }}</td>
+                <td>{{ notification.updated_at | date : "dd/MM/yyyy" }}</td>
+                <td>
+                  <button class="btn btn-primary btn-sm me-2 btn-rounded" title="Edit"
+                    (click)="editManageNotification(editnotification, notification)">
+                    <i class="ri-edit-line align-middle text-white"></i>
+                  </button>
+                  <button class="btn bg-danger btn-sm me-2 btn-rounded" title="Delete"
+                    (click)="deletemanagenotification(notification.id)">
+                    <i class="ri-delete-bin-line align-middle text-white"></i>
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="row justify-content-md-between align-items-md-center mt-3">
+      <div class="col col-sm-6">
+          <p class="mb-2">
+              Showing {{ (page - 1) * pageSize + 1 }} to {{ getMax() }} of {{ notifications?.length ?? 0 }}
+              entries
+          </p>
+      </div>
+      <div class="col col-sm-6">
+          <div class="text-sm-right float-sm-end listjs-pagination">
+              <ngb-pagination [collectionSize]=notifications?.length??0 [(page)]="page" [pageSize]=pageSize
+                              [maxSize]="2">
+              </ngb-pagination>
+          </div>
+      </div>
+  </div>
+  </div>
+</div>
+
+<ng-template #addNotification let-offcanvas>
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title">Add Notification</h4>
+    <button type="button" class="btn btn-primary btn-rounded ms-auto" (click)="offcanvas.close('Close click')">
+      Close
+    </button>
+  </div>
+  <div class="offcanvas-body">
+    <form  class="notificationForm" [formGroup]="notificationForm">
+      <div class="mb-3">
+        <div class="col-12">
+          <label for="visible_at" class="form-label">Visible At</label>
+          <select id="visible_at" class="form-select rounded-pill" formControlName="visible_at">
+            <!-- <option *ngFor="let category of categorys" [value]="category.id">{{ category.id }}</option> -->
+            <option value="loginPage">Login Page</option>
+            <option value="dashboard">Dashboard</option>
+          </select>
+          <!-- <div *ngIf="notificationForm.get('visible_at').errors?.['required']" class="text-danger mt-1">
+            Location is required
+          </div> -->
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="start_date">Start Date <small class="text-muted">(dd-mm-yyyy)</small><span class="text-danger">*</span></label>
+        <div class="input-group btn-block btn-rounded me-5 w-100">
+          <input type="text" id="start_date" mwlFlatpickr class="form-control rounded-pill"  placeholder="dd/MM/yyyy" formControlName="start_date"/>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="end_date">End Date <small class="text-muted">(dd-mm-yyyy)</small><span class="text-danger">*</span></label>
+        <div class="input-group btn-block btn-rounded me-5 w-100">
+          <input type="text" id="end_date" mwlFlatpickr class="form-control rounded-pill" placeholder="dd/MM/yyyy" formControlName="end_date"/>
+        </div>
+      </div>
+      
+      <div class="mb-3">
+        <label for="message">Message</label>
+        <textarea class="form-control rounded-4" id="message" placeholder="Enter your message here"
+          formControlName="message"></textarea>
+      </div>
+      <div class="text-end">
+        <button type="button" class="btn btn-primary btn-rounded" (click)="onSubmit()">
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #editnotification let-offcanvas>
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title">Edit1 Notification</h4>
+    <button type="button" class="btn btn-primary btn-rounded ms-auto" (click)="offcanvas.close('Close click')">
+      Close
+    </button>
+  </div>
+  <div class="offcanvas-body">
+    <form  class="editNotificationForm" [formGroup]="editNotificationForm">
+      <div class="mb-3">
+        <div class="col-20">
+          <label for="notification_id" class="form-label">Visible At</label>
+          <select id="notification_id" class="form-select rounded-pill" formControlName="visible_at">
+            <option value="loginPage">Login Page</option>
+            <option value="dashboard">Dashboard</option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="start_date">Start Date <small class="text-muted">(dd-mm-yyyy)</small><span class="text-danger">*</span></label>
+        <div class="input-group btn-block btn-rounded me-5 w-100">
+          <input type="text" id="start_date" mwlFlatpickr class="form-control rounded-pill"  placeholder="dd/MM/yyyy" formControlName="start_date"/>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="end_date">End Date <small class="text-muted">(dd-mm-yyyy)</small><span class="text-danger">*</span></label>
+        <div class="input-group btn-block btn-rounded me-5 w-100">
+          <input type="text" id="end_date" mwlFlatpickr class="form-control rounded-pill" placeholder="dd/MM/yyyy" formControlName="end_date"/>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="exampleDropdownFormmessage">Message</label>
+        <textarea class="form-control rounded-4" id="exampleDropdownFormmessage" placeholder="Message" formControlName="message"></textarea>
+      </div>
+      <div class="text-end">
+        <button type="button" class="btn btn-primary btn-rounded" (click)="onEditNotificationClick()">
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

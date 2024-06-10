@@ -1,0 +1,291 @@
+<app-breadcrumbs title="Manage Corporates" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card rounded-4">
+            <div class="card-body p-0">
+                <div class="row">
+                    <div class="col col-lg">
+                        <owl-carousel-o [options]="customOptions">
+
+                            <ng-template carouselSlide *ngFor="let item of statistics_list">
+                                <div class="py-4 px-3 border-end">
+                                    <h5 class="text-muted text-uppercase fs-13">{{ item?.name}}
+                                        <i class="ri-checkbox-circle-line fs-18 float-end align-middle text-success"></i>
+                                    </h5>
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <i class="ri-admin-line display-6 text-muted"></i>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h2 class="mb-0">{{ item?.user_count}}</h2>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </owl-carousel-o>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-animate rounded-4">
+            <div class="card-header border-0">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="search-box">
+                            <input class="form-control search bg-light border-light rounded-pill"
+                                   placeholder="Search by Company Name, Contact Name, Email, Mobile No">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-info btn-rounded me-3 float-end">
+                            <i class="ri-filter-line me-1"></i> Filters
+                        </button>
+                        <button class="btn btn-primary btn-rounded float-end me-3"
+                                routerLink="/admin/manage-users/manage-corporates/create">
+                            <i class="ri-add-circle-line me-1"></i> Add User
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="hstack gap-3">
+                            Show <select name="page" id="page" class="form-select rounded-3" style="max-width:80px;">
+                            <option>10</option>
+                            <option>25</option>
+                            <option>50</option>
+                            <option>100</option>
+                        </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+
+                        <button class="btn btn-success btn-rounded float-end me-3" style="width: 100px;"><i
+                                class="ri-file-excel-line me-1"></i> Export
+                        </button>
+                    </div>
+                </div>
+                <ngx-simplebar class="table-responsive mt-3" simplebar>
+                    <table class="table align-middle table-nowrap">
+                        <thead>
+                        <tr>
+                            <th>SR</th>
+                            <th>User</th>
+                            <th>Contact</th>
+                            <th>Role</th>
+                            <th>Parent</th>
+                            <th>Status</th>
+                            <th>Identification</th>
+                            <th>Balance</th>
+                            <th>Action</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="cursor-pointer card-animate"
+                            *ngFor="let user of users | slice: (page-1) * pageSize : page * pageSize; let i = index;">
+                            <td>{{i + 1}}</td>
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-1">{{user?.full_name | uppercase}}</span>
+                                    <span class="text-muted mb-0">&#64; {{user?.username | uppercase}}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-0"> <i
+                                            class="ri-phone-line me-1"></i>{{user?.mobile}}</span>
+                                    <span class="text-muted mb-0"> <i
+                                            class="ri-mail-check-line me-1"></i>{{user?.email | lowercase}}</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-0"> {{user?.role | uppercase}}</span>
+                                    <span class="badge rounded-pill text-bg-success"
+                                          *ngIf="user.active">Active</span>
+                                    <span class="badge rounded-pill text-bg-danger"
+                                          *ngIf="!user.active">Inactive</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-0"> DOB: {{user?.dob | date:'dd-MM-yyyy'}}</span>
+                                    <span class="text-muted mb-0"> DOC: {{user?.created_at | dateago}}</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-0"> State: {{user?.state}} </span>
+                                    <span class="text-muted mb-0"> District: {{user?.district | dateago}}</span>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-0 "> PAN: {{user?.pan ?? 'N/A' | uppercase}} </span>
+                                    <span class="fs-16 mb-0 "> Aadhaar: {{user?.aadhar_no ?? 'N/A' | uppercase}} </span>
+
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-0 "> {{user?.balance | currency:'INR'}} </span>
+                                    <span class="fs-16 mb-0 "> {{ updated_at | dateago}} </span>
+
+                                </div>
+                            </td>
+
+                            <td>
+                                <button class="btn bg-info btn-sm me-2 btn-rounded" title="Edit User Details"
+                                        routerLink="/admin/manage-users/manage-corporates/{{user?.id }}/edit">
+                                    <i class="ri-edit-line align-middle text-white"></i>
+                                </button>
+                                <button class="btn bg-primary btn-sm me-2 btn-rounded" title="Wallet Statement">
+                                    <i class="ri-wallet-line align-middle text-white"></i>
+                                </button>
+                                <button class="btn  btn-success btn-sm me-2 btn-rounded"  (click)="onPromoteUser(promote_user,user)"  title="Promote Users">
+                                    <i class="ri-user-line align-middle text-white"></i>
+                                </button>
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </ngx-simplebar>
+                <div class="row justify-content-md-between align-items-md-center mt-2">
+                    <div class="col col-sm-6">
+                        <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                            Showing {{ (page - 1) * pageSize + 1 }} to {{ Math.min(page * pageSize, totalUsers) }}
+                            of {{ totalUsers }} entries
+                        </div>
+                    </div>
+
+
+                    <div class="col col-sm-6">
+                        <div class="text-sm-right float-sm-end">
+                            <ngb-pagination [collectionSize]=totalUsers [(page)]="page" [pageSize]=pageSize
+                                            [maxSize]="2">
+                            </ngb-pagination>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<ng-template #corporateDetails let-offcanvas>
+    <div class="offcanvas-header pb-0">
+        <div class="d-flex justify-content-start gap-3">
+            <img src="assets/images/avatar.png" alt="user img" class="avatar-md rounded-circle">
+            <div class="d-flex flex-column justify-content-start gap-1">
+                <div class="d-flex justify-content-start align-items-center gap-2">
+                    <p class="fw-semibold fs-16 mb-1">Deepak</p>
+                    <span class="badge badge-outline-success">Active</span>
+                    <small class="badge bg-soft-dark" title="Risk Score"><i
+                            class="ri-shield-fill text-black"></i></small>
+                </div>
+                <span class="text-muted d-flex align-items-center"><i class="ri-phone-line"></i> 8565654521</span>
+                <span class="text-muted d-flex align-items-center"><i
+                        class="ri-map-pin-line"></i> Rajasthan,India</span>
+            </div>
+        </div>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <div class="row mt-3">
+        <div class="col-12 px-4">
+            <button class="btn btn-info w-100 btn-rounded">View Details</button>
+        </div>
+    </div>
+    <hr class="mb-0">
+
+</ng-template>
+</div>
+
+<!--Promote user | Create Wallet Start-->
+<ng-template #promote_user let-offcanvas>
+    <div class="offcanvas-header">
+        <p class="fs-18 fw-medium">Promote {{user_details.role }}</p>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <ngx-simplebar class="offcanvas-body p-3" style="max-height: calc(100vh - 75px); background-color: #F2F3F4;">
+        <div class="card rounded-4 card-animate">
+            <div class="card-body">            
+                  
+                  <div class="col-12">
+                    <label for="fullName" class="form-label mt-2">{{user_details.role}}'s Name:-</label>
+                    <input class="form-control rounded-pill" placeholder="0" id="fullName" name="fullName" value="{{user_details.full_name}}"
+                            readonly>
+                  </div>
+
+                  <div class="col-12">
+                    <label for="username" class="form-label mt-2">{{user_details.role}}'s UserName:-</label>
+                    <input class="form-control rounded-pill" placeholder="0" id="username" name="username" value="{{user_details.username}}"
+                            readonly>
+                  </div>
+                  <div class="col-12">
+                    <label for="username" class="form-label mt-2">KYC Status:- 
+                        <span class="badge rounded-pill bg-danger" *ngIf="user_details.kyc_type=='min-kyc'">Pending</span>
+                        <span class="badge rounded-pill bg-primary" *ngIf="user_details.kyc_type=='full-kyc'">Completed</span>
+                    </label>
+                  </div>
+                    <div class="row">
+                        <div class="col-12 mb-3 mt-2">
+                            <button class="btn btn-primary rounded-4 x-3 py-2" title="Submit" type="submit" (click)="centerModal(centerDataModalKyc)" *ngIf="user_details.kyc_type=='min-kyc'">
+                                Submit
+                            </button>
+                            <button class="btn btn-primary  rounded-4 px-3 py-2" title="Submit" type="submit" (click)="centerModal(centerDataModal)" *ngIf="user_details.kyc_type=='full-kyc'">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+    </ngx-simplebar>
+</ng-template>
+<!--Generate gift Card  end -->
+
+<ng-template #centerDataModal let-modal>
+    <div class="modal-body text-center p-5">
+        <div class="mt-4">
+            <h4 class="mb-3" *ngIf="user_details.role=='retailer'">Retailer is promoted to role Distributor</h4>
+            <h4 class="mb-3" *ngIf="user_details.role=='distributor'">Distributor is promoted to role Super Distributor</h4>
+            <p class="text-muted mb-4"> After Promoting Role Username is Changed.</p>
+            <p class="text-muted mb-4" *ngIf="user_details.role=='retailer'"> New Username is:- D{{user_details.username |slice:1:10}}</p>
+            <p class="text-muted mb-4" *ngIf="user_details.role=='distributor'"> New Username is:- S{{user_details.username |slice:1:10}}</p>
+            <div class="hstack gap-2 justify-content-center">
+                <button type="button" class="btn btn-light rounded-4" data-bs-dismiss="modal"
+                    (click)="modal.close('Close click')">Close</button>
+                <a href="javascript:void(0);" class="btn btn-primary rounded-4" (click)="modal.close('Close click')" (click)="submitPromote(user_details)">Submit</a>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #centerDataModalKyc let-modal>
+    <div class="modal-body text-center p-5">
+        <div class="mt-4">
+            <h4 class="mb-3">Oops Kyc Status Is pending!!</h4>
+            <p class="text-muted mb-4"> {{user_details.role}} Have to First Complete Kyc..Then Try Again</p>
+            <div class="hstack gap-2 justify-content-center">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal"
+                    (click)="modal.close('Close click')">Close</button>
+            </div>
+        </div>
+    </div>
+</ng-template>

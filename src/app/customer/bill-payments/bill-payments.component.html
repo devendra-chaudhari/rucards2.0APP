@@ -1,0 +1,306 @@
+<app-breadcrumbs title="BBPS" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+
+<div class="row gx-5 gy-3">
+    <div class="col-md-5">
+        <ngx-simplebar class="card rounded-0" style="max-height: 750px;">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <p class="fs-20 fw-medium mb-0">
+                    <i class="ri-arrow-left-circle-fill me-1 cursor-pointer align-middle" (click)="goBack()"
+                       *ngIf="bbpsStep != 1"></i>
+                    <span *ngIf="bbpsStep == 1">Bill Payment Categories</span>
+                    <span *ngIf="bbpsStep == 2">Electricity</span>
+                    <span *ngIf="bbpsStep == 3">Bill Details</span>
+                    <span *ngIf="bbpsStep == 4">Payment</span>
+                </p>
+                <img src="assets/images/project/sm_bbps.png" alt="bbps logo" width="90">
+            </div>
+            <div class="card-body">
+                <ng-container *ngIf="bbpsStep == 1;">
+                    <div *ngFor="let item of bbpsServices;">
+                        <p class="fw-medium fs-16 mb-2">{{item.category | titlecase}}</p>
+                        <div class="card shadow-md mb-2">
+                            <div class="card-body">
+                                <div class="row gy-2">
+                                    <div class="col-3" *ngFor="let subitem of item.services;">
+                                        <div class="services rounded-3 py-2">
+                                            <div class="cursor-pointer d-flex flex-column justify-content-center align-items-center gap-2 mb-3"
+                                                 (click)="bbpsStep = 2;">
+                                                <img src="{{subitem.img}}" class="bx-tada-hover img-fluid avatar-xs"
+                                                     alt="service img">
+                                                <span class="fw-medium fs-12 text-nowrap">{{subitem.title}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="fs-18 fw-medium mt-3">
+                        Recent bills & recharges <a href="javascript:void(0)"
+                                                    class="float-end align-middle btn btn-primary btn-rounded btn-sm">
+                        <i class="ri-history-line align-middle"></i> View History</a></p>
+                    <div class="card">
+                        <div class="card-body">
+                            <ng-container>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div class="d-flex">
+                                        <img src="assets/images/logo-sm.png" alt="logo"
+                                             class="avatar-xs rounded-circle me-3">
+                                        <div class="d-flex flex-column">
+                                            <p class="fw-medium mb-0">Bharat Gas (BPCL)</p>
+                                            <small class="text-muted">9955421125</small>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-column align-items-end">
+                                        <p class="fw-medium mb-0">&#8377; 1134.50</p>
+                                        <small class="text-success">Paid on 13/04/23</small>
+                                        <div class="d-flex mt-1">
+                                            <a href="javascript:void(0)"
+                                               class="text-muted d-flex align-items-center">
+                                                View details <i class="ri-arrow-down-s-fill ms-1"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="bbpsStep == 2;">
+                    <div class="card-body">
+                        <form>
+                            <div class="row gy-2">
+                                <div class="col-12">
+                                    <label for="state">State</label>
+                                    <select id="state" class="form-select rounded-pill">
+                                        <option value="" selected>Choose State</option>
+                                        <option value="8">Rajasthan</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label for="board">Board</label>
+                                    <select id="board" class="form-select rounded-pill">
+                                        <option value="" selected>Choose Board</option>
+                                        <option value="8">Jaipur Vidyut Nigam (JVVNL)</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label for="kno">K Number</label>
+                                    <input id="kno" class="form-control rounded-pill"
+                                           placeholder="Enter K Number">
+                                </div>
+                                <div class="col-12 text-center">
+                                    <p class="fw-medium fs-14 mb-0">
+                                        Proceeding allows us to fetch your upcoming bills so you can view & pay
+                                        them on time</p>
+                                </div>
+                                <div class="col-12 text-center">
+                                    <button class="btn btn-primary btn-rounded" (click)="bbpsStep = 3;">
+                                        Fetch Bill
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="bbpsStep == 3;">
+                    <div class="d-flex justify-content-start align-items-center my-3">
+                        <div class="d-flex">
+                            <img src="assets/images/logo-sm.png" alt="logo" class="avatar-sm rounded-circle me-3">
+                            <div class="d-flex flex-column">
+                                <p class="fw-medium mb-0">Jodhpur Vidyut Vitran Nigam Limited (JDVVNL)</p>
+                                <small class="text-muted">#411212151522</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <label class="text-muted">Consumer Name</label>
+                            <input type="text" class="form-control rounded-pill text-uppercase"
+                                   value="MR. ABHISHEK">
+                            <div class="d-flex justify-content-between align-items-center my-2">
+                                <small class="text-muted">Bill Number</small>
+                                <p class="mb-0 fw-medium">3104545201</p>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <small class="text-muted">Bill Date</small>
+                                <p class="mb-0 fw-medium">NA</p>
+                            </div>
+                            <hr class="mt-1">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="mb-0">Amount</p>
+                                <p class="mb-0 fw-medium">&#8377; 1613.00</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <label for="label" class="text-muted">Label This Bill</label>
+                                    <input type="text" id="label"
+                                           class="form-control rounded-pill text-capitalize fw-medium"
+                                           placeholder="Add Label"
+                                           [(ngModel)]="label" name="label">
+                                    <div class="d-flex gap-2 fs-16 mt-2">
+                                        <div class="badge fw-medium badge-soft-primary rounded-pill cursor-pointer"
+                                             (click)="label = 'self'">Self
+                                        </div>
+                                        <div class="badge fw-medium badge-soft-primary rounded-pill cursor-pointer"
+                                             (click)="label = 'mother'">Mother
+                                        </div>
+                                        <div class="badge fw-medium badge-soft-primary rounded-pill cursor-pointer"
+                                             (click)="label = 'father'">Father
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end">
+                        <button class="btn btn-rounded btn-primary" (click)="bbpsStep = 1;">Add to billers
+                        </button>
+                    </div>
+                </ng-container>
+            </div>
+        </ngx-simplebar>
+    </div>
+    <div class="col-md-7">
+        <ngx-simplebar class="card mx-0 mx-md-5" style="max-height: 750px;">
+            <div class="card-header">
+                <p class="fs-18 fw-medium mb-0">Manage Billers
+                    <i class="float-end align-middle ri-information-line"
+                       ngbTooltip="Maximum 25 no of billers can be added at a time"></i>
+                </p>
+
+            </div>
+            <div class="card-body">
+                <ng-container>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex">
+                                    <img src="assets/images/bbps/C04.svg" alt="logo" class="avatar-xs me-3">
+                                    <div class="d-flex flex-column">
+                                        <p class="fw-medium fs-16 mb-0">Jaipur Vidyut Vitran Nigam (JVVNL)</p>
+                                        <span class="text-muted">210181045412</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="fw-medium fs-16 mb-0">&#8377;1620.00</p>
+                                    <i class="ri-delete-bin-line text-danger float-end cursor-pointer fs-18"
+                                       title="Delete"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex">
+                                    <img src="assets/images/bbps/C04.svg" alt="logo" class="avatar-xs me-3">
+                                    <div class="d-flex flex-column">
+                                        <p class="fw-medium fs-16 mb-0">Jodhpur Vidyut Vitran Nigam (JVVNL)</p>
+                                        <span class="text-muted">210182584845</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="fw-medium fs-16 mb-0">&#8377;1700.00</p>
+                                    <i class="ri-delete-bin-line text-danger float-end cursor-pointer fs-18"
+                                       title="Delete"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h5>Total Amount <span class="float-end">&#8377;3320.00</span></h5>
+                    <div class="text-center mt-4">
+                        <button class="btn btn-primary btn-rounded" (click)="payBill(paymentDetails)">Proceed to
+                            Pay
+                        </button>
+                    </div>
+                </ng-container>
+            </div>
+        </ngx-simplebar>
+        <div class="card">
+            <div class="card-body">
+                <h5>Variety of online Bill Payments and e-Services</h5>
+                <ul class="mt-2" style="line-height: 25px;">
+                    <li>Pay your electricity, water and Utility bills online without any hassle and avoid late
+                        payment charges
+                    </li>
+                    <li>Recharge your mobile, landline, cable and DTH devices in few clicks</li>
+                    <li>Loan and Insurance services made easy through one click easy payments.</li>
+                </ul>
+                <h5>General Instructions:</h5>
+                <ul class="mt-2" style="line-height: 25px;">
+                    <li>It is recommended to wait for 48 hours before re-trying the bill payments for same consumer
+                        number Pay your bills before due date to avoid penalty.
+                    </li>
+                    <li>Raise a ticket if you have any kind of issue with a transaction or call rucards support
+                        helpline number or write us on connect&#64;rucards.in
+                    </li>
+                    <li>You can download the receipts at any time from the portal and export transaction history
+                        into Excel file.
+                    </li>
+                    <li>If biller reject/refund the transaction, then rucards will be refund the   customer/agent.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #paymentDetails let-offcanvas>
+    <div class="offcanvas-header pb-0 border">
+        <p class="fs-18 fw-medium">Checkout</p>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <ngx-simplebar class="offcanvas-body p-3" style="background: #FFFFFF4D; max-height: calc(100vh - 70px);">
+        <div class="card">
+            <div class="card-header">
+                <p class="fs-16 fw-medium mb-0">Order Summary</p>
+            </div>
+            <div class="card-body">
+                <table class="table table-nowrap table-striped table-bordered">
+                    <tbody>
+                    <tr>
+                        <th>Service</th>
+                        <td>BBPS</td>
+                    </tr>
+                    <tr>
+                        <th>No of Billers</th>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <th>Total Amount</th>
+                        <td>&#8377; 3200</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <form>
+            <div class="card">
+                <div class="card-header">
+                    <p class="fs-16 fw-medium mb-0">Payment</p>
+                </div>
+                <div class="card-body">
+                    <div class="list-group rounded-4">
+                        <label class="list-group-item cursor-pointer">
+                            <input class="form-check-input me-1" name="paymentMode" type="radio">
+                            Main Wallet
+                        </label>
+                        <label class="list-group-item cursor-pointer">
+                            <input class="form-check-input me-1" name="paymentMode" type="radio">
+                            PG - Safexpay
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <button class="btn btn-primary btn-rounded w-50">Pay</button>
+            </div>
+        </form>
+    </ngx-simplebar>
+</ng-template>

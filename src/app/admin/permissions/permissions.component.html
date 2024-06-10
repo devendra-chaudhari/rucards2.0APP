@@ -1,0 +1,196 @@
+<app-breadcrumbs title="Permission" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="card rounded-4">
+    <div class="card-header">
+        <div class="row align-items-center g-3">
+            <div class="col-md-3">
+                <p class="fs-16 fw-medium">Manage Permissions</p>
+            </div>
+            <div class="col-md-auto ms-auto">
+                <div class="d-flex gap-2">
+                    <div class="search-box">
+                        <input type="text" class="form-control rounded-pill" placeholder="Search..." #search
+                               (keyup)="onSearch(search.value)">
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+                    <select name="page" id="page" class="btn btn-primary btn-rounded" (change)="redirectToPage($event)">
+                        <option value="" selected>View/Edit User Permission</option>
+                        <option value="1_tech">Tech</option>
+                        <option value="10_sub-admin">Sub Admin</option>
+                        <option value="3_api-partner">Api Partner</option>
+                        <option value="4_super-distributor">Super Distributor</option>
+                        <option value="5_distributor">Distributor</option>
+                        <option value="6_merchant">Merchant</option>
+                        <option value="7_retailer">Retailer</option>
+                        <option value="8_customer">Customer</option>
+                        <option value="9_employee">Employee</option>
+                    </select>
+                    <a routerLink="/admin/roles"
+                       class="btn btn-primary btn-rounded">
+                        Permission Control
+                    </a>
+                    <button class="btn btn-primary btn-rounded" (click)="openPermission(permissionModal)">
+                        Add Permission
+                    </button>
+                    <button class="btn btn-success btn-rounded" (click)="export_to_excel()">
+                        Export
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive table-card" data-simplebar data-simplebar-auto-hide="false">
+            <table class="table align-middle table-nowrap" id="customerTable">
+                <thead>
+                <tr>
+                    <th>SR</th>
+                    <th>Name</th>
+                    <th>Group</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="cursor-pointer card-animate" *ngFor="let permission of permissions| slice: (page-1) * pageSize : page * pageSize; let i = index;">
+                    <td>{{ (page - 1) * pageSize + i + 1 }}</td>
+                    <td>{{ permission.display_name | titlecase }}</td>
+                    <td>{{ permission.group_name | titlecase }}</td>
+                    <td>{{ permission.description | titlecase }}</td>
+                    <td>
+                        <span *ngIf="permission.active" class="badge badge-pill bg-success">Active</span>
+                        <span *ngIf="!permission.active" class="badge badge-pill bg-warning">Inactive</span>
+                    </td>
+                    <td>{{ permission.created_at | dateago }}</td>
+                    <td>{{ permission.updated_at | dateago }}</td>
+                    <td>
+                        <button class="btn bg-info btn-sm me-2 btn-rounded" title="Edit"
+                                (click)="openEditDialog(permission)">
+                            <i class="ri-edit-line align-middle text-white"></i>
+                        </button>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row justify-content-md-between align-items-md-center mt-2">
+            <div class="col col-sm-6">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    Showing {{ (page - 1) * pageSize + 1 }} to {{ getMax() }} of {{ total }} entries
+                </div>
+            </div>
+
+            <div class="col col-sm-6">
+                <div class="text-sm-right float-sm-end listjs-pagination">
+                    <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="pageSize" [maxSize]="2">
+                    </ngb-pagination>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<ng-template #editDialog let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title">Edit Permission</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
+    </div>
+    <div class="modal-body">
+        <form #editForm="ngForm" (ngSubmit)="saveChanges()">
+            <div class="form-group mb-3">
+                <label for="displayName">Display Name</label>
+                <input type="text" id="displayName" name="displayName" class="form-control rounded-3"
+                       [(ngModel)]="selected_Permission.display_name" required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="group">Group</label>
+                <input type="text" id="edit_group" name="group" class="form-control rounded-3 bg-light" readonly
+                       [(ngModel)]="selected_Permission.group_name"
+                       required>
+            </div>
+            <div class="form-group mb-3">
+                <label for="description">Description</label>
+                <textarea id="edit_description" name="description" class="form-control"
+                          [(ngModel)]="selected_Permission.description" required></textarea>
+            </div>
+            <div class="form-group mb-3">
+                <label for="active">Status</label>
+                <select id="active" name="active" class="form-select" [(ngModel)]="selected_Permission.active"
+                        required>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" (click)="modal.dismiss()">Cancel</button>
+                <button type="submit" class="btn btn-primary" [disabled]="!editForm.valid">Save</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<!--create New Permission-->
+<ng-template #permissionModal let-modal>
+    <div class="modal-content">
+        <div class="modal-header">
+            <p class="fs-24">{{ title }} Permission</p>
+            <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="permissionForm">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label for="group">Permission Group</label>
+                        <select id="group" class="form-select rounded-pill"
+                                formControlName="group">
+                            <option value="null" disabled>Select Permission Group</option>
+                            <option *ngFor="let group of permissionGroup"
+                                    value="{{group.id}}">{{ group.name | titlecase }}
+                            </option>
+                        </select>
+                        <div *ngIf="isPermissionSubmit && pf['group'].errors" class="text-danger mt-1">
+                            <div *ngIf="pf['group'].errors['required']">Permission group is required</div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="display_name">Permission Name</label>
+                        <input id="display_name" class="form-control rounded-pill" placeholder="Enter Permission Name"
+                               formControlName="display_name">
+                        <div *ngIf="isPermissionSubmit && pf['display_name'].errors" class="text-danger mt-1">
+                            <div *ngIf="pf['display_name'].errors['required']">Display name is required</div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="description">Description (if any.)</label>
+                        <textarea cols="5" rows="6" id="description" class="form-control"
+                                  placeholder="Enter Permission Description"
+                                  formControlName="description"></textarea>
+                        <div *ngIf="isPermissionSubmit && pf['description'].errors" class="text-danger mt-1">
+                            <div *ngIf="pf['description'].errors['required']">Permission Description is required</div>
+                        </div>
+                    </div>
+
+                    {{ permissionForm.value |json }}
+                    <div class="col-md-12">
+                        <div class="hstack gap-2 justify-content-end">
+                            <button class="btn btn-light btn-rounded" data-bs-dismiss="modal"
+                                    (click)="modal.close('Close click')">Close
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-rounded"
+                                    (click)="onCreatePermission();">Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>
+

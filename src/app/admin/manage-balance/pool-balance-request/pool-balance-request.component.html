@@ -1,0 +1,233 @@
+<app-breadcrumbs title="Pool Balance" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="card rounded-4">
+    <div class="card-header">
+        <h4 class="mb-0">Load Pool Balance from Bank</h4>
+    </div>
+    <div class="card-body p-3">
+        <div class="row">
+            <div class="col-md-6 order-1">
+                <div class="mb-4">
+                    <form [formGroup]="fundForm">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="text-center">
+                                    <img src="{{filePath}}" alt="Upload Receipt" width="120">
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="text-center mt-4">
+                                    <div class="d-inline-flex">
+                                        <label for="receipt" class="btn btn-primary btn-rounded me-2 mb-3"
+                                               title="Upload Receipt">Upload Receipt
+                                            <input type="file" id="receipt" hidden
+                                                   accept="image/png, image/jpeg" formControlName="receipt"
+                                                   (change)="uploadReceipt($event)">
+                                        </label>
+                                        <button type="button" class="btn btn-danger btn-rounded mb-3"
+                                                title="Reset" (click)="filePath='assets/images/receipt.svg'">
+                                            Reset
+                                        </button>
+                                    </div>
+                                    <br>
+                                    <h5 class="text-black m-0">Please upload your transaction supported
+                                        document.
+                                    </h5>
+                                    <small class="text-muted">Allowed JPG,JPEG or PNG. Max size of 500KB</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label class="col-md-4 form-label" for="transaction_date">Transaction Date</label>
+                            <div class="col-md-8">
+                                <input type="text" id="transaction_date" formControlName="transaction_date"
+                                       class="form-control fw-semibold flatpickr-input rounded-pill"
+                                       placeholder="Deposit Date" mwlFlatpickr [altInput]="true"
+                                       [maxDate]="max_date"
+                                       altFormat="j F, Y">
+                                <div *ngIf="isFundSubmit && ff['transaction_date'].errors"
+                                     class="text-danger mt-1">
+                                    <div *ngIf="ff['transaction_date'].errors['required']">Deposit date is
+                                        required
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-md-4 form-label" for="bank_name">Debit From Bank</label>
+                            <div class="col-md-8">
+                                <select class="form-select fw-semibold rounded-pill"
+                                        formControlName="bank_name"
+                                        id="bank_name">
+                                    <option selected>Select Bank</option>
+                                    <option value="{{bank?.id}}"
+                                            *ngFor="let bank of banks" [ngValue]="{ id: bank.id, name: bank.name }">
+                                        {{bank?.name}}
+                                    </option>
+
+                                </select>
+                                <div *ngIf="isFundSubmit && ff['bank_name'].errors" class="text-danger mt-1">
+                                    <div *ngIf="ff['bank_name'].errors['required']">Company Bank is required
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-md-4 form-label" for="bank_name">Credit To Pool</label>
+                            <div class="col-md-8">
+                                <select class="form-select fw-semibold rounded-pill"
+                                        formControlName="wallet_name"
+                                        id="wallet_name"
+                                        >
+                                    <option selected>Select Pool</option>
+                                    <option value="{{wallet?.id}}"
+                                            *ngFor="let wallet of Wallets"
+                                            [ngValue]="{ id: wallet.id, name: wallet.name, balance:wallet.balance }">
+                                        {{wallet?.name}}
+                                    </option>
+                                </select>
+                                <div *ngIf="isFundSubmit && ff['bank_name'].errors" class="text-danger mt-1">
+                                    <div *ngIf="ff['bank_name'].errors['required']">Company Bank is required
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-12 px-3 py-1">
+                                <div class="card card-animate bg-soft-light">
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <h5>Fund Classification as per Product</h5>
+                                            <table class="table table-sm table-bordered w-100" id="customerTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Product</th>
+                                                        <th>Amount</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <ng-container formArrayName="services">
+                                                        <ng-container *ngFor="let serviceGroup of services.controls; let i = index"
+                                                        [formGroupName]="i">
+                                                            <tr>
+                                                                <td class="w-75">
+                                                                    <input type="hidden" name="service_id" formControlName="id" >
+                                                                    <input type="hidden" name="service_name" formControlName="service_name" >
+                                                                    {{ serviceGroup.get('service_name').value }}
+                                                                </td>
+                                                                <td class="w-25">
+                                                                    <input type="text" class="form-control rounded-3 float-end"
+                                                                        formControlName="amount" appNumberOnly>
+                                                                </td>
+                                                            </tr>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row mb-3">
+                            <label class="col-md-4 form-label" for="amount">Amount</label>
+                            <div class="col-md-8">
+                                <input id="amount" placeholder="Amount" inputmode="numeric"
+                                       class="form-control fw-semibold rounded-pill bg-light"
+                                       formControlName="amount" readonly>
+                                <div *ngIf="isFundSubmit && ff['amount'].errors" class="text-danger mt-1">
+                                    <div *ngIf="ff['amount'].errors['required']">Amount is required</div>
+                                    <div *ngIf="ff['amount'].errors['min']">Amount must be at least 100 rupees
+                                    </div>
+                                </div>
+                                <div *ngIf="ff['amount'].value>0 && ff['amount'].value" class="mt-1">
+                                    <small class="text-muted fw-semibold">{{convertNumber(ff['amount'].value)}}</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-md-4 form-label" for="ref_no">Transaction Ref/UTR</label>
+                            <div class="col-md-8">
+                                <input id="ref_no" placeholder="Reference No/ UTR No"
+                                       class="form-control fw-semibold rounded-pill" formControlName="ref_no">
+                                <div *ngIf="isFundSubmit && ff['ref_no'].errors" class="text-danger mt-1">
+                                    <div *ngIf="ff['ref_no'].errors['required']">Transaction no is required
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-md-4 form-label" for="remark">Remark</label>
+                            <div class="col-md-8">
+                                <textarea id="remark" rows="5" name="remark" placeholder="Remark(If any)"
+                                          formControlName="remark"
+                                          class="form-control fw-semibold rounded-3"></textarea>
+                                <div *ngIf="isFundSubmit && ff['remark'].errors" class="text-danger mt-1">
+                                    <div *ngIf="ff['ref_no'].errors['required']">Transaction Remark is required
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-primary btn-rounded" (click)="onSubmit();">Submit</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            <div class="col-md-6 order-2">
+                <div class="mb-4">
+                    <div class="card p-3">
+                        <h5>Recent Transactions</h5>
+                        <div class="row my-3">
+                            <div class="col-12">
+                                <input class="form-control rounded-4" placeholder="Search Pool Transaction Details">
+                            </div>
+                        </div>
+
+                        <ngx-simplebar class="table-responsive mt-2">
+                            <table class="table table-sm table-centered align-middle table-nowrap">
+                                <thead class="bg-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>UTR/REF No</th>
+                                    <th>Txn Type</th>
+                                    <th>Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="cursor-pointer card-animate"
+                                    *ngFor="let transaction of transactions | slice: (page-1) * pageSize : page * pageSize; let i = index;">
+                                    <td>{{(page - 1) * pageSize + i + 1}}</td>
+                                    <td>{{transaction?.created_date | date: 'dd MMM yyyy'}}</td>
+                                    <td>{{transaction?.amount |currency:'INR'}}</td>
+                                    <td>{{transaction?.ref_no | uppercase}}</td>
+                                    <td>{{transaction?.transaction_type | uppercase}}</td>
+                                    <td>
+                        <span
+                              class="badge bg-primary rounded-pill"> {{transaction?.transaction_status | uppercase}}</span>
+                                        <span *ngIf=" transaction?.transaction_status=='Accepted'"
+                                              class="badge bg-success rounded-pill"> {{transaction?.transaction_status | uppercase}}</span>
+                                        <span *ngIf=" transaction?.transaction_status=='Rejected'"
+                                              class="badge bg-danger rounded-pill"> {{transaction?.transaction_status | uppercase}}</span>
+
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </ngx-simplebar>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--{{ fundForm.value.services | json }}-->

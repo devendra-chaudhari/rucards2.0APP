@@ -1,0 +1,139 @@
+.card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6.6px);
+  -webkit-backdrop-filter: blur(6.6px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+
+body {
+  background-image: var(--#{$prefix}body-bg-image);
+  background-attachment: fixed;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: #F6F6FA;
+  }
+}
+
+#page-topbar {
+  &.topbar-shadow {
+    background-color: var(--#{$prefix}card-bg-fill);
+  }
+}
+
+[data-layout="vertical"][data-sidebar-size="sm"] .navbar-menu .navbar-nav .nav-item:hover > .menu-dropdown {
+  background-color: $white;
+}
+
+.layout-rightside-col {
+  @media (max-width: 1699.98px) {
+    .card {
+      background-color: var(--#{$prefix}gray-300);
+    }
+  }
+}
+
+.apex-charts {
+  .apexcharts-pie-series {
+    path {
+      stroke: var(--#{$prefix}card-bg-fill);
+    }
+  }
+}
+
+.apexcharts-tooltip,
+.swal2-popup {
+  background-color: var(--#{$prefix}card-bg-fill) !important;
+}
+
+.shepherd-content,
+.card-bg-fill,
+.navbar-landing.is-sticky,
+#preloader,
+.timeline-item .icon,
+.department ul li a {
+  background-color: var(--#{$prefix}card-bg-fill);
+}
+
+// profile Page
+.profile-wid-bg::before {
+  background: none;
+}
+
+@media (max-width: 1349.98px) {
+
+  .email-detail-content,
+  .file-manager-detail-content {
+    background-color: var(--#{$prefix}card-bg-fill);
+  }
+}
+
+[for="body-img-three"],
+[for="body-img-two"],
+[for="body-img-one"] {
+  background-image: var(--#{$prefix}body-bg-image);
+  background-size: cover;
+}
+
+[data-sidebar="light"][data-layout="vertical"][data-sidebar-size="sm-hover"] {
+  .navbar-menu:hover {
+    background-color: var(--#{$prefix}white);
+  }
+}
+
+[data-layout-mode="dark"] {
+  body {
+    background-size: cover;
+
+    &::before {
+      background-color: rgba(4, 19, 36, 0.95);
+    }
+  }
+
+  &[data-layout="vertical"][data-sidebar="dark"][data-sidebar-size="sm-hover"] {
+    .navbar-menu:hover {
+      background-color: var(--#{$prefix}card-bg-fill);
+    }
+  }
+
+  &[data-layout="vertical"][data-sidebar="dark"][data-sidebar-size="sm"] {
+    .navbar-menu .navbar-nav .nav-item:hover > .menu-dropdown {
+      background-color: var(--#{$prefix}card-bg-fill);
+    }
+  }
+
+  &[data-layout="vertical"][data-sidebar-size="sm"] {
+    .navbar-menu .navbar-nav .nav-item:hover > a.menu-link {
+      background-color: var(--#{$prefix}card-bg-fill);
+    }
+  }
+}
+
+[data-layout="horizontal"] .navbar-nav .nav-item .nav-link[data-bs-toggle=collapse]:after {
+  color: currentColor;
+}
+
+@media (max-width: 991.98px) {
+  .email-menu-sidebar.menubar-show {
+    background-color: var(--#{$prefix}card-bg-fill);
+  }
+}
+
+@media (max-width: 767.98px) {
+  [data-topbar="light"] {
+    .app-menu {
+      background-color: $white;
+    }
+  }
+  [data-layout-mode="dark"] {
+    .vertical-sidebar-enable .app-menu {
+      background-color: var(--#{$prefix}card-bg-fill);
+    }
+  }
+}

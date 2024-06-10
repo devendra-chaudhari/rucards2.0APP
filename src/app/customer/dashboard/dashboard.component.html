@@ -1,0 +1,259 @@
+<div class="row">
+    <div class="col-md-8">
+        <div class="text-start mb-4">
+            <p class="text-primary fs-24">Welcome Back</p>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card card-animate rounded-4 bg-soft-success">
+                    <div class="card-body">
+                        <div class="d-flex flex-column justify-content-start gap-2">
+                            <i class="bx bx-wallet display-6 text-success"></i>
+                            <h6 class="text-success">Transfer To Rucards User</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-animate rounded-4 bg-soft-primary">
+                    <div class="card-body">
+                        <div class="d-flex flex-column justify-content-start gap-2">
+                            <i class="bx bx-pie-chart-alt display-6 text-primary"></i>
+                            <h6 class="text-primary">Transfer To Your Bank</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card card-animate rounded-4 bg-soft-info">
+                    <div class="card-body">
+                        <div class="d-flex flex-column justify-content-start gap-2">
+                            <i class="ri-bank-line display-6 text-info"></i>
+                            <h6 class="text-info">Transfer To Another Bank</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-animate rounded-4">
+                    <div class="card-body p-0 pb-2">
+                        <div class="mb-n2">
+                            <apx-chart [series]="basicColumnChart.series" [chart]="basicColumnChart.chart"
+                                       [colors]="basicColumnChart.colors" [dataLabels]="basicColumnChart.dataLabels"
+                                       [plotOptions]="basicColumnChart.plotOptions" [yaxis]="basicColumnChart.yaxis"
+                                       [legend]="basicColumnChart.legend"
+                                       [fill]="basicColumnChart.fill" [stroke]="basicColumnChart.stroke"
+                                       [tooltip]="basicColumnChart.tooltip"
+                                       [xaxis]="basicColumnChart.xaxis" dir="ltr"></apx-chart>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8">
+                <div class="card card-animate rounded-4">
+                    <div class="card-body">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 rounded-4" style="background-color: #e6e8ec">
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="rounded-4">
+                    <img src="assets/images/customerCard.png" alt="card img" class="img-fluid rounded-4 mt-3">
+                    <div class="d-flex justify-content-start card-no mb-0 ">
+                        <div class="d-flex flex-column mb-0">
+                            <div class="d-flex justify-content-center align-items-start gap-2">
+
+                                <h4 class="text-white fs-18 fw-semibold mb-0" *ngIf="showDetails">
+                                    {{gprCardsList[0]?.CardNumber }}
+                                    <a [cdkCopyToClipboard]="gprCardsList[0]?.CardNumber" (click)="onCopyCardNo()"><i
+                                            class="ri-file-copy-line"
+                                            title="Copy Card No"></i></a>
+                                </h4>
+                            </div>
+                            <h5 class="text-white fs-18 fw-semibold mb-0" *ngIf="!showDetails">XXXX XXXX XXXX XXXX</h5>
+                            <div class="mt-1">
+                                <ng-container *ngIf="gprCardsList.length>0">
+                                    <p *ngIf="showDetails" class="mb-0">
+                                        EXP: {{ gprCardsList[0]?.ExpiryDate |date:'MM/yy'}}</p>
+                                    <p *ngIf="!showDetails" class="mb-0 fs-18">EXP:XX/XX</p>
+                                    <p *ngIf="showDetails"
+                                       class="fs-18 fw-medium text-white-75 mb-0">{{ gprCardsList[0]?.Name}}</p>
+                                    <p *ngIf="!showDetails" class="mb-0">XXX XXX XXXX </p>
+<!--                                    <button (click)="card_view_details_iframe_widget()"-->
+<!--                                            class="btn btn-sm btn-ghost-warning"><i class="ri-eye-line me-1"></i>-->
+<!--                                        View More Details-->
+<!--                                    </button>-->
+<!--                                    <button (click)="card_set_pin_iframe_widget()" class="btn btn-sm btn-ghost-info"><i-->
+<!--                                            class="ri-lock-password-line me-1"></i>-->
+<!--                                        Set Card Pin-->
+<!--                                    </button>-->
+<!--                                    <div class="form-check form-switch  switch-small form-switch-success mt-3">-->
+                                        <button (click)="card_view_details_iframe_widget()"
+                                                class="btn btn-sm btn-ghost-warning"><i class="ri-eye-line me-1"></i>
+                                            View More Details
+                                        </button>
+                                        <button (click)="card_set_pin_iframe_widget()" class="btn btn-sm btn-ghost-info"><i
+                                                class="ri-lock-password-line me-1"></i>
+                                            Set Card Pin
+                                        </button>
+<!--                                        <label>-->
+<!--                                            <input class="form-check-input text-white-75" type="checkbox" checked-->
+<!--                                                   [value]="showDetails"-->
+<!--                                                   (change)="showDetails = !showDetails">-->
+<!--                                            Show/hide :-->
+<!--                                        </label>-->
+<!--                                    </div>-->
+                                </ng-container>
+                                <ng-container *ngIf="gprCardsList.length==0">
+                                    <span class="text-white-75">Your Card Not Enabled Yet.</span>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-evenly flex-column flex-md-row mt-0" *ngIf="isGPRWalletCreated==true">
+                        <button class="btn btn-rounded btn-primary mb-2 mb-md-0" (click)="createNewVirtualCard()">
+                            Add Virtual Card
+                        </button>
+                        <button disabled class="btn btn-rounded btn-secondary">
+                            Add Physical Card
+                        </button>
+                    </div>
+                    <div class="d-flex justify-content-evenly flex-column flex-md-row mt-0" *ngIf="isGPRWalletCreated==false">
+                        <button class="btn btn-rounded btn-secondary" (click)="onGenerateNewGPRCard(generate_new_gpr_card,user)">
+                            Create GPR Card
+                        </button>
+                    </div>
+                    <iframe [src]="sanitizedUrl" frameborder="0"></iframe>
+                    <h5 class="p-3">Card Recent Transactions</h5>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<ng-template #virtual_card_content let-modal>
+    <div class="modal-content">
+        <div class="modal-header">
+            <p class="fs-24">Physical Card</p>
+            <button class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+            <form action="javascript:void(0);">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label for="kit_no" class="form-label">Kit Number</label>
+                        <input type="text" class="form-control rounded-pill" id="kit_no"
+                               placeholder="Enter your kit number">
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="hstack gap-2 justify-content-end">
+                            <button type="button" class="btn btn-rounded btn-light" data-bs-dismiss="modal"
+                                    (click)="modal.close('Close click')">Close
+                            </button>
+                            <button type="submit" class="btn btn-rounded btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #createWallet let-offcanvas>
+    <div class="offcanvas-header pb-0">
+        <p class="fs-24 fw-medium">Create Wallet</p>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <ngx-simplebar class="offcanvas-body p-3" style="max-height: calc(100vh - 75px); background-color: #F2F3F4;">
+        <div class="card card-animate rounded-4">
+            <div class="card-body">
+
+            </div>
+        </div>
+    </ngx-simplebar>
+</ng-template>
+<ngx-spinner></ngx-spinner>
+
+<ng-template #generate_new_gpr_card let-offcanvas>
+    <div class="offcanvas-header">
+        <p class="fs-18 fw-medium">Generate GPR Card</p>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <ngx-simplebar class="offcanvas-body p-3" style="max-height: calc(100vh - 75px); background-color: #F2F3F4;">
+        <div class="card rounded-4 card-animate">
+            <div class="card-body">
+                <div class="col-12 mb-3">
+                    <label for="product_name">Select Product Name</label>
+                    <div class="d-flex justify-content-between align-items-center gap-1">
+                        <select name="product_name" id="product_name" class="form-select rounded-4"
+                                [(ngModel)]="data.product_id" (change)="onProductSelectionChange()">
+                            <option value="">Select Product</option>
+                            <ng-container *ngFor="let product of products">
+                                <ng-container
+                                        *ngIf="product.product_type === 'gift' && product.product_name.trim() !== '' && product.wallet_id !== null">
+                                    <option value="{{ product.id }}">{{ product.product_name }}
+                                        | {{product.product_series}}</option>
+                                </ng-container>
+                            </ng-container>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-2 p-3 bg-">
+                        <label> Choose Card Type</label> <br>
+                        <select class="form-select rounded-4" [(ngModel)]="data.card_category" name="card_category"
+                                id="card_category">
+                            <option value="physical" disabled>Physical</option>
+                            <option value="virtual" selected>Virtual</option>
+                        </select>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-3" *ngIf="data.card_category=='physical'">
+                        <label for="kit_no">Kit No <span class="text-danger mx-2">*</span></label>
+                        <input type="text" maxlength="20" name="kit_no" id="kit_no" class="form-control rounded-4"
+                               placeholder="Enter Kit No" [(ngModel)]="data.kit_no">
+                    </div>
+                    <div class="col-12 mb-3">
+                        <label for="pan_no">Pan Card No <span class="text-danger mx-2">*</span></label>
+                        <input type="text" maxlength="10" name="pan_no" id="pan_no"
+                               class="form-control rounded-4 text-uppercase"
+                               placeholder="Enter Pan Card No" [(ngModel)]="data.pan_no">
+                    </div>
+
+                    <div class="col-12 mb-3" *ngIf="wallet_otp_received">
+                        <label for="otp">OTP <span class="text-danger mx-2">*</span></label>
+                        <input type="text" maxlength="6" name="otp" id="otp" class="form-control rounded-4"
+                               placeholder="Enter OTP" [(ngModel)]="data.otp">
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <button *ngIf="!wallet_found && !wallet_otp_received" class="btn btn-primary btn-grad px-3 py-2"
+                                title="Validate Details before Submit" [disabled]="!data.product_bin || !data.pan_no"
+                                (click)="validateWalletDetails()">Validate
+                        </button>
+                        <button *ngIf="wallet_otp_received" class="btn btn-primary btn-grad px-3 py-2"
+                                title="Create New GPR Card"
+                                (click)="CreateNewWallet()">Submit
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </ngx-simplebar>
+</ng-template>

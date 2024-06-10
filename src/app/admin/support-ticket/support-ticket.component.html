@@ -1,0 +1,290 @@
+<app-breadcrumbs title="Support Tickets" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="row">
+    <div class="col-xxl-3 col-sm-6">
+        <div class="card card-animate rounded-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="fw-medium text-muted mb-0">Total Tickets</p>
+                        <h2 class="mt-4 ff-secondary fw-semibold">10k</h2>
+                        <p class="mb-0 text-muted"><span class="badge bg-soft-success text-success mb-0">
+                                <i class="ri-arrow-up-line align-middle"></i> 17.32 %
+                            </span> vs. previous month</p>
+                    </div>
+                    <div>
+                        <div class="avatar-sm flex-shrink-0">
+                            <span class="avatar-title bg-soft-primary text-primary rounded-circle fs-4">
+                                <i class="ri-ticket-2-line"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xxl-3 col-sm-6">
+        <div class="card card-animate rounded-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="fw-medium text-muted mb-0">Pending Tickets</p>
+                        <h2 class="mt-4 ff-secondary fw-semibold">10k</h2>
+                        <p class="mb-0 text-muted"><span class="badge bg-soft-danger text-danger mb-0">
+                                <i class="ri-arrow-down-line align-middle"></i> 0.96 %
+                            </span> vs. previous month</p>
+                    </div>
+                    <div>
+                        <div class="avatar-sm flex-shrink-0">
+                            <span class="avatar-title bg-soft-primary text-primary rounded-circle fs-4">
+                                <i class="mdi mdi-timer-sand"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xxl-3 col-sm-6">
+        <div class="card card-animate rounded-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="fw-medium text-muted mb-0">Closed Tickets</p>
+                        <h2 class="mt-4 ff-secondary fw-semibold">1K</h2>
+                        <p class="mb-0 text-muted"><span class="badge bg-soft-danger text-danger mb-0">
+                                <i class="ri-arrow-down-line align-middle"></i> 3.87 %
+                            </span> vs. previous month</p>
+                    </div>
+                    <div>
+                        <div class="avatar-sm flex-shrink-0">
+                            <span class="avatar-title bg-soft-primary text-primary rounded-circle fs-4">
+                                <i class="ri-shopping-bag-line"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xxl-3 col-sm-6">
+        <div class="card card-animate rounded-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <p class="fw-medium text-muted mb-0">Deleted Tickets</p>
+                        <h2 class="mt-4 ff-secondary fw-semibold">1%</h2>
+                        <p class="mb-0 text-muted"><span class="badge bg-soft-success text-success mb-0">
+                                <i class="ri-arrow-up-line align-middle"></i> 1.09 %
+                            </span> vs. previous month</p>
+                    </div>
+                    <div>
+                        <div class="avatar-sm flex-shrink-0">
+                            <span class="avatar-title bg-soft-primary text-primary rounded-circle fs-4">
+                                <i class="ri-delete-bin-line"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card rounded-4" id="ticketsList">
+            <div class="card-header border-0">
+                <div class="d-flex align-items-center">
+                    <p class="fs-18 fw-medium mb-0 flex-grow-1">Tickets</p>
+                    <div class="flex-shrink-0  hstack gap-2">
+                        <button class="btn btn-success btn-rounded" data-bs-toggle="modal" data-bs-target="#showModal"
+                                (click)="openModal(content)">Create Tickets
+                        </button>
+                        <button class="btn btn-soft-danger" id="remove-actions" style="display: none">
+                            <i class="ri-delete-bin-2-line"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body border border-dashed border-end-0 border-start-0">
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <div class="search-box">
+                            <input class="form-control rounded-pill search bg-light border-light"
+                                   placeholder="Search for ticket number,">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="input-light">
+                            <select class="form-control rounded-pill">
+                                <option value="" selected>Select Status</option>
+                                <option value="Open">Open</option>
+                                <option value="Inprogress">Inprogress</option>
+                                <option value="Closed">Closed</option>
+                                <option value="New">New</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-info btn-rounded w-100"><i
+                                class="ri-equalizer-fill me-1 align-bottom"></i>
+                            Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive table-card mb-3">
+                    <table class="table align-middle table-nowrap mb-0" id="ticketTable">
+                        <thead>
+                        <tr>
+                            <th scope="col" style="width: 40px;">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                                </div>
+                            </th>
+                            <th>SR</th>
+                            <th>Title</th>
+                            <th>Client</th>
+                            <th>Assigned To</th>
+                            <th>Create Date</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody class="list form-check-all" id="ticket-list-data">
+                        <tr class="cursor-pointer card-animate">
+                            <th scope="row">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="checkAll">
+                                </div>
+                            </th>
+                            <td routerLink="/admin/support-tickets/details">1</td>
+                            <td routerLink="/admin/support-tickets/details">Make a createing</td>
+                            <td routerLink="/admin/support-tickets/details">rame</td>
+                            <td routerLink="/admin/support-tickets/details">tyrone higgin</td>
+                            <td routerLink="/admin/support-tickets/details">07 jan 2012</td>
+                            <td routerLink="/admin/support-tickets/details">12 jan 2021</td>
+                            <td routerLink="/admin/support-tickets/details">
+                                <span class="badge text-uppercase bg-danger">Close</span>
+                            </td>
+                            <td routerLink="/admin/support-tickets/details">
+                                <span class="badge text-uppercase bg-success">High</span>
+                            </td>
+                            <td>
+                                <button class="btn bg-info btn-sm btn-rounded me-2" title="Edit">
+                                    <i class="ri-edit-line align-middle text-white"></i>
+                                </button>
+                                <button class="btn bg-danger btn-sm btn-rounded" title="Delete">
+                                    <i class="ri-delete-bin-line align-middle text-white"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row justify-content-md-between align-items-md-center">
+                    <div class="col col-sm-6">
+                        <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                            Showing 1 to 10 of 100 entries
+                        </div>
+                    </div>
+                    <div class="col col-sm-6">
+                        <div class="text-sm-right float-sm-end listjs-pagination">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<ng-template #content role="document" let-modal>
+    <div class="modal-content">
+        <div class="modal-header p-3">
+            <div class="container mt-5">
+                <div class="input-light">
+                    <select name="selectedOption"  class="form-control rounded-pill">
+                        <option value="" selected>Select ticket case type</option>
+                        <option value="customer">Customer Details</option>
+                        <option value="card">Card Details</option>
+                        <option value="transaction">Transaction Details</option>
+                      </select>
+                </div>
+                <form>
+                    Customer Details Section
+                    <div class="form-group">
+                      <label for="customerName">Customer Name</label>
+                      <input type="text" class="form-control" id="customerName" name="customerName" >
+                    </div>
+                    <div class="form-group">
+                      <label for="customerMobile">Mobile</label>
+                      <input type="tel" class="form-control" id="customerMobile" name="customerMobile" >
+                    </div>
+                    <div class="form-group">
+                      <label for="customerAmount">Amount</label>
+                      <input type="number" class="form-control" id="customerAmount" name="customerAmount" >
+                    </div>
+                  
+                    Card Details Section
+                    <div class="form-group">
+                      <label for="maskedCardDetails">Masked Card Details</label>
+                      <input type="text" class="form-control" id="maskedCardDetails" name="maskedCardDetails" >
+                    </div>
+                    <div class="form-group">
+                      <label for="cardAmount">Amount</label>
+                      <input type="number" class="form-control" id="cardAmount" name="cardAmount" >
+                    </div>
+                  
+                    Transaction Details Section
+                    <div class="form-group">
+                      <label for="transactionDateTime">Transaction DateTime</label>
+                      <input type="datetime-local" class="form-control" id="transactionDateTime" name="transactionDateTime" >
+                    </div>
+                    <div class="form-group">
+                      <label for="merchantName">Merchant Name</label>
+                      <input type="text" class="form-control" id="merchantName" name="merchantName" >
+                    </div>
+                    <div class="form-group">
+                      <label for="referenceNo">Reference No</label>
+                      <input type="text" class="form-control" id="referenceNo" name="referenceNo" >
+                    </div>
+                    <div class="form-group">
+                      <label for="transactionAmount">Amount</label>
+                      <input type="number" class="form-control" id="transactionAmount" name="transactionAmount" >
+                    </div>
+                  
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
+              </div>
+              <!-- <div class="container mt-3">
+                <div *ngIf="selectedOption === 'customer'" class="alert alert-primary">
+                  Customer Details UI
+                </div>
+                <div *ngIf="selectedOption === 'card'" class="alert alert-success">
+                  Card Details UI
+                </div>
+                <div *ngIf="selectedOption === 'transaction'" class="alert alert-info">
+                  Transaction Details UI
+                </div>
+              </div> -->
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+                    (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+            hello
+        </div>
+    </div>
+</ng-template>

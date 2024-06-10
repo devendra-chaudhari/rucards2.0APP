@@ -1,0 +1,287 @@
+<app-breadcrumbs title="Add Corporate" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<div class="card rounded-4 card-animate">
+    <div class="card-header mb-0">
+        <h4>Create New Corporate User
+            <div class="float-end">
+                <div class="d-flex justify-content-end align-items-center">
+                    <a routerLink="/admin/manage-users/manage-corporates" class="btn btn-primary btn-rounded">Corporate
+                        List</a>
+                </div>
+            </div>
+        </h4>
+    </div>
+    <div class="card-body">
+
+
+        <ng-container *ngIf="step==1">
+            <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="role_id" class="form-label">User Role <span class="text-danger">*</span></label>
+                            <select id="role_id" name="role_id" class="form-select rounded-pill"
+                                    formControlName="role_id">
+                                <option value="" disabled>Select Role</option>
+                                <option value="3">API Partner</option>
+                                <option value="6">Merchant</option>
+                                <option value="9">Employee</option>
+                            </select>
+                            <div *ngIf="submitted && registrationForm.get('role_id').invalid && (registrationForm.get('role_id').dirty || registrationForm.get('role_id').touched)"
+                                 class="text-danger">
+                                <div *ngIf="submitted && registrationForm.get('role_id').hasError('required')">User Role
+                                    is
+                                    required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Enter Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control btn-rounded" appAlphabeticInput
+                                   placeholder="Name" id="name"
+                                   name="name" formControlName="name" maxlength="80">
+                            <div *ngIf="submitted && registrationForm.get('name').invalid && (registrationForm.get('name').dirty || registrationForm.get('name').touched)"
+                                 class="text-danger">
+                                <div *ngIf="submitted && registrationForm.get('name').hasError('required')">Name is
+                                    required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="father_name" class="form-label">Enter Father Name <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control btn-rounded" placeholder="Father Name"
+                                   id="father_name"
+                                   appAlphabeticInput
+                                   name="father_name" formControlName="father_name" maxlength="80">
+                            <div *ngIf="submitted && registrationForm.get('father_name').invalid && (registrationForm.get('father_name').dirty || registrationForm.get('father_name').touched)"
+                                 class="text-danger">
+                                <div *ngIf="submitted && registrationForm.get('father_name').hasError('required')">
+                                    Father
+                                    Name is
+                                    required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="mobile_no" class="form-label">Mobile No <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control btn-rounded" placeholder="Mobile No" id="mobile_no"
+                                   maxlength="10" appNumberOnly
+                                   name="mobile_no" formControlName="mobile_no">
+                            <div *ngIf="submitted && registrationForm.get('mobile_no').invalid && (registrationForm.get('mobile_no').dirty || registrationForm.get('mobile_no').touched)"
+                                 class="text-danger">
+                                <div *ngIf="submitted && registrationForm.get('mobile_no').hasError('required')">Mobile
+                                    No
+                                    is required.
+                                </div>
+                                <div *ngIf="submitted && registrationForm.get('mobile_no').hasError('pattern')">Invalid
+                                    Mobile No (10
+                                    digits only).
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control btn-rounded" placeholder="Email" id="email"
+                                   name="email"
+                                   maxlength="80"
+                                   formControlName="email">
+                            <div *ngIf="submitted && registrationForm.get('email').invalid && (registrationForm.get('email').dirty || registrationForm.get('email').touched)"
+                                 class="text-danger">
+                                <div *ngIf="submitted && registrationForm.get('email').hasError('email')">Invalid email
+                                    address.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="dob" class="form-label">Date of Birth <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control rounded-pill flatpickr-input"
+                                   placeholder="Date of Birth"
+                                   id="dob" name="dob" formControlName="dob" mwlFlatpickr [altInput]="true"
+                                   altFormat="j F, Y">
+                            <div *ngIf="submitted && registrationForm.get('dob').invalid && (registrationForm.get('dob').dirty || registrationForm.get('dob').touched)"
+                                 class="text-danger">
+                                <div *ngIf="submitted && registrationForm.get('dob').hasError('required')">Date of Birth
+                                    is
+                                    required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="gender" class="form-label">Gender</label>
+                            <select name="gender" id="gender" class="form-select rounded-4" formControlName="gender">
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Trans-Gender">Trans-Gender</option>
+                                <option value="N/A">Not Applicable</option>
+                            </select>
+                            <div *ngIf="submitted && registrationForm.get('gender').invalid && (registrationForm.get('gender').dirty || registrationForm.get('gender').touched)"
+                                 class="text-danger">
+                                <div *ngIf="submitted && registrationForm.get('gender').hasError('required')">Gender is
+                                    required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="aadhaar_no">Aadhaar Card No</label>
+                            <div class="input-group">
+                                <input type="text" id="aadhaar_no" formControlName="aadhaar"
+                                       class="form-control rounded-4 " appNumberOnly
+                                       placeholder="Aadhaar Card No" maxlength="12">
+                                                          </div>
+                            <div *ngIf="submitted && registrationForm.get('aadhaar_no').invalid && (registrationForm.get('aadhaar_no').dirty || registrationForm.get('aadhaar_no').touched)"
+                                 class="text-danger">
+                                <div *ngIf="submitted && registrationForm.get('aadhaar_no').hasError('required')">Aadhaar
+                                    No
+                                    is required.
+                                </div>
+                                <div *ngIf="submitted && registrationForm.get('aadhaar_no').hasError('pattern')">Invalid
+                                    Aadhaar No (12
+                                    digits only).
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="pan" class="form-label">PAN </label>
+                            <div class="input-group">
+                                <input type="text" id="pan" formControlName="pan" name="pan"
+                                       class="form-control rounded-4  text-uppercase"
+                                       placeholder="Pan No" maxlength="10" pattern="^[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}$">
+                                                          </div>
+                            <div *ngIf="submitted && registrationForm.get('pan').invalid && (registrationForm.get('pan').dirty || registrationForm.get('pan').touched)"
+                                 class="text-danger">
+                                <div *ngIf="submitted && registrationForm.get('pan').hasError('required')">PAN is
+                                    required.
+                                </div>
+                                <div *ngIf="submitted && registrationForm.get('pan').hasError('pattern')">Invalid PAN
+                                    (e.g.,
+                                    ABCDE1234F).
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="pincode" class="form-label">Pincode <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control btn-rounded" placeholder="Pincode" id="pincode"
+                                   appNumberOnly maxlength="6" (change)="onPincode()"
+                                   name="pincode" formControlName="pincode">
+                            <div *ngIf="submitted && registrationForm.get('pincode').invalid && (registrationForm.get('pincode').dirty || registrationForm.get('pincode').touched)"
+                                 class="text-danger">
+                                <div *ngIf="submitted && registrationForm.get('pincode').hasError('required')">Pincode
+                                    is
+                                    required.
+                                </div>
+                                <div *ngIf="submitted && registrationForm.get('pincode').hasError('pattern')">Invalid
+                                    Pincode (6 digits
+                                    only).
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="state" class="form-label">State <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control btn-rounded" placeholder="State" id="state"
+                                   name="state"
+                                   maxlength="30"
+                                   formControlName="state">
+                            <div *ngIf="submitted && registrationForm.get('state').invalid && (registrationForm.get('state').dirty || registrationForm.get('state').touched)"
+                                 class="text-danger">
+                                <div *ngIf="submitted && registrationForm.get('state').hasError('required')">State is
+                                    required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="district" class="form-label">District <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control btn-rounded" placeholder="District" id="district"
+                                   maxlength="30"
+                                   name="district" formControlName="district">
+
+
+                            <div *ngIf="submitted && registrationForm.get('district').invalid && (registrationForm.get('district').dirty || registrationForm.get('district').touched)"
+                                 class="text-danger">
+                                <div *ngIf="submitted && registrationForm.get('district').hasError('required')">District
+                                    is
+                                    required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="city" class="form-label">City <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control btn-rounded" placeholder="City" id="city" name="city"
+                                   maxlength="30"
+                                   formControlName="city">
+                            <div *ngIf="submitted && registrationForm.get('city').invalid && (registrationForm.get('city').dirty || registrationForm.get('city').touched)"
+                                 class="text-danger">
+                                <div *ngIf="submitted && registrationForm.get('city').hasError('required')">City is
+                                    required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control btn-rounded" placeholder="Address"
+                                   id="address"
+                                   maxlength="255"
+                                   name="address" formControlName="address">
+                            <div *ngIf="submitted && registrationForm.get('address').invalid && (registrationForm.get('address').dirty || registrationForm.get('address').touched)"
+                                 class="text-danger">
+                                <div *ngIf="submitted && registrationForm.get('address').hasError('required')">Home
+                                    Address is
+                                    required.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="col-12">
+                        <button type="submit"
+                                class="btn btn-primary btn-rounded me-2">Submit
+                        </button>
+                        <a class="btn btn-danger btn-rounded"
+                           routerLink="/admin/manage-users/manage-corporates">Back</a>
+                    </div>
+                </div>
+            </form>
+        </ng-container>
+    </div>
+</div>
+

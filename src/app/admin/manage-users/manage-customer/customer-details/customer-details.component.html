@@ -1,0 +1,604 @@
+<app-breadcrumbs title="Customer Details" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="card rounded-4">
+    <div class="card-body">
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <div class="d-flex justify-content-start gap-3">
+                    <img src="assets/images/avatar.png" alt="customer img" class="avatar-md rounded-circle">
+                    <div class="d-flex flex-column justify-content-start gap-1">
+                        <div class="d-flex justify-content-start align-items-center gap-2">
+                            <p class="fw-medium fs-16 mb-1">Himanshu Saini</p>
+                            <span class="badge badge-outline-success">Active</span>
+                            <small class="badge bg-soft-dark" title="Risk Score"><i
+                                    class="ri-shield-fill text-black"></i></small>
+                        </div>
+                        <span class="text-muted d-flex align-items-center"><i
+                                class="ri-phone-line"></i> 8545454544</span>
+                        <span class="text-muted d-flex align-items-center"><i
+                                class="ri-map-pin-line"></i> Rajashthan,India</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex justify-content-end align-items-center gap-2">
+                    <button class="btn btn-rounded btn-info" routerLink="/admin/manage-users/manage-customer"
+                            title="Back"><i
+                            class='bx bx-arrow-back'></i>
+                    </button>
+                    <button class="btn btn-rounded btn-primary">Pay Now</button>
+                </div>
+            </div>
+        </div>
+
+        <ul ngbNav #nav="ngbNav" [activeId]="1" class="nav nav-tabs mb-3 mt-5">
+            <li [ngbNavItem]="1">
+                <a ngbNavLink>
+                    <span class="d-sm-block">Profile</span>
+                </a>
+                <ng-template ngbNavContent>
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <div class="border card-animate rounded-4">
+                                <div class="card-header border border-top-0 border-start-0 border-end-0">
+                                    <h2>Contact Information</h2>
+                                </div>
+                                <div class="card-body">
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Customer ID</label>
+                                                    <p>R-666455d2c5cz2xc1cdcds5</p>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="kyc_type" class="form-label">KYC Type</label>
+                                                    <input type="text" class="form-control rounded-pill bg-light"
+                                                           value="Min KYC" id="kyc_type" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Type</label>
+                                                    <div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="type"
+                                                                   checked
+                                                                   disabled>
+                                                            <label>Individual</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="type"
+                                                                   disabled>
+                                                            <label>Business</label>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="email" class="form-label">Email</label>
+                                                    <input type="text" class="form-control rounded-pill bg-light"
+                                                           value="abc@gmail.com" id="email" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="title" class="form-label">Title</label>
+                                                    <input type="text" class="form-control rounded-pill bg-light"
+                                                           value="Mr"
+                                                           id="title" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="first_name" class="form-label">First Name</label>
+                                                    <input type="text" class="form-control rounded-pill bg-light"
+                                                           value="Jimmy"
+                                                           id="first_name" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="last_name" class="form-label">Last Name</label>
+                                                    <input type="text" class="form-control rounded-pill bg-light"
+                                                           value="Wang"
+                                                           id="last_name" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="father_name" class="form-label">Father Name</label>
+                                                    <input type="text" class="form-control rounded-pill bg-light"
+                                                           value="John"
+                                                           id="father_name" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="dob" class="form-label">Date of Birth</label>
+                                                    <input type="text" class="form-control rounded-pill bg-light"
+                                                           value="13-Mar-1997" id="dob" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="mobile" class="form-label">Phone Number</label>
+                                                    <div class="form-icon">
+                                                        <input type="text"
+                                                               class="form-control rounded-pill form-control-icon bg-light"
+                                                               value="9845454512" id="mobile" readonly>
+                                                        <i class="ri-phone-line"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="aadhar_no" class="form-label">Aadhaar No</label>
+                                                    <input type="text" class="form-control rounded-pill bg-light"
+                                                           value="564512874512" id="aadhar_no" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="pan_no" class="form-label">PAN No</label>
+                                                    <input type="text" class="form-control rounded-pill bg-light"
+                                                           value="GLYPS4512D" id="pan_no" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="voterId" class="form-label">Voter ID</label>
+                                                    <input type="text" class="form-control rounded-pill bg-light"
+                                                           value="4511211" id="voterId" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="dirving_licence" class="form-label">Driving Licence
+                                                        No</label>
+                                                    <input type="text" class="form-control rounded-pill bg-light"
+                                                           value="4511211" id="dirving_licence" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <hr>
+                                    <h2>Address</h2>
+                                    <form>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="street" class="form-label">Street</label>
+                                                    <input type="text" class="form-control rounded-pill bg-light"
+                                                           value="465 Delhi" id="street" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="street_2" class="form-label">Street 2</label>
+                                                    <input type="text" class="form-control rounded-pill bg-light"
+                                                           value=""
+                                                           id="street_2" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="city" class="form-label">City</label>
+                                                    <input type="text" class="form-control rounded-pill bg-light"
+                                                           value="Mumbai"
+                                                           id="city" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="mb-3">
+                                                    <label for="state" class="form-label">City</label>
+                                                    <select id="state" class="form-select rounded-pill bg-light"
+                                                            disabled>
+                                                        <option value="" selected>Select a State</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="mb-3">
+                                                    <label for="pincode" class="form-label">Pincode</label>
+                                                    <input type="text" class="form-control rounded-pill bg-light"
+                                                           value="301405"
+                                                           id="pincode" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="contry" class="form-label">Country</label>
+                                                    <select id="contry" class="form-select rounded-pill bg-light"
+                                                            disabled>
+                                                        <option value="1" selected>India</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="text-end">
+                                                    <button class="btn btn-rounded btn-light me-2">Cancel</button>
+                                                    <button class="btn btn-rounded btn-primary">Save Contact Information
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="border card-animate rounded-4">
+                                <div class="card-header border border-top-0 border-start-0 border-end-0">
+                                    <h2>Payment Methods</h2>
+                                </div>
+                                <div class="card-body">
+                                    <div class="card bg-soft-success rounded-3">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <div class="avatar-sm">
+                                                        <div class="avatar-title bg-soft-success text-success rounded-circle fs-24">
+                                                            <i class="ri-bank-line"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <div class="d-flex flex-column">
+                                                        <p class="card-text mb-0">Bank Transfer</p>
+                                                        <small class="text-muted">New Delhi Near Gas Station</small>
+                                                        <small class="text-muted">Jimmy Wang</small>
+                                                    </div>
+                                                </div>
+                                                <span class="badge bg-soft-success text-success">ACTIVE</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card bg-light rounded-3">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <div class="avatar-sm">
+                                                        <div class="avatar-title bg-soft-dark text-muted rounded-circle fs-24">
+                                                            <i class="ri-bank-line"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <div class="d-flex flex-column">
+                                                        <p class="card-text mb-0">Venmo</p>
+                                                        <small class="text-muted">inactive</small>
+                                                    </div>
+                                                </div>
+                                                <span class="badge bg-soft-dark text-muted">INACTIVE</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-start">
+                                        <button class="btn btn-rounded btn-light"><i class="ri-add-line me-1"></i>Add
+                                            New Payout
+                                            Method
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border card-animate rounded-4 mt-3">
+                                <div class="card-header border border-top-0 border-start-0 border-end-0">
+                                    <h2>Copy Recipient Emails to</h2>
+                                </div>
+                                <div class="card-body">
+                                    <div class="text-start">
+                                        <p>Send a copy of all recipient emails (excluding Portal login
+                                            code/authentication
+                                            emails) to the following email addresses:</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <input type="text" class="form-control rounded-pill bg-light"
+                                               value="abc@gmail.com"
+                                               readonly>
+                                    </div>
+                                    <div class="text-start mt-3">
+                                        <button class="btn btn-rounded btn-light"><i class="ri-add-line me-1"></i>Add
+                                            Email
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="2">
+                <a ngbNavLink>
+                    <span class="d-sm-block">Payments</span>
+                </a>
+                <ng-template ngbNavContent>
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>Showing 1 payment</h2>
+                            <div class="border card-animate rounded-4">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table align-middle table-nowrap table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-uppercase">Payment status</th>
+                                                <th class="text-uppercase">Payment Id</th>
+                                                <th class="text-uppercase">Payment Amount</th>
+                                                <th class="text-uppercase">Tax Withholding</th>
+                                                <th class="text-uppercase">Merchant Fees</th>
+                                                <th class="text-uppercase">Payment Purpose</th>
+                                                <th class="text-uppercase">Tax Form</th>
+                                                <th class="text-uppercase">Updated On</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr class="cursor-pointer card-animate">
+                                                <td><span class="badge bg-soft-warning text-warning">Pending</span></td>
+                                                <td>
+                                                    <span>P-fafdsjj5445c21dsa1</span>
+                                                </td>
+                                                <td>
+                                                    190.00
+                                                </td>
+                                                <td>
+                                                    0.00
+                                                </td>
+                                                <td>
+                                                    0.00
+                                                </td>
+                                                <td>
+                                                    Royalties-Copyright
+                                                </td>
+                                                <td>
+                                                    No Form
+                                                </td>
+                                                <td>
+                                                    Aug 3, 2022
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row justify-content-md-between align-items-md-center mt-3">
+                                        <div class="col col-sm-6">
+                                            <p class="mb-2">
+                                                Showing 1 to 10 of 20 entries
+                                            </p>
+                                        </div>
+                                        <div class="col col-sm-6">
+                                            <div class="text-sm-right float-sm-end listjs-pagination">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>Showing 0 Offline payments</h2>
+                            <div class="border card-animate rounded-4">
+                                <div class="card-body">
+                                    <div class="text-center bg-soft-dark p-4">
+                                        No offline payments found
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="3">
+                <a ngbNavLink>
+                    <span class="d-sm-block">Tax</span>
+                </a>
+                <ng-template ngbNavContent>
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>Showing 1 tax form</h2>
+                            <div class="border card-animate rounded-4">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table align-middle table-nowrap table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-uppercase">Form status</th>
+                                                <th class="text-uppercase">Tax Form Type</th>
+                                                <th class="text-uppercase">Us Tin Status</th>
+                                                <th class="text-uppercase">Withholding Rate</th>
+                                                <th class="text-uppercase">Signed On</th>
+                                                <th class="text-uppercase">Actions</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr class="cursor-pointer card-animate">
+                                                <td><span class="badge bg-light text-dark">Voided</span></td>
+                                                <td>
+                                                    <span>W-3dfsc</span>
+                                                </td>
+                                                <td>
+                                                    Not Valid
+                                                </td>
+                                                <td>
+                                                    0.00%
+                                                </td>
+                                                <td>
+                                                    Sep 23, 2021
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-rounded btn-danger">Delete</button>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row justify-content-md-between align-items-md-center mt-3">
+                                        <div class="col col-sm-6">
+                                            <p class="mb-2">
+                                                Showing 1 to 10 of 20 entries
+                                            </p>
+                                        </div>
+                                        <div class="col col-sm-6">
+                                            <div class="text-sm-right float-sm-end listjs-pagination">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="4">
+                <a ngbNavLink>
+                    <span class="d-sm-block">Compliance</span>
+                </a>
+                <ng-template ngbNavContent>
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>Compliance Check (0)</h2>
+                            <div class="border card-animate rounded-4">
+                                <div class="card-body">
+                                    <div class="text-center bg-soft-dark p-4">
+                                        No compliance checks recorded
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="5">
+                <a ngbNavLink>
+                    <span class="d-sm-block">Notifications</span>
+                </a>
+                <ng-template ngbNavContent>
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>Showing 1 notification</h2>
+                            <div class="card-animate border rounded-4">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table align-middle table-nowrap table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-uppercase">status</th>
+                                                <th class="text-uppercase">Type</th>
+                                                <th class="text-uppercase">Notified To</th>
+                                                <th class="text-uppercase">Topic</th>
+                                                <th class="text-uppercase">Date</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr class="cursor-pointer card-animate">
+                                                <td><span class="badge bg-soft-info text-info">Sent</span></td>
+                                                <td>
+                                                    &#64;
+                                                </td>
+                                                <td>
+                                                    tim+test&#64;gmail.com
+                                                </td>
+                                                <td>
+                                                    Payment Sent
+                                                </td>
+                                                <td>
+                                                    Sep 23, 2021
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row justify-content-md-between align-items-md-center mt-3">
+                                        <div class="col col-sm-6">
+                                            <p class="mb-2">
+                                                Showing 1 to 10 of 20 entries
+                                            </p>
+                                        </div>
+                                        <div class="col col-sm-6">
+                                            <div class="text-sm-right float-sm-end listjs-pagination">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="6">
+                <a ngbNavLink>
+                    <span class="d-sm-block">Logs</span>
+                </a>
+                <ng-template ngbNavContent>
+
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="7">
+                <a ngbNavLink>
+                    <span class="d-sm-block">Login History</span>
+                </a>
+                <ng-template ngbNavContent>
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>Recipient Login History</h2>
+                            <div class="border card-animate rounded-4">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table align-middle table-nowrap table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-uppercase">Date</th>
+                                                <th class="text-uppercase">IP Address</th>
+                                                <th class="text-uppercase">Location</th>
+                                                <th class="text-uppercase">Details</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr class="cursor-pointer card-animate">
+                                                <td>Sep 23, 2021</td>
+                                                <td>
+                                                    86.106.54.124
+                                                </td>
+                                                <td>
+                                                    Montreal, Quebec, Canada
+                                                </td>
+                                                <td>
+                                                    Successful login through the recipient widget or portal
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row justify-content-md-between align-items-md-center mt-3">
+                                        <div class="col col-sm-6">
+                                            <p class="mb-2">
+                                                Showing 1 to 10 of 20 entries
+                                            </p>
+                                        </div>
+                                        <div class="col col-sm-6">
+                                            <div class="text-sm-right float-sm-end listjs-pagination">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </li>
+        </ul>
+
+        <div class="tab-content pt-3">
+            <div [ngbNavOutlet]="nav"></div>
+        </div>
+    </div>
+</div>

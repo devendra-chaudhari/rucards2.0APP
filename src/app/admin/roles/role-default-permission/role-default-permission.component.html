@@ -1,0 +1,215 @@
+<app-breadcrumbs
+  title="Role Default Permission"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+<div class="row">
+  <div class="col-12">
+    <div class="card card-animate">
+      <div class="card-header mb-0">
+        <h4>
+          Set Default {{ role_name.replace("_", " ") | titlecase }} Permission
+          <div class="float-end">
+            <div class="d-flex justify-items-center align-items-center gap-2">
+              <a
+                routerLink="/admin/roles"
+                class="btn btn-sm btn-warning btn-rounded px-2"
+              >
+                <i class="ri-arrow-left-line"></i> Back to Roles</a
+              >
+              <a
+                routerLink="/admin/roles/role-wise-users/{{ role_id }}/{{
+                  role_name
+                }}"
+                class="btn btn-sm btn-info btn-rounded px-2"
+              >
+                <i class="ri-file-list-line"></i> View
+                {{ role_name.replace("_", " ") | titlecase }} 's List</a
+              >
+            </div>
+          </div>
+        </h4>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div *ngFor="let group of groupPermissionsByGroupName() | keyvalue">
+            <div class="col-12">
+              <div class="card card-animate">
+                <div class="card-header">
+                  <h5>
+                    {{ group.key }}
+                    <a
+                      class="border-0 float-end me-3"
+                      (click)="selectAll(group.value)"
+                    >
+                      Select All/ Unselect All
+                    </a>
+                  </h5>
+                </div>
+                <div class="row mt-1">
+                  <div class="col-md-6">
+                    <div class="card-body">
+                      <ngx-simplebar style="max-height: 300px">
+                        <div class="card-header">
+                          Assign permission
+                        </div>
+                        <div class="card-body">
+                          <div *ngFor="let permission of group.value">
+                            <label class="mx-4"  *ngIf="permission.active">
+                              <input
+                                class="check"
+                                type="checkbox"
+                                [name]="permission.display_name"
+                                [id]="permission.display_name"
+                                [checked]="
+                                  selectAllChecked[group.key] || permission.active
+                                "
+                                (change)="togglePermission(permission, group.key)"
+                              />
+                              {{ permission.display_name }}
+                            </label>
+                          </div>
+                        </div>
+                      </ngx-simplebar>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="card-body">
+                      <ngx-simplebar style="max-height: 300px">
+                        <div class="card-header">
+                          Unassign permission
+                        </div>
+                        <div class="card-body">
+                          <div *ngFor="let permission of group.value">
+                            <label class="mx-4" *ngIf="!permission.active">
+                              <input
+                                class="check"
+                                type="checkbox"
+                                [name]="permission.display_name"
+                                [id]="permission.display_name"
+                                [checked]="
+                                  selectAllChecked[group.key] || permission.active
+                                " 
+                                (change)="togglePermission(permission, group.key)"
+                              />
+                              {{ permission.display_name }}
+                            </label>
+                          </div>
+                        </div>
+                      </ngx-simplebar>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <button
+              class="btn btn-primary rounded-4"
+              (click)="submitPermissions()"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <h4>General Instruction</h4>
+        <p>
+          In order to establish a secure and controlled environment within
+          Rucards application, it is essential to define default role
+          permissions. Default role permissions determine the access rights
+          granted to Role based on their assigned roles when they first join the
+          system or when new functionalities are introduced. This document
+          outlines the steps to set up default role permissions for our
+          application.
+        </p>
+        <h5>Identify Roles</h5>
+        <ul>
+          <li>
+            Start by identifying the different roles that exist in our
+            application. Roles typically represent different user types or user
+            groups, such as "Admin," "Retailer," "Super
+            Distributor","Customer","Employee" etc.
+          </li>
+          <li>
+            Determine the access levels and permissions that each role should
+            have by default. For instance, an "Admin" might have full access to
+            all features, while a "User" may have limited access.
+          </li>
+          <li>
+            Document the role permissions in a clear and organized manner. This
+            will serve as a reference for future updates and modifications.
+          </li>
+        </ul>
+
+        <h5>Define Role Permissions</h5>
+        <ul>
+          <li>
+            Create a list of all available functionalities and features in the
+            application.
+          </li>
+          <li>
+            For each functionality, determine which roles should have access and
+            what type of access they should have (e.g., read, write, delete).
+          </li>
+          <li>
+            Document the role permissions in a clear and organized manner. This
+            will serve as a reference for future updates and modifications.
+          </li>
+        </ul>
+
+        <h5>Implement Default Role Permissions</h5>
+        <ul>
+          <li>
+            Access the application's security settings or role management
+            section.
+          </li>
+          <li>
+            Set the default role permissions based on the roles and permissions
+            defined
+          </li>
+          <li>
+            Ensure that new users are automatically assigned to the appropriate
+            default role with the associated permissions.
+          </li>
+        </ul>
+
+        <h5>Regular Review and Updates</h5>
+        <ul>
+          <li>
+            Regularly review and update default role permissions as the
+            application evolves or new features are introduced.
+          </li>
+          <li>
+            Consider conducting security audits to identify any potential
+            vulnerabilities or areas that require tighter access controls.
+          </li>
+        </ul>
+
+        <h5>User-Specific Permissions</h5>
+        <ul>
+          <li>
+            Remember that default role permissions provide a starting point for
+            user access, but individual user permissions can be modified based
+            on specific needs.
+          </li>
+          <li>
+            Allow administrators or managers to grant additional permissions to
+            individual users when necessary.
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
