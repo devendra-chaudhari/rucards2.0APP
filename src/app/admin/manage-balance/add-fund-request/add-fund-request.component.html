@@ -1,0 +1,242 @@
+<app-breadcrumbs title="Add Fund" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="card rounded-4">
+    <div class="card-body p-4">
+        <div class="row gy-3">
+            <div class="col-md-6">
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <div class="mb-4">
+                            <form [formGroup]="fundForm">
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <div class="text-center">
+                                            <img src="{{filePath}}" alt="Upload Receipt" width="120">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="text-center mt-4">
+                                            <div class="d-inline-flex">
+                                                <label for="receipt" class="btn btn-primary btn-rounded me-2 mb-3"
+                                                       title="Upload Receipt">Upload Receipt
+                                                    <input type="file" id="receipt" hidden
+                                                           accept="image/png, image/jpeg" formControlName="receipt"
+                                                           (change)="uploadReceipt($event)">
+                                                </label>
+                                                <button type="button" class="btn btn-danger btn-rounded mb-3"
+                                                        title="Reset" (click)="filePath='assets/images/receipt.svg'">
+                                                    Reset
+                                                </button>
+                                            </div>
+                                            <br>
+                                            <h5 class="text-black m-0">Please upload your transaction supported
+                                                document.
+                                            </h5>
+                                            <small class="text-muted">Allowed JPG,JPEG or PNG. Max size of 500KB</small>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3 mt-4">
+                                    <label class="col-md-4 form-label">Payment Receiver</label>
+                                    <div class="col-md-6">
+                                        <div class="d-flex justify-content-start gap-5">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" id="company" name="receiver"
+                                                       value="company" formControlName="receiver">
+                                                <label class="form-check-label" for="company">Company</label>
+                                            </div>
+                                            <div class="form-check" *ngIf="user_details.parent_type=='super_distributor'">
+                                                <input class="form-check-input" type="radio" id="distributor"  name="receiver"
+                                                       value="distributor" formControlName="receiver">
+                                                <label class="form-check-label" for="distributor">Distributor</label>
+                                            </div>
+                                            <div class="form-check" *ngIf="user_details.parent_type=='distributor'">
+                                                <input class="form-check-input" type="radio" id="distributor"  name="receiver"
+                                                       value="distributor" formControlName="receiver">
+                                                <label class="form-check-label" for="distributor">Distributor</label>
+                                            </div>
+                                            <div class="form-check" *ngIf="user_details.parent_type=='merchant'">
+                                                <input class="form-check-input" type="radio" id="distributor"  name="receiver"
+                                                       value="distributor" formControlName="receiver">
+                                                <label class="form-check-label" for="distributor">Distributor</label>
+                                            </div>
+                                            <div class="form-check" *ngIf="user_details.parent_type=='retailer'">
+                                                <input class="form-check-input" type="radio" id="distributor"  name="receiver"
+                                                       value="distributor" formControlName="receiver">
+                                                <label class="form-check-label" for="distributor">Distributor</label>
+                                            </div>
+                                            <div class="form-check" *ngIf="user_details.parent_type=='customer'">
+                                                <input class="form-check-input" type="radio" id="distributor"  name="receiver"
+                                                       value="distributor" formControlName="receiver">
+                                                <label class="form-check-label" for="distributor">Distributor</label>
+                                            </div>
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label class="col-md-4 form-label" for="wallet_name">Select Product</label>
+                                    <div class="col-md-8">
+                                        <select name='wallet_name' id="wallet_name" class="form-select rounded-pill fw-semibold"
+                                                formControlName="wallet_name" (change)="changeRemark()" >
+                                            <option value="" disabled>Select Product</option>
+                                            <ng-container *ngFor="let product of products">
+                                                <option value="{{product?.id}}"
+                                                         [ngValue]="{ id: product.id, name: product.product_name, wallet_id:product.wallet_id }"
+                                                [disabled]="product.active == false || product.wallet_id == null" >
+                                                        {{product?.product_code}} | {{product?.product_series}}
+                                                </option>
+                                            </ng-container>
+                                        </select>
+<!--                                        <div *ngIf="isFundSubmit && ff['wallet_name'].errors" class="text-danger mt-1">-->
+<!--                                            <div *ngIf="ff['wallet_name'].errors['required']">Wallet is required-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-md-4 form-label" for="deposit_date">Deposit
+                                        Date</label>
+                                    <div class="col-md-8">
+                                        <input type="text" id="deposit_date" formControlName="deposit_date"
+                                               class="form-control fw-semibold flatpickr-input rounded-pill"
+                                               placeholder="Deposit Date" mwlFlatpickr [altInput]="true"
+                                               [maxDate]="max_date"
+                                               altFormat="j F, Y">
+                                        <div *ngIf="isFundSubmit && ff['deposit_date'].errors"
+                                             class="text-danger mt-1">
+                                            <div *ngIf="ff['deposit_date'].errors['required']">Deposit date is
+                                                required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-md-4 form-label" for="payment_mode">Payment Mode</label>
+                                    <div class="col-md-8">
+                                        <select class="form-select fw-semibold rounded-pill"
+                                                formControlName="payment_mode"
+                                                id="payment_mode">
+                                            <option value="" disabled>Select Payment Mode</option>
+                                            <option value="{{mode?.name}}"
+                                                    *ngFor="let mode of payment_modes">{{mode?.name}}</option>
+                                        </select>
+<!--                                        <div *ngIf="isFundSubmit && ff['payment_mode'].errors" class="text-danger mt-1">-->
+<!--                                            <div *ngIf="ff['payment_mode'].errors['required']">Payment mode is required-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-md-4 form-label" for="amount">Amount</label>
+                                    <div class="col-md-8">
+                                        <input id="amount" placeholder="Amount" appNumberOnly inputmode="numeric"
+                                               min="0" class="form-control fw-semibold rounded-pill" maxlength="7"
+                                               formControlName="amount" (keyup)="numtoword()">
+                                        <div *ngIf="isFundSubmit && ff['amount'].errors" class="text-danger mt-1">
+                                            <div *ngIf="ff['amount'].errors['required']">Amount is required</div>
+                                            <div *ngIf="ff['amount'].errors['min']">Amount must be at least 100 rupees
+                                            </div>
+                                        </div>
+                                        <div *ngIf="ff['amount'].value>0 && ff['amount'].value" class="mt-1">
+                                            <small class="text-muted fw-semibold">{{convertedAmount}}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-md-4 form-label" for="ref_no">Transaction Ref/UTR</label>
+                                    <div class="col-md-8">
+                                        <input id="ref_no" placeholder="Reference No/ UTR No"
+                                               class="form-control fw-semibold rounded-pill" formControlName="ref_no">
+                                        <div *ngIf="isFundSubmit && ff['ref_no'].errors" class="text-danger mt-1">
+                                            <div *ngIf="ff['ref_no'].errors['required']">Transaction no is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-md-4 form-label" for="remark">Remark</label>
+                                    <div class="col-md-8">
+                                        <input id="remark" name="remark" placeholder="Remark(If any)" formControlName="remark"
+                                               class="form-control fw-semibold rounded-pill">
+                                        <div *ngIf="isFundSubmit && ff['remark'].errors" class="text-danger mt-1">
+                                            <div *ngIf="ff['ref_no'].errors['required']">Transaction Remark is required
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="text-center">
+                                    <button class="btn btn-primary btn-rounded" (click)="onSubmit();">Submit</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex justify-content-between align-items-center">
+                    <p class="fs-18 fw-medium">Instructions</p>
+                    <a class="btn btn-sm btn-rounded btn-primary" routerLink="/manage-balance/my-fund-request">Fund
+                        Request History</a>
+                </div>
+                <div class="bg-soft-primary p-2 rounded-4 mt-4">
+                    <strong>How to add wallet balance in Rucards</strong>
+                    <ul class="mt-1">
+                        <li>Load balance (PG) will update your wallet limit instantly once the transaction is
+                            successfully.
+                        </li>
+                        <li>The receiver will manually verify the fund request, which may take a few minutes during
+                            working days.
+                        </li>
+                        <li>For MDR charges kindly check the following details.
+                        </li>
+                        <li class="text-dark fw-semibold">Please do not close the window, refresh the page, press stop
+                            or the back button while the transaction is being processed.
+                        </li>
+                    </ul>
+                </div>
+                <p class="mt-3"><span class="fw-semibold">Please Note: </span>
+                    This service adds money to the wallet via NEFT/IMPS/RTGS/UPI/Direct Bank Deposit option and is
+                    subject to verification by Rucards. It may take several minutes.
+                </p>
+                <p><strong>PROCEDURE</strong></p>
+                <ul>
+                    <li>First deposit amount in mentioned bank account - <br>
+                        <div class="p-3 bg-soft-primary rounded-4 mb-3">
+                            Name.<strong class="text-uppercase">Rucards <span
+                                class="text-danger">(No Cash Deposit)</span></strong>
+                            <br>
+                            Bank.<strong class="text-uppercase"> ICICI BANK </strong> <br>
+                            Bank Account No.<strong>102105003559</strong> <br>
+                            IFSC CODE :<strong> ICIC0000011 </strong> <br>
+                            Branch Name :<strong class="text-uppercase">MUMBAI-ANDHERI-ROAD </strong> <br>
+                        </div>
+                    </li>
+                    <li>Select receiver company or distributor
+                    <li>Upload transaction receipt</li>
+                    <li>Fill fund request form and submit</li>
+                </ul>
+                <p class="text-danger"><strong>NOTE</strong></p>
+                <ul>
+                    <li>
+                        Please make sure to transfer the funds to the correct account number and IFSC code mentioned
+                        above.
+                    </li>
+                    <li>
+                        Rucards will not be responsible for any incorrect information.
+                    </li>
+                    <li>
+                        If an incorrect account number or IFSC code is provided, Rucards or its bank will not be
+                        responsible for any resulting consequences, and the payment may not be considered.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+

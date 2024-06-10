@@ -1,0 +1,575 @@
+<app-breadcrumbs title="Manage Gift Card" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="row">
+  <div class="col-xl">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+
+            <div class="col-md-3">
+                <div class="mb-3">
+                    <label for="kit_no" class="form-label"
+                    >Choose Product <span class="text-danger">*</span></label
+                    >
+                    <select name="" id="" class="form-select rounded-5">
+                        <option value="">Choose Product </option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="col-md-3">
+                <label for="from_date" class="form-label mt-2">From Date:</label>
+                <input id="from_date" class="form-control flatpickr-input rounded-4" type="text" mwlFlatpickr [altInput]="true"
+                       [convertModelValue]="true" altFormat="F j, Y" dateFormat="Y-m-d" [(ngModel)]="from_date">
+            </div>
+
+            <div class="col-md-3">
+                <label for="to_date" class="form-label mt-2">To Date:</label>
+                <input id="to_date" class="form-control flatpickr-input rounded-4" type="text" mwlFlatpickr [altInput]="true"
+                       [convertModelValue]="true" altFormat="F j, Y" dateFormat="Y-m-d" data-maxDate="{{todayDate}}" [(ngModel)]="to_date">
+            </div>
+
+
+            <div class="col-md-3">
+            <div class="mb-3">
+              <label for="mobile" class="form-label"
+                >Mobile Number</label
+              >
+              <input
+                class="form-control rounded-4 fw-semibold"
+                [(ngModel)]="customer_gc_list.mobile_no"
+                type="text"
+                id = "mobile"
+                placeholder="Mobile No"
+                name="mobile_no"
+                required
+              />
+            </div>
+          </div>
+
+            <div class="col-md-3">
+            <div class="mb-3">
+              <label for="4-digit" class="form-label"
+                >Last 4 Digit</label
+              >
+              <input
+                class="form-control rounded-4 fw-semibold"
+                type="text"
+                id="4-digit"
+                [(ngModel)]="customer_gc_list.last_4_digit"
+                placeholder="Last 4 Digits of Cards"
+                name="last_4_digits"
+                required
+              />
+            </div>
+          </div>
+
+
+
+            <div class="col-md-3">
+            <div class="mb-3">
+              <label for="customer_name_id" class="form-label rounded-4"
+                >Customer Name</label
+              >
+              <select
+                name="customer_name"
+                id="customer_name_id"
+                class="form-select rounded-4 fw-semibold"
+                [(ngModel)]="customer_gc_list.customer_name_id"
+                required
+              >
+                <option value="" selected>--All Customers--</option>
+                <option
+                  value="{{ customer?.id }}"
+                  *ngFor="let customer of customers[0]"
+                >
+                  {{ customer?.name }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+
+            <div class="col-md-3">
+                <div class="mb-3">
+                    <label for="kit_no" class="form-label"
+                    >Kit Number</label
+                    >
+                    <input
+                            class="form-control rounded-4 fw-semibold"
+                            name="kit_no"
+                            id="kit_no"
+                            type="text"
+                            [(ngModel)]="customer_gc_list.kit_no"
+                            placeholder="Enter KIT number"
+                            required
+                    />
+                </div>
+            </div>
+      </div>
+
+
+        <div
+          class="btn-group right ms-auto nexttab"
+          role="group"
+          aria-label="Basic example"
+        >
+          <button
+            type="button"
+            class="btn rounded-5"
+            style="background-color: #112558; color: white"
+            (click)="onSearch()"
+          >
+            Submit
+          </button>
+          <button
+            type="button"
+            class="btn rounded-5 ms-2"
+            style="background-color: #112558; color: white"
+            (click)="resetForm()"
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card card-animate">
+  <div class="card-header mb-0 border-0">
+  <h4 class="fw-medium">Recent Gift Cards</h4>
+</div>
+<div class="card-body">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center justify-content-center">
+          <label for="page" class="me-2">Show</label>
+          <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+          <label for="page" class="ms-2">entries</label>
+        </div>
+        <div>
+          <button type="button" class="btn btn-success float-end btn-rounded me-2 mb-2" (click)="export_to_excel()">
+            Export
+          </button>
+
+        </div>
+    </div>
+
+    <ngx-simplebar class="table-responsive mt-3">
+      <table
+        class="table table-sm table-striped table-hover align-middle table-nowrap"
+      >
+        <thead>
+          <tr>
+            <th class="text-uppercase">#</th>
+            <th (click)="sort('name')" class="text-uppercase">Customer Name <i class='bx bxs-sort-alt fs-12'></i></th>
+            <th (click)="sort('mobile')" class="text-uppercase">Mobile No <i class='bx bxs-sort-alt fs-12'></i></th>
+            <th (click)="sort('card_number')" class="text-uppercase">Card No <i class='bx bxs-sort-alt fs-12'></i></th>
+            <th (click)="sort('card_id')" class="text-uppercase">Kit No <i class='bx bxs-sort-alt fs-12'></i></th>
+            <th (click)="sort('card_id')" class="text-uppercase">Bin No <i class='bx bxs-sort-alt fs-12'></i></th>
+            <th class="text-uppercase">Current Balance</th>
+            <th class="text-uppercase">Status</th>
+            <th class="text-uppercase">Action</th>
+          </tr>
+        </thead>
+        <tbody style="min-height: 300px">
+          <tr *ngFor="let item of giftCardList; index as i">
+            <td class="text-uppercase">{{ (page - 1) * pageSize + i +1 }}</td>
+            <td>
+              <a
+                routerLink="gift-cards"
+                [queryParams]="{ kit_no: item.card_id }"
+              >
+                {{ item?.name | uppercase }}
+              </a>
+            </td>
+            <td>{{ item?.mobile }}</td>
+            <td>XXXX-XXXX-XXXX-{{ item?.card_number | slice : 12 : 16 }}</td>
+            <td>{{ item?.card_id }}</td>
+            <td>{{ item?.bin_no }}</td>
+            <td>
+              <i class="ri-restart-line fs-16" title="Refresh Balance" (click)="onRefreshBalanceClick(item)"></i>
+              <span class="text-dark fw-bold" *ngIf="showCurrentBalance || item.show">
+                {{ item?.current_balance  |currency:'INR'}}
+              </span>
+            </td>
+            <td>
+              <div class="badge bg-success rounded-pill">Active</div>
+              <div>{{ item?.activated_on | date : "EEEE, MMMM d, y" }}</div>
+            </td>
+            <td>
+              <div class="dropdown topbar-head-dropdown ms-1 header-item" ngbDropdown>
+                <button  type="button" class="btn btn-sm rounded-4" data-bs-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                  ngbDropdownToggle >
+                  <i class="ri-more-line"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-lg p-0 dropdown-menu-up" ngbDropdownMenu>
+                  <div class="p-3 border-top-0 border-start-0 border-end-0 border-dashed border" >
+                    <div class="row align-items-center">
+                      <div class="col">
+                        <h6 class="m-0 fw-semibold fs-15">Actions</h6>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="p-2">
+                    <div class="row g-0">
+                      <div class="col">
+                        <a
+                          class="dropdown-icon-item"
+                          href="javascript:void(0);"
+                          (click)="openModal(content)"
+                          *ngIf="item.gc_flag == 'UL'"
+                        >
+                          <i class="ri-key-line fs-2"></i>
+                          <span>Set Pin</span>
+                        </a>
+                      </div>
+                      <div class="col">
+                        <a
+                          class="dropdown-icon-item"
+                          href="javascript:void(0);"
+                          (click)="openIframeModal(iframeModal,item,'cardDetails')"
+                          *ngIf="item.gc_flag == 'UL'"
+                        >
+                          <i class="ri-bank-card-line fs-2"></i>
+                          <span>Card Details</span>
+                        </a>
+                      </div>
+                    </div>
+
+                    <div class="row g-0" *ngIf="item.gc_flag == 'UL'">
+                      <div class="col">
+                        <a
+                          class="dropdown-icon-item"
+                          href="javascript:void(0);"
+                          *ngIf="item.gc_flag == 'UL'"
+                          (click)="onGenerate_gc_preferneces(
+                              generate_gc_card_prefernces,
+                              item
+                            )">
+                          <i class="ri-list-check-2 fs-2"></i>
+                          <span>Preferences</span>
+                        </a>
+                      </div>
+                      <div class="col">
+                        <a
+                          class="dropdown-icon-item"
+                          href="javascript:void(0);"
+                          title="View Card Txns"
+                          routerLink="gift-card-statement"
+                          [queryParams]="{ kit_no: item.card_id }"
+                        >
+                          <i class="ri-exchange-funds-line fs-2"></i>
+                          <span>Transactions</span>
+                        </a>
+                      </div>
+                      <div class="col" *ngIf="item.gc_flag == 'UL'">
+                        <a
+                          class="dropdown-icon-item"
+                          href="javascript:void(0);"
+                          (click)="openLockModal(Lockcontent)"
+                        >
+                          <i class="ri-lock-line fs-2"></i>
+                          <span>Lock</span>
+                        </a>
+                      </div>
+                    </div>
+
+                    <div class="row g-0" *ngIf="item.gc_flag == 'L'">
+                      <div class="col">
+                        <a
+                          class="dropdown-icon-item"
+                          href="javascript:void(0);"
+                          title="View Card Txns"
+                          routerLink="gift-card-statement"
+                          [queryParams]="{ kit_no: item.card_id }"
+                        >
+                          <i class="ri-exchange-funds-line fs-2"></i>
+                          <span>Transactions</span>
+                        </a>
+                      </div>
+                      <div class="col-4" *ngIf="item.gc_flag == 'L'">
+                        <a
+                          class="dropdown-icon-item"
+                          href="javascript:void(0);"
+                          (click)="openUnLockModal(UnLockcontent)"
+                        >
+                          <i class="ri-lock-unlock-line fs-2"></i>
+                          <span>Unlock</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Collapse section -->
+
+              <!--card Preferneces gift Card offcanvas-->
+              <ng-template #generate_gc_card_prefernces let-offcanvas>
+                <div class="offcanvas-header">
+                  <p class="fs-18 fw-medium">Gift Card Preferences</p>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    aria-label="Close"
+                    (click)="offcanvas.dismiss()"
+                  ></button>
+                </div>
+                <ngx-simplebar
+                  class="offcanvas-body p-3"
+                  style="
+                    max-height: calc(100vh - 75px);
+                    background-color: #f2f3f4;
+                  "
+                >
+                  <div class="card rounded-4 card-animate">
+                    <div class="card-body">
+                      <div class="col-12 mb-3">
+                        <label for="flexCheckpos">Preferences</label>
+                        <div class="form-check">
+                          <input
+                                  class="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="flexCheckpos"
+                            [(ngModel)]="item.gc_preferences_pos"
+                            [checked]="item.gc_preferences_pos"
+                          />
+                          <label class="form-check-label" for="flexCheckpos">
+                            POS
+                          </label>
+                        </div>
+
+                        <div class="form-check">
+                          <input
+                            mdbCheckbox
+                            class="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="flexCheckecom"
+                            [(ngModel)]="item.gc_preferences_ecom"
+                            [checked]="item.gc_preferences_ecom"
+                          />
+                          <label class="form-check-label" for="flexCheckecom">
+                            ECOM
+                          </label>
+                        </div>
+                        <div class="form-check">
+                          <input
+                            mdbCheckbox
+                            class="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="flexCheckcontactless"
+                            [(ngModel)]="item.gc_preferences_contactless"
+                            [checked]="item.gc_preferences_contactless"
+                          />
+                          <label
+                            class="form-check-label"
+                            for="flexCheckcontactless"
+                          >
+                            CONTACTLESS
+                          </label>
+                        </div>
+                      </div>
+                      <hr />
+                      <div class="row">
+                        <div class="col-12 mb-3 mt-2">
+                          <button
+                            class="btn btn-primary btn-grad px-3 py-2"
+                            title="Validate Details before Submit"
+                            type="submit"
+                            (click)="
+                              openSetPreferencesModal(setCardPreferencescontent)
+                            "
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ngx-simplebar>
+              </ng-template>
+              <!--card Preferneces gift Card -->
+
+              <!-- Set Pin Modal -->
+              <ng-template #content role="document" let-modal>
+                <div class="modal-header">
+                  <h5 class="modal-title mt-0">Set Pin</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    aria-hidden="true"
+                    (click)="modal.dismiss('Cross click')"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <h5>Do You Want to Set Pin??</h5>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-light"
+                    (click)="modal.close('Close click')"
+                  >
+                    No
+                  </button>
+                  <button type="button" class="btn btn-primary" (click)="openIframeModal(iframeModal,item,'setPin')" >
+                    Yes
+                  </button>
+                </div>
+              </ng-template>
+
+              <!-- Lock Modal -->
+              <ng-template #Lockcontent role="document" let-modal>
+                <div class="modal-header">
+                  <h5 class="modal-title mt-0">Lock Gift Card</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    aria-hidden="true"
+                    (click)="modal.dismiss('Cross click')"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <h5>Do You Want to Lock Gift card??</h5>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-light"
+                    (click)="modal.close('Close click')"
+                  >
+                    No
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="lock(item)"
+                  >
+                    Yes
+                  </button>
+                </div>
+              </ng-template>
+
+              <!-- UnLock Modal -->
+              <ng-template #UnLockcontent role="document" let-modal>
+                <div class="modal-header">
+                  <h5 class="modal-title mt-0">Unlock Gift Card</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    aria-hidden="true"
+                    (click)="modal.dismiss('Cross click')"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <h5>Do You Want to UnLock Gift card??</h5>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-light"
+                    (click)="modal.close('Close click')"
+                  >
+                    No
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="unlock(item)"
+                  >
+                    Yes
+                  </button>
+                </div>
+              </ng-template>
+
+              <!-- set Preferences Modal -->
+              <ng-template #setCardPreferencescontent role="document" let-modal>
+                <div class="modal-header">
+                  <h5 class="modal-title mt-0">Set Gift Card Preferences</h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    aria-hidden="true"
+                    (click)="modal.dismiss('Cross click')"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <h5>Do You Want to change in Gift card preferences??</h5>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-light"
+                    (click)="modal.close('Close click')"
+                  >
+                    No
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="gc_set_preferences(item)"
+                  >
+                    Yes
+                  </button>
+                </div>
+              </ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ngx-simplebar>
+  <div class="row justify-content-md-between align-items-md-center mt-2">
+    <div class="col col-sm-6">
+      <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+        Showing {{ (page - 1) * pageSize + 1 }} to {{ getMax() }} of {{ total }} entries
+      </div>
+    </div>
+
+    <div class="col col-sm-6">
+      <div class="text-sm-right float-sm-end listjs-pagination">
+        <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="pageSize" [maxSize]="2" (pageChange)="onPageChange($event)">
+        </ngb-pagination>
+      </div>
+    </div>
+
+  </div>
+  </div>
+</div>
+
+
+
+
+<ng-template #iframeModal role="document" let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title mt-0">Set Pin</h5>
+    <button
+            type="button"
+            class="btn-close"
+            aria-hidden="true"
+            (click)="closeModal()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <div id="embeddedUrl" style="width: 100%; height: 500px;">
+      <iframe [src]="stringIframe" style="width: 100%; height: 100%; border: none;"></iframe>
+    </div>
+  </div>
+  <div class="modal-footer mb-3">
+    <button type="button" class="btn btn-danger" (click)="closeModal()" >
+      close
+    </button>
+  </div>
+
+</ng-template>

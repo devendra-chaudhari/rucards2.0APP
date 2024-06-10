@@ -1,0 +1,863 @@
+<div class="auth-page-wrapper pt-5">
+    <div class="auth-page-content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="card shadow-lg">
+                        <div class="card-body p-0">
+                            <div class="row">
+                                <div class="col-md-3 d-none d-md-block bg rounded-4 rounded-end">
+                                    <div class="p-3">
+                                        <p class="text-white fw-medium fs-24 mt-3">User Registration</p>
+                                        <small class="text-white">
+                                            To create a new Rucards user account, please fill in all the required
+                                            information.
+                                        </small>
+
+                                        <img class="img-fluid my-4" src="assets/images/register.png"
+                                             alt="New User Registration">
+                                        <span class="mt-4">
+                                            <strong class="mb-2 text-white">General Instruction:</strong> <br>
+                                        </span>
+
+                                        <marquee behavior="scroll" loop="-1" direction="up" width="100%" height="250px"
+                                                 scrollamount="2">
+                                            <ul class="text-white text-start">
+                                                <li class="mb-2">Please provide accurate information and documentation.
+                                                    We will review and authenticate your submission.
+                                                </li>
+
+                                                <li class="mb-2">After you submit your application, you will receive a
+                                                    welcome email that includes an application tracking ID. This ID will
+                                                    allow you to easily check the status of your application.
+                                                </li>
+                                                <li class="mb-2">Once your profile is approved by the administration,
+                                                    you can start working with trust and reliability.
+                                                </li>
+                                                <li class="mb-2">If you encounter any issues, please contact us at
+                                                    support&#64;rucards.in
+                                                </li>
+                                            </ul>
+                                        </marquee>
+                                    </div>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="p-4">
+                                        <div class="row gy-3 mt-1 mb-4">
+                                            <div class="col-md-4">
+                                                <div class="text-center text-md-start">
+                                                    <img src="assets/images/logo-dark.png" alt="logo" width="170"
+                                                         height="30">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <p class="fs-18 text-center text-md-start fw-medium mb-4">
+                                                    Onboarding Application Form</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-start align-items-center mb-2 gap-2 gap-md-5 px-3"
+                                             *ngIf="(retailerCurrentStep==1 && role=='retailer') || (customerCurrentStep==1 && role=='customer')">
+                                            <label class="form-label">Register As</label>
+                                            <div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" id="customer"
+                                                           value="customer" name="role" [(ngModel)]="role">
+                                                    <label for="customer">Customer</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" id="retailer"
+                                                           value="retailer" name="role" [(ngModel)]="role">
+                                                    <label for="retailer">Corporate</label>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <!--------------------------------- retailer form----------------------------------------->
+                                        <form [formGroup]="retailerForm"
+                                              *ngIf="retailerCurrentStep==1 && role=='retailer'">
+                                            <div class="row gy-3 px-3">
+                                                <div class="col-md-6">
+                                                    <label for="pan_no">Pan No <span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="input-group">
+                                                        <input type="text" id="pan_no" formControlName="pan"
+                                                               class="form-control rounded-5 rounded-end text-uppercase"
+                                                               placeholder="Pan No" maxlength="10">
+                                                        <button class="btn btn-primary rounded-5 rounded-start"
+                                                                (click)="verifyPan(panContent)" title="Verify Pan No"
+                                                                [disabled]="ff['pan'].errors" *ngIf="!panVerified">
+                                                            Verify
+                                                        </button>
+                                                        <span class="input-group-text bg-success rounded-5 rounded-start"
+                                                              title="Verified" *ngIf="panVerified">
+                                                            <i class="ri-check-line text-white fw-semibold"></i>
+                                                        </span>
+                                                    </div>
+                                                    <div *ngIf="isRetailerSubmit && ff['pan'].errors"
+                                                         class="text-danger">
+                                                        <div *ngIf="ff['pan'].errors['required']">Pan no is required
+                                                        </div>
+                                                        <div *ngIf="ff['pan'].errors['pattern']">Invalid Pan No</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="aadhaar_no">Aadhaar Card No <span
+                                                            class="text-danger">*</span></label>
+                                                    <div class="input-group">
+                                                        <input type="text" id="aadhaar_no" formControlName="aadhaar"
+                                                               class="form-control rounded-5 rounded-end" appNumberOnly
+                                                               placeholder="Aadhaar Card No" maxlength="12">
+                                                        <button class="btn btn-primary rounded-5 rounded-start"
+                                                                *ngIf="!aadhaarVerified"
+                                                                (click)="verifyAadhaar(aadhaarContent)"
+                                                                title="Verify Aadhaar No"
+                                                                [disabled]="ff['aadhaar'].errors">
+                                                            Verify
+                                                        </button>
+                                                        <span class="input-group-text bg-success rounded-5 rounded-start"
+                                                              title="Verified" *ngIf="aadhaarVerified">
+                                                            <i class="ri-check-line text-white fw-semibold"></i>
+                                                        </span>
+                                                    </div>
+                                                    <div *ngIf="isRetailerSubmit && ff['aadhaar'].errors"
+                                                         class="text-danger">
+                                                        <div *ngIf="ff['aadhaar'].errors['required']">Aadhaar no is
+                                                            required
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="email">Email <span class="text-danger">*</span></label>
+                                                    <input type="text" id="email" class="form-control rounded-pill"
+                                                           placeholder="Email Address" formControlName="email">
+                                                    <div *ngIf="isRetailerSubmit && ff['email'].errors"
+                                                         class="text-danger">
+                                                        <div *ngIf="ff['email'].errors['required']">Email Address is
+                                                            required
+                                                        </div>
+                                                        <div *ngIf="ff['email'].errors['email']">Invalid Email Address
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="mobile_no">Mobile No <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" id="mobile_no" class="form-control rounded-pill"
+                                                           placeholder="Mobile No" formControlName="mobile"
+                                                           maxlength="10" appNumberOnly>
+                                                    <div *ngIf="isRetailerSubmit && ff['mobile'].errors"
+                                                         class="text-danger">
+                                                        <div *ngIf="ff['mobile'].errors['required']">Mobile no is
+                                                            required
+                                                        </div>
+                                                        <div *ngIf="ff['mobile'].errors['pattern']">Invalid Mobile No
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="text-end">
+                                                        <button class="btn btn-primary btn-rounded"
+                                                                [disabled]="!aadhaarVerified || !panVerified || !retailerForm.valid"
+                                                                (click)="onStepOne()">Next
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                        <!-----------------------------------retailer table---------------------------------------->
+                                        <ngx-simplebar class="table-responsive mb-2" *ngIf="retailerCurrentStep==2">
+                                            <h4>Please Verify Your Details</h4>
+                                            <table class="table table-bordered table-striped table-hover text-nowrap mt-4">
+                                                <tbody>
+                                                <tr>
+                                                    <td colspan="6">
+                                                        <span class="fw-bold">Applicant Name : </span>
+                                                        <span>{{ aadhaarCardData.data.name | titlecase }}</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <span class="fw-bold">Father Name : </span>
+                                                        <span>{{ aadhaarCardData.data.care_of | titlecase }}</span>
+                                                    </td>
+                                                    <td colspan="3">
+                                                        <span class="fw-bold">Mobile No : </span>
+                                                        <span>{{ ff['mobile'].value }}</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <span class="fw-bold">Pan No : </span>
+                                                        <span class="text-uppercase">{{ ff['pan'].value }}</span>
+                                                    </td>
+                                                    <td colspan="3">
+                                                        <span class="fw-bold">Aadhaar No : </span>
+                                                        <span>{{ ff['aadhaar'].value }}</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <span class="fw-bold">Email : </span>
+                                                        <span>{{ ff['email'].value }}</span></td>
+                                                    <td colspan="3">
+                                                        <span class="fw-bold">DOB : </span>
+                                                        <span>{{ aadhaarCardData.data.dob }}</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <span class="fw-bold">Gender : </span>
+                                                        <span *ngIf="aadhaarCardData.data.gender == 'M'">Male</span>
+                                                        <span *ngIf="aadhaarCardData.data.gender == 'F'">Female</span>
+                                                    </td>
+                                                    <td colspan="3">
+                                                        <span class="fw-bold">State : </span>
+                                                        <span>{{ aadhaarCardData.data.split_address.state | titlecase }}</span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <span class="fw-bold">District : </span>
+                                                        <span>{{ aadhaarCardData.data.split_address.dist | titlecase }}</span>
+                                                    </td>
+                                                    <td colspan="3">
+                                                        <span class="fw-bold">City : </span>
+
+
+                                                        <span>{{ aadhaarCardData.data.split_address?.subdist }} {{ aadhaarCardData.data.split_address?.vtc }}</span>
+
+
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <span class="fw-bold">Pincode : </span>
+                                                        <span>{{ aadhaarCardData.data.split_address.pincode }}</span>
+                                                    </td>
+                                                    <td colspan="3">
+                                                        <span class="fw-bold">Address : </span>
+                                                        <span>{{ aadhaarCardData.data.address | titlecase }}</span>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </ngx-simplebar>
+                                        <div class="row my-3 gy-3" *ngIf="retailerCurrentStep==2">
+                                            <div class="col-md-12" *ngIf="needRetailerMobileOtp">
+                                                <label for="mobile_otp">OTP <span class="text-danger">*</span></label>
+                                                <input type="text" id="mobile_otp" class="form-control rounded-pill"
+                                                       placeholder="Enter OTP" name="mobile_otp" maxlength="6"
+                                                       appNumberOnly [(ngModel)]="retailer_mobile_otp">
+                                            </div>
+                                            <div class="col-md-12" *ngIf="needRetailerMobileOtp">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span class="alert alert-success rounded-pill">{{ otp_msg | titlecase }}</span>
+                                                    <div>
+                                                        <a *ngIf="!resendRetailerMobileOTP" (click)="resendMobileOtp()"
+                                                           class="text-secondary cursor-pointer">Resend OTP</a>
+                                                        <countdown *ngIf="resendRetailerMobileOTP" #cd [config]="config"
+                                                                   (event)="handleEvent($event)"></countdown>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox" name="terms"
+                                                           id="terms" [(ngModel)]="retailer_terms"
+                                                           [disabled]="needRetailerMobileOtp">
+                                                    <label class="form-check-label fw-medium" for="terms">
+                                                        I Accept Rucards
+                                                        [<a href="https://rucards.in/terms-and-conditions.php"
+                                                            target="_blank"
+                                                            title="View terms and Conditions">T&amp;C</a>]
+                                                        [ <a href="https://rucards.in/privacy-policy.php" target="_blank"
+                                                             title="View Privacy Policy">Privacy
+                                                        Policy </a>]
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="text-center text-md-end">
+                                                    <button class="btn btn-info btn-rounded me-3"
+                                                            (click)="goBack()">Back
+                                                    </button>
+                                                    <button class="btn btn-primary btn-rounded"
+                                                            [disabled]="!retailer_terms"
+                                                            *ngIf="!needRetailerMobileOtp" (click)="confirmTerm()">
+                                                        Submit
+                                                    </button>
+                                                    <button class="btn btn-primary btn-rounded"
+                                                            *ngIf="needRetailerMobileOtp"
+                                                            [disabled]="retailer_mobile_otp == ''"
+                                                            (click)="registerRetailer()">Register
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- -----------------Retailer Success Message ---------------  --->
+                                        <div class="row my-3 gy-3" *ngIf="retailerCurrentStep==3">
+                                            <div class="text-center">
+                                                <div class="registration-congrats my-3">
+                                                    <img src="assets/images/success.gif" alt="success" class="img-fluid"
+                                                         style="width: 128px; height: 128px;">
+                                                    <h1>Congratulations!</h1>
+                                                    <h5 class="text-success">Registration successful.</h5>
+                                                </div>
+                                                <p class="text-muted fs-16 mb-3">Thank you for registering! Your account
+                                                    has been successfully created.</p>
+                                                <div class="d-flex justify-content-center align-items-center gap-3">
+                                                    <a class="btn btn-primary fs-16" routerLink="/login"
+                                                       title="Customer Login">Login</a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <!------------------------------------------------customer Registration form--------------------------------->
+                                        <form [formGroup]="customerForm"
+                                              *ngIf="customerCurrentStep==1 && role=='customer'">
+                                            <div class="row gy-3 px-3">
+                                                <div class="col-md-4">
+                                                    <label for="name">Applicant Name <span class="text-danger">*</span></label>
+                                                    <input type="text" id="name" formControlName="name"
+                                                           class="form-control rounded-pill" maxlength="50"
+                                                           placeholder="Enter Applicant Name" appAlphabeticInput>
+                                                    <div *ngIf="isCustomerSubmit && sf['name'].errors"
+                                                         class="text-danger">
+                                                        <div *ngIf="sf['name'].errors['required']">Name is required
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="father_name">Father Name <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" id="father_name" formControlName="father_name"
+                                                           class="form-control rounded-pill" maxlength="50"
+                                                           placeholder="Enter Father Name" appAlphabeticInput>
+                                                    <div *ngIf="isCustomerSubmit && sf['father_name'].errors"
+                                                         class="text-danger">
+                                                        <div *ngIf="sf['father_name'].errors['required']">Father Name is
+                                                            required
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="email2">Email <span class="text-danger">*</span></label>
+                                                    <input type="text" id="email2" class="form-control rounded-pill"
+                                                           placeholder="Email Address" formControlName="email">
+                                                    <div *ngIf="isCustomerSubmit && sf['email'].errors"
+                                                         class="text-danger">
+                                                        <div *ngIf="sf['email'].errors['required']">Email Address is
+                                                            required
+                                                        </div>
+                                                        <div *ngIf="sf['email'].errors['email']">Invalid Email Address
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="mobile">Mobile No <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" id="mobile" class="form-control rounded-pill"
+                                                           placeholder="Mobile No" formControlName="mobile_no"
+                                                           maxlength="10" appNumberOnly>
+                                                    <div *ngIf="isCustomerSubmit && sf['mobile_no'].errors"
+                                                         class="text-danger">
+                                                        <div *ngIf="sf['mobile_no'].errors['required']">Mobile no is
+                                                            required
+                                                        </div>
+                                                        <div *ngIf="sf['mobile_no'].errors['pattern']">Invalid Mobile No
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="dob">DOB <small
+                                                            class="text-muted">(dd-mm-yyyy)</small><span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" id="dob" formControlName="dob"
+                                                           class="form-control rounded-pill" mwlFlatpickr
+                                                           [altInput]="true" altFormat="d-m-Y" [allowInput]="true"
+                                                           [maxDate]="maxDate" placeholder="Date Of Birth">
+                                                    <div *ngIf="isCustomerSubmit && sf['dob'].errors"
+                                                         class="text-danger">
+                                                        <div *ngIf="sf['dob'].errors['required']">DOB is required</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <label for="gender">Gender <span
+                                                            class="text-danger">*</span></label>
+                                                    <select id="gender" formControlName="gender"
+                                                            class="form-control rounded-pill form-select">
+                                                        <option value="" selected>Select Gender</option>
+                                                        <option value="Male">Male</option>
+                                                        <option value="Female">Female</option>
+                                                        <option value="trans_gender">Trans Gender</option>
+                                                    </select>
+                                                    <div *ngIf="isCustomerSubmit && sf['gender'].errors"
+                                                         class="text-danger">
+                                                        <div *ngIf="sf['gender'].errors['required']">Gender is
+                                                            required
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="pincode">Pincode <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" id="pincode" formControlName="pincode"
+                                                           class="form-control rounded-pill" appNumberOnly maxlength="6"
+                                                           placeholder="Enter Pincode" #pincode
+                                                           (input)="onPincode(pincode.value)">
+                                                    <div *ngIf="isCustomerSubmit && sf['pincode'].errors"
+                                                         class="text-danger">
+                                                        <div *ngIf="sf['pincode'].errors['required']">Pincode is
+                                                            required
+                                                        </div>
+                                                        <div *ngIf="sf['pincode'].errors['minlength']">Invalid Pincode
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label [for]="isPincodeData ? 'state' : 'state2'">State <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" id="state2" class="form-control rounded-pill"
+                                                           placeholder="Enter State" formControlName="state">
+                                                    <div *ngIf="isCustomerSubmit && sf['state'].errors"
+                                                         class="text-danger">
+                                                        <div *ngIf="sf['state'].errors['required']">State is required
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label [for]="isPincodeData ? 'district' : 'district2'">District
+                                                        <span class="text-danger">*</span></label>
+
+                                                    <input type="text" id="district2" class="form-control rounded-pill"
+                                                           placeholder="Enter District" formControlName="district">
+                                                    <div *ngIf="isCustomerSubmit && sf['district'].errors"
+                                                         class="text-danger">
+                                                        <div *ngIf="sf['district'].errors['required']">District is
+                                                            required
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="city">City <span class="text-danger">*</span></label>
+                                                    <input type="text" id="city" formControlName="city"
+                                                           class="form-control rounded-pill" placeholder="Enter City">
+                                                    <div *ngIf="isCustomerSubmit && sf['city'].errors"
+                                                         class="text-danger">
+                                                        <div *ngIf="sf['city'].errors['required']">City is required
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label for="address">Address <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" id="address" formControlName="address"
+                                                           class="form-control rounded-pill"
+                                                           placeholder="Enter Address">
+                                                    <div *ngIf="isCustomerSubmit && sf['address'].errors"
+                                                         class="text-danger">
+                                                        <div *ngIf="sf['address'].errors['required']">Address is
+                                                            required
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="text-end">
+                                                        <button class="btn btn-primary btn-rounded"
+                                                                [disabled]="!customerForm.valid"
+                                                                (click)="onCustomerStepOne()">Next
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                        <!----------------------------------- customer Preview table And Set Password---------------------------------------->
+                                        <ngx-simplebar class="table-responsive mb-2" *ngIf="customerCurrentStep==2">
+                                            <h5>Verify below Details and Set Password.</h5>
+                                            <div class="card card-animate">
+                                                <div class="card-body">
+                                                    <table class="table table-bordered table-striped table-hover text-nowrap mt-4">
+                                                        <tbody>
+                                                        <tr>
+                                                            <td colspan="6">
+                                                                <span class="fw-bold">Applicant Name : </span>
+                                                                <span>{{ sf['name'].value | titlecase }}</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <span class="fw-bold">Father Name : </span>
+                                                                <span>{{ sf['father_name'].value | titlecase }}</span>
+                                                            </td>
+                                                            <td colspan="3">
+                                                                <span class="fw-bold">Mobile No : </span>
+                                                                <span>{{ sf['mobile_no'].value }}</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <span class="fw-bold">Email : </span>
+                                                                <span>{{ sf['email'].value }}</span></td>
+                                                            <td colspan="3">
+                                                                <span class="fw-bold">DOB : </span>
+                                                                <span>{{ sf['dob'].value |date:'dd-MM-yyyy' }}</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <span class="fw-bold">Gender : </span>
+                                                                <span>{{ sf['gender'].value | titlecase }}</span>
+                                                            </td>
+                                                            <td colspan="3">
+                                                                <span class="fw-bold">State : </span>
+                                                                <span *ngIf="isPincodeData">{{ state_name | titlecase }}</span>
+                                                                <span *ngIf="!isPincodeData">{{ sf['state'].value | titlecase }}</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <span class="fw-bold">District : </span>
+                                                                <span>{{ sf['district'].value | titlecase }}</span>
+                                                            </td>
+                                                            <td colspan="3">
+                                                                <span class="fw-bold">City : </span>
+
+                                                                <span>{{ sf['city'].value | titlecase }}</span>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <span class="fw-bold">Pincode : </span>
+                                                                <span>{{ sf['pincode'].value }}</span>
+                                                            </td>
+                                                            <td colspan="3">
+                                                                <span class="fw-bold">Address : </span>
+                                                                <span>{{ sf['address'].value | titlecase }}</span>
+                                                            </td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </ngx-simplebar>
+                                        <div class="row my-3 gy-3" *ngIf="customerCurrentStep==2">
+                                            <div class="col-12">
+                                                <div class="card card-animate">
+                                                    <div class="card-body">
+                                                        <form *ngIf="!needCustomerMobileOtp">
+                                                            <div class="row mb-3">
+                                                                <div class="col-md-6">
+                                                                    <label for="customer_password"
+                                                                           class="form-label">Password</label>
+                                                                    <div class="input-group">
+                                                                        <input type="password" class="form-control"
+                                                                               id="customer_password"
+                                                                               name="customer_password"
+                                                                               [(ngModel)]="customer_password"
+                                                                               [type]="showPassword ? 'text' : 'password'"
+                                                                               placeholder="Enter password">
+                                                                        <button class="btn btn-secondary"
+                                                                                type="button"
+                                                                                (click)="togglePassword()">
+                                                                            <i class="{{ showPassword ? 'ri-eye-line' : 'ri-eye-off-line' }}"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <label for="confirmCustomerPassword"
+                                                                           class="form-label">Confirm
+                                                                        Password</label>
+                                                                    <div class="input-group">
+                                                                        <input type="password" class="form-control"
+                                                                               id="confirmCustomerPassword"
+                                                                               name="confirmCustomerPassword"
+                                                                               [(ngModel)]="customer_confirm_password"
+                                                                               [type]="showConfirmPassword ? 'text' : 'password'"
+                                                                               placeholder="Confirm password">
+                                                                        <button class="btn btn-secondary"
+                                                                                type="button"
+                                                                                (click)="toggleConfirmPassword()">
+                                                                            <i class="{{ showConfirmPassword ? 'ri-eye-line' : 'ri-eye-off-line' }}"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="form-check mt-2">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                               name="terms"
+                                                                               id="terms2" [(ngModel)]="customer_terms">
+                                                                        <label class="form-check-label fw-medium"
+                                                                               for="terms2">
+                                                                            I Accept Rucards
+                                                                            [<a href="https://rucards.in/terms-and-conditions.php"
+                                                                                target="_blank"
+                                                                                title="View terms and Conditions">T&amp;C</a>]
+                                                                            [ <a
+                                                                                href="https://rucards.in/privacy-policy.php"
+                                                                                target="_blank"
+                                                                                title="View Privacy Policy">Privacy
+                                                                            Policy </a>]
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="text-center text-md-end">
+                                                                        <button class="btn btn-info btn-rounded me-3"
+                                                                                (click)="changeCustomerDetails()">Back
+                                                                        </button>
+                                                                        <button class="btn btn-primary btn-rounded"
+                                                                                [disabled]="!customer_terms"
+                                                                                *ngIf="!needCustomerMobileOtp || customer_confirm_password!='' || customer_password!='' "
+                                                                                (click)="validateCustomerRegistration()">
+                                                                            Submit
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                        <div class="col-md-12" *ngIf="needCustomerMobileOtp">
+                                                            <label for="mobile_otp2">OTP <span
+                                                                    class="text-danger">*</span></label>
+                                                            <input type="text" id="mobile_otp2"
+                                                                   class="form-control rounded-pill"
+                                                                   placeholder="Enter OTP" name="mobile_otp2"
+                                                                   maxlength="6"
+                                                                   appNumberOnly [(ngModel)]="customer_mobile_otp">
+                                                        </div>
+                                                        <div class="col-md-12" *ngIf="needCustomerMobileOtp">
+                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                <span class="alert alert-success rounded-pill mt-3">{{ otp_msg | titlecase }}</span>
+                                                                <div>
+                                                                    <a *ngIf="!resendCustomerMobileOTP"
+                                                                       (click)="resendCustomerMobileOtp()"
+                                                                       class="text-secondary cursor-pointer">Resend
+                                                                        OTP</a>
+                                                                    <countdown *ngIf="resendCustomerMobileOTP"
+                                                                               [config]="config"
+                                                                               (event)="handleEvent($event)"></countdown>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-12">
+
+
+                                                            <button class="btn btn-primary btn-rounded"
+                                                                    *ngIf="needCustomerMobileOtp"
+                                                                    [disabled]="customer_mobile_otp === ''"
+                                                                    (click)="registerCustomer()">Register
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <!----------------------------------- Customer Registration Message---------------------------------------->
+                                        <div class="row my-3 gy-3" *ngIf="customerCurrentStep==3">
+                                            <div class="text-center">
+                                                <div class="registration-congrats my-3">
+                                                    <img src="assets/images/success.gif" alt="success"
+                                                         class="img-fluid" style="width: 128px; height: 128px;">
+                                                    <h1>Congratulations!</h1>
+                                                    <h5 class="text-success">Registration successful.</h5>
+                                                </div>
+                                                <p class="text-muted fs-16 mb-3">Thank you for registering! Your
+                                                    account has been successfully created.</p>
+                                                <div class="d-flex justify-content-center align-items-center gap-3">
+                                                    <a class="btn btn-primary fs-16" routerLink="/login"
+                                                       title="Customer Login">Login</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center align-items-center gap-3">
+                                        <span>Already Have an account?</span>
+                                        <a routerLink="/login">Back to Login</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="text-center">
+                            <p class="mb-0 text-muted">
+                                &copy; {{ year }} All Rights Reserved By <a href="javascript:void(0)"
+                                                                            style="font-weight: bolder; border: none">Crescent
+                                Business Solutions Pvt Ltd.</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <ng-template #panContent let-offcanvas>
+        <div class="offcanvas-header pb-0">
+            <p class="fw-semibold fs-18 mb-0">Pan Verification</p>
+            <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+        </div>
+        <hr class="mb-0">
+        <div class="offcanvas-body">
+            <div class="text-center">
+                <i class="ri-checkbox-circle-fill display-4 text-success" *ngIf="panCardData.valid"></i>
+                <i class="ri-close-circle-fill display-4 text-danger" *ngIf="!panCardData.valid"></i>
+                <h4 *ngIf="panCardData.valid">Pan Valid</h4>
+                <h4 *ngIf="!panCardData.valid">Pan Invalid</h4>
+            </div>
+            <div class="card card-animate rounded-4 mt-3">
+                <div class="card-body">
+                    <div class="table-responsive mb-2">
+                        <table class="table text-nowrap mt-4">
+                            <tbody>
+                            <tr>
+                                <td colspan="6">
+                                    <span class="fw-bold">Pan No : </span>
+                                    <span>{{ panCardData.pan_no }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    <span class="fw-bold">Name : </span>
+                                    <span>{{ panCardData.name | titlecase }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    <span class="fw-bold">Aadhaar Seeding : </span>
+                                    <span class="badge rounded-pill text-bg-success"
+                                          *ngIf="panCardData.aadhaar_seeding == 'Y'">Yes</span>
+                                    <span class="badge rounded-pill text-bg-danger"
+                                          *ngIf="panCardData.aadhaar_seeding == 'N'">No</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    <span class="fw-bold">Category : </span>
+                                    <span>{{ panCardData.category }}</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <button class="btn btn-rounded btn-primary" aria-label="Close" (click)="offcanvas.dismiss()">
+                    Continue
+                </button>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #aadhaarContent let-offcanvas>
+        <div class="offcanvas-header pb-0">
+            <p class="fw-semibold fs-18 mb-0">Aadhaar Verification</p>
+            <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+        </div>
+        <hr class="mb-0">
+        <div class="offcanvas-body" *ngIf="!aadhaarExists">
+            <div class="mb-3">
+                <label for="aadhaar_otp" class="form-label">OTP <span class="text-danger">*</span></label>
+                <input type="text" class="form-control rounded-pill fw-semibold" id="aadhaar_otp" name="aadhaar_otp"
+                       [(ngModel)]="otp" maxlength="6" placeholder="Enter Aadhaar OTP" appNumberOnly>
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <a *ngIf="!resendAadharOtp" class="text-secondary cursor-pointer" (click)="resendAadhaarOtp();">
+                    Resend OTP</a>
+                <countdown *ngIf="resendAadharOtp" [config]="config"
+                           (event)="handleEvent($event)"></countdown>
+            </div>
+            <div class="d-flex justify-content-center">
+                <button class="btn btn-primary btn-rounded" [disabled]="otp == ''" (click)="verifyAadhaarOtp();">Verify
+                </button>
+            </div>
+        </div>
+        <div class="offcanvas-body" *ngIf="aadhaarExists">
+            <div class="text-center">
+                <i class="ri-checkbox-circle-fill display-4 text-success"
+                   *ngIf="aadhaarCardData.data.status == 'VALID'"></i>
+                <i class="ri-close-circle-fill display-4 text-danger"
+                   *ngIf="aadhaarCardData.data.status == 'INVALID'"></i>
+                <h4 *ngIf="aadhaarCardData.data.status == 'VALID'">Aadhaar Valid</h4>
+                <h4 *ngIf="aadhaarCardData.data.status == 'INVALID'">Aadhaar Invalid</h4>
+            </div>
+            <div class="card card-animate rounded-4 mt-3">
+                <div class="card-body">
+                    <div class="table-responsive mb-2">
+                        <table class="table text-nowrap mt-4">
+                            <tbody>
+                            <tr>
+                                <td colspan="6">
+                                    <span class="fw-bold">Aadhaar No : </span>
+                                    <span>{{ ff['aadhaar'].value }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    <span class="fw-bold">Name : </span>
+                                    <span>{{ aadhaarCardData.data.name | titlecase }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    <span class="fw-bold">Father Name : </span>
+                                    <span>{{ aadhaarCardData.data.care_of | titlecase }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    <span class="fw-bold">DOB : </span>
+                                    <span>{{ aadhaarCardData.data.dob }}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    <span class="fw-bold">Gender : </span>
+                                    <span *ngIf="aadhaarCardData.data.gender == 'M'">Male</span>
+                                    <span *ngIf="aadhaarCardData.data.gender == 'F'">Female</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    <span class="fw-bold">City : </span>
+                                    <span>{{ aadhaarCardData.data.split_address.subdist }} {{ aadhaarCardData.data.split_address?.vtc }}</span>
+
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    <span class="fw-bold">State : </span>
+                                    <span>{{ aadhaarCardData.data.split_address.state }}</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <button class="btn btn-rounded btn-primary" aria-label="Close" (click)="offcanvas.dismiss()">
+                    Continue
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</div>
+<ngx-spinner type="ball-scale-multiple"></ngx-spinner>

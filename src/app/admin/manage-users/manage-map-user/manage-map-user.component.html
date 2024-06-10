@@ -1,0 +1,233 @@
+<app-breadcrumbs title="Manage Map Users" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+
+<div class="card rounded-4 p-3">
+    <div class="card-header border-0">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <h4 class="fw-medium">Manage User Mapping</h4>
+            </div>
+            <div class="col-md-6">
+                <!--                <div class="float-end">-->
+                <!--                    <a routerLink="/retailer/manage-customers/create"-->
+                <!--                       class="btn btn-rounded  mb-2"  style="background-color: #3FA5D3; color: white;">-->
+                <!--                        Add Customer</a>-->
+                <!--                </div>-->
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-start align-items-center gap-2">
+                    <div class="search-box w-100">
+                        <input class="form-control rounded-pill search bg-light border-light"
+                               placeholder="Search User Details By Username..." [(ngModel)]="data.username" (change)="onChange()">
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+                    <button type="button" class="btn btn-primary  btn-rounded me-2 mb-2">Search</button>
+                    <select name="page" id="page" class="btn  btn-rounded me-2 mb-2 " [(ngModel)]="data.role_id" (change)="onChange()">
+                        <option value="" selected>All</option>
+                        <option value="8">Customer</option>
+                        <option value="7">Retailer</option>
+                        <option value="5">Distributor</option>
+                    </select>
+                    <button type="button" class="btn btn-primary  btn-rounded me-2 mb-2">Filters</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center gap-2">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <label for="page" class="me-2">Show</label>
+                        <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1" [(ngModel)]="data.page_size" (change)="onChange()">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <label for="page" class="ms-2">entries</label>
+                    </div>
+                    <button type="button" class="btn btn-success  btn-rounded me-2 mb-2" >
+                        Export
+                    </button>
+                </div>
+            </div>
+        </div>
+        <ngx-simplebar class="table-responsive mt-3">
+            <table class="table table-sm table-striped table-hover align-middle table-nowrap">
+                <thead>
+                    <tr>
+                        <th class="text-uppercase">#</th>
+                        <th class="text-uppercase cursor-pointer">
+                            Full Name
+                        </th>
+                        <th class="text-uppercase">Email</th>
+                        <th class="text-uppercase">Status</th>
+                        <th class="text-uppercase">Date</th>
+                        <th class="text-uppercase">Address</th>
+                        <th class="text-uppercase">Identification</th>
+                        <th class="text-uppercase">Parent</th>
+                        <th class="text-uppercase">Action</th>
+                    </tr>
+                </thead>
+                <tbody style="min-height: 300px;">
+                    <tr class="cursor-pointer card-animate"
+                        *ngFor="let user of users ; let i = index;">
+                        <td>{{(data.page - 1) * data.page_size + i+ 1 }}</td>
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                <span class="fs-16 mb-1">{{user?.name | uppercase}}</span>
+                                <span class="text-muted mb-0">&#64; {{user?.username | uppercase}}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                        <span class="fs-16 mb-0"> <i
+                                                class="ri-phone-line me-1"></i>{{user?.mobile_no}}</span>
+                                <span class="text-muted mb-0"> <i
+                                        class="ri-mail-check-line me-1"></i>{{user?.email_id | lowercase}}</span>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                <span class="fs-16 mb-0" *ngIf="user.role == '8'">
+                                    Customer
+                                </span>
+                                <span class="fs-16 mb-0" *ngIf="user.role == '5'">
+                                    Distributor
+                                </span>
+                                <span class="fs-16 mb-0" *ngIf="user.role == '7'">
+                                    Retailer
+                                </span>
+                                <span class="badge rounded-pill text-bg-success"
+                                      *ngIf="user.active">Active</span>
+                                <span class="badge rounded-pill text-bg-danger"
+                                      *ngIf="!user.active">Inactive</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                <span class="fs-16 mb-0"> DOB: {{user?.dob | date:'dd-MM-yyyy'}}</span>
+                                <span class="text-muted mb-0"> DOC: {{user?.created_at | dateago}}</span>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                <span class="fs-16 mb-0"> State: {{user?.state}} </span>
+                                <span class="text-muted mb-0"> District: {{user?.district | dateago}}</span>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                <span class="fs-16 mb-0 "> PAN: {{user?.pan_no ?? 'N/A' | uppercase}} </span>
+                                <span class="fs-16 mb-0 "> Aadhaar: {{user?.aadhar_no ?? 'N/A' | uppercase}} </span>
+
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                <span class="fs-16 mb-1">{{user?.parent_name | uppercase}}</span>
+                                <span class="text-muted mb-0">&#64; {{user?.parent_username | uppercase}}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm rounded-4 me-2"
+                                    (click)="onMapUser(map_user)" title="Generate Gift Card"
+                                    style="background-color: #3FA5D3; color: white;"><i class="ri-mind-map align-middle text-white"></i>
+                            </button>
+                        </td>
+                        <ng-template #map_user let-offcanvas>
+                            <div class="offcanvas-header">
+                                <p class="fs-18 fw-medium">Map User</p>
+                                <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+                            </div>
+                            <ngx-simplebar class="offcanvas-body p-3" style="max-height: calc(100vh - 75px); background-color: #F2F3F4;">
+                                <div class="card rounded-4 card-animate">
+                                    <div class="card-body">
+                                        <div class="list-group border-0 g-3 py-1">
+                                            <p class="fs-16 fw-medium py-1">Map User Details:</p>
+                                            <a class="list-group-item list-group-item-action border-0 list-group-item-success g-3 py-1">Full Name: {{user.name | uppercase}}<span class="font-weight-bold"></span></a>
+                                            <a class="list-group-item list-group-item-action border-0 g-3 py-1">Username: {{user?.username | uppercase}}</a>
+                                            <a class="list-group-item list-group-item-action border-0 g-3 py-1">MobileNo: {{user?.mobile_no}}</a>
+                                            <a class="list-group-item list-group-item-action border-0 g-3 py-1">Email: {{user?.email_id | lowercase}}</a>
+                                            <a class="list-group-item list-group-item-action border-0 g-3 py-1">Pan Card: {{user?.pan_no ?? 'N/A' | uppercase}}</a>
+                                            <a class="list-group-item list-group-item-action border-0 g-3 py-1">Aadhaar No: {{user?.aadhar_no ?? 'N/A' | uppercase}}</a>
+                                            <a class="list-group-item list-group-item-action border-0 g-3 py-1">Address: {{user?.district | uppercase}} / {{user.state| uppercase}}</a>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="username" class="form-label mt-2">Username</label>
+                                            <input class="form-control rounded-pill" placeholder="eg:-R00123456" id="username" name="username" [(ngModel)]="username" >
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12 mb-3 mt-2">
+                                                <button class="btn btn-primary btn-grad px-3 py-2" title="Map User" type="submit" [disabled]="username==null"
+                                                        (click)="openMapModal(Mapcontent)">
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ngx-simplebar>
+                        </ng-template>
+                        <ng-template #Mapcontent role="document" let-modal>
+                            <div class="modal-header">
+                                <h5 class="modal-title mt-0">Map User</h5>
+                                <h6  class="modal-title mt-0">
+                                    "Welcome to our user mapping system! We're dedicated to simplifying connections and communication.Your user details (username: {{user.username}} and the associated parent details (parent username: {{data.username}}). This information will enable us to create a personalized map, ensuring your messages reach their intended destinations seamlessly. Thank you for helping us enhance your communication experience!"
+                                </h6>
+                                <button
+                                        type="button"
+                                        class="btn-close"
+                                        aria-hidden="true"
+                                        (click)="modal.dismiss('Cross click')"
+                                ></button>
+                            </div>
+                            <div class="modal-body">
+                                <h5>Do You Want to Map User??</h5>
+                            </div>
+                            <div class="modal-footer">
+                                <button
+                                        type="button"
+                                        class="btn btn-light"
+                                        (click)="modal.close('Close click')"
+                                >
+                                    No
+                                </button>
+                                <button
+                                        type="button"
+                                        class="btn btn-primary"
+                                        (click)="onMapUserSubmit(user)"
+                                >
+                                    Yes
+                                </button>
+                            </div>
+                        </ng-template>
+                    </tr>
+                </tbody>
+            </table>
+        </ngx-simplebar>
+        <div class="row justify-content-md-between align-items-md-center mt-2">
+            <div class="col col-sm-4">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    Showing {{ (data.page - 1) * data.page_size + 1 }} to {{ getMax() }} of {{ data.total }} entries
+                </div>
+            </div>
+
+            <div class="col col-sm-4">
+                <div class="text-sm-right float-sm-end listjs-pagination">
+                    <ngb-pagination [collectionSize]="data.total" [(page)]="data.page" [pageSize]="data.page_size" [maxSize]="2" (pageChange)="onPageChange($event)">
+                    </ngb-pagination>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+

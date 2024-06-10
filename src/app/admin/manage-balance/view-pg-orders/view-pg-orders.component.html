@@ -1,0 +1,100 @@
+<app-breadcrumbs title="View PG Orders" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs> 
+
+<div class="card rounded-4 p-3">
+    <div class="card-header border-0">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <h4 class="fw-medium">View Transaction</h4>
+            </div>
+            <div class="col-md-6">
+                <div class="float-end">
+                    <a routerLink=""
+                       class="btn btn-rounded  mb-2"  style="background-color: #3FA5D3; color: white;">
+                        Add Fund</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-start align-items-center gap-2">
+                    <div class="search-box w-100">
+                        <input class="form-control rounded-pill search bg-light border-light"
+                               placeholder="Search Customer Details By Name, Address, DOB, PAN and more...">
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+                    <!-- <button type="button" class="btn btn-primary  btn-rounded me-2 mb-2">Filters</button> -->
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center gap-2">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <label for="page" class="me-2">Show</label>
+                            <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <label for="page" class="ms-2">entries</label>
+                        </div>
+                        <!-- <button type="button" class="btn btn-success  btn-rounded me-2 mb-2">Export
+                        </button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive mt-3">
+            <table class="table table-sm table-striped table-hover align-middle table-nowrap">
+                <thead>
+                <tr>
+                    <th class="text-uppercase">#</th>
+                    <th class="text-uppercase">Date</th>
+                    <th class="text-uppercase">Time</th>
+                    <th class="text-uppercase">Gateway</th>
+                    <th class="text-uppercase">Wallet</th>
+                    <th class="text-uppercase">Transaction ID</th>
+                    <th class="text-uppercase">Amount</th>
+                    <th class="text-uppercase">Status</th>
+                </tr>
+                </thead>
+                <tbody style="min-height: 300px;">
+                <tr *ngFor="let payment of payments; index as i;">
+                    <td class="text-uppercase">{{ i + 1}}</td>
+                    <td>{{ payment.date  }}</td>
+                    <td>{{ payment.time |uppercase }}</td>
+                    <td>{{ payment.gateway }}</td>
+                    <td>{{ payment.wallet }}</td>
+                    <td>{{ payment.transaction_id}}</td>
+                    <td>{{ payment.amount }}</td>
+                    <td>
+                        <span *ngIf="payment.status=='Initiated'" class="btn rounded-pill btn-primary waves-effect waves-light border-0" style="background-color: #0c0b0b;"> {{ payment.status}} </span>
+                        <span *ngIf="payment.status=='Failed'" class="btn rounded-pill btn-primary waves-effect waves-light border-0" style="background-color: #ee6352;"> {{ payment.status}} </span>
+                        <span *ngIf="payment.status=='Success'" class="btn rounded-pill btn-primary waves-effect waves-light border-0" style="background-color: #40bb82;"> {{ payment.status}} </span>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row justify-content-md-between align-items-md-center mt-2">
+            <div class="col col-sm-6">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    Showing {{ (page - 1) * pageSize + 1 }} to 124 of {{ totalRecords  }} entries
+                </div>
+            </div>
+
+            <div class="col col-sm-6">
+                <div class="text-sm-right float-sm-end listjs-pagination">
+                    <ngb-pagination [collectionSize]=totalRecords [(page)]="page" [pageSize]=pageSize [maxSize]="2">
+                    </ngb-pagination>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

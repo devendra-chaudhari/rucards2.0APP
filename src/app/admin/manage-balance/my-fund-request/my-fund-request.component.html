@@ -1,0 +1,93 @@
+<app-breadcrumbs title="Manage Balance" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="card rounded-4">
+    <div class="card-header">
+        <div class="row align-items-center g-3">
+            <div class="col-md-3">
+                <p class="fs-16 fw-medium">My Balance Request History</p>
+            </div>
+            <div class="col-md-auto ms-auto">
+                <div class="d-flex gap-2">
+                    <div class="search-box">
+                        <input type="text" class="form-control rounded-pill" placeholder="Search..." #search
+                               (keyup)="onSearch(search.value)">
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+
+                    <button class="btn btn-success btn-rounded" (click)="export_to_excel()">
+                        Export
+                    </button>
+                    <a class="btn btn-primary btn-rounded" routerLink="/manage-balance/add-fund">
+                        Add Fund
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive table-card">
+            <table class="table align-middle table-nowrap" id="customerTable">
+                <thead>
+                <tr>
+                    <th>SR</th>
+                    <th>Deposit Date</th>
+                    <th>Req.ID</th>
+                    <th>Mode</th>
+                    <th>Amount</th>
+                    <th>UTR/REF No</th>
+                    <th>Wallet Name</th>
+                    <th>Status</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="cursor-pointer card-animate"
+                    *ngFor="let transaction of transactions | slice: (page-1) * pageSize : page * pageSize; let i = index;">
+                    <td>{{(page - 1) * pageSize + i + 1}}</td>
+                    <td>{{transaction?.deposit_date | date: 'dd MMM yyyy'}}</td>
+                    <td>
+                        <div class="d-flex flex-column justify-content-center align-items-start">
+                            <span class="fs-16 mb-1">{{transaction?.fund_request_id}}</span>
+                        </div>
+                    </td>
+                    <td>{{transaction?.payment_mode | uppercase}}</td>
+                    <td>{{transaction?.amount |currency:'INR'}}</td>
+
+                    <td>{{transaction?.ref_no | uppercase}}</td>
+                    <td>{{transaction?.wallet_name | uppercase}}</td>
+                    <td>
+                        <span *ngIf=" transaction?.status=='Processing'"
+                              class="badge bg-primary rounded-pill"> {{transaction?.status | uppercase}}</span>
+                        <span *ngIf=" transaction?.status=='Accepted'"
+                              class="badge bg-success rounded-pill"> {{transaction?.status | uppercase}}</span>
+                        <span *ngIf=" transaction?.status=='Rejected'"
+                              class="badge bg-danger rounded-pill"> {{transaction?.status | uppercase}}</span>
+                    </td>
+
+                    <td>{{transaction.request_date | date: 'dd MMM yyyy'}}</td>
+                    <td>{{transaction.response_at ?? transaction.request_date | date: 'dd MMM yyyy'}}</td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row justify-content-md-between align-items-md-center mt-4">
+            <div class="col col-sm-6">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    Showing {{ (page - 1) * pageSize + 1 }} to {{ 100 }} of {{ transactions?.length ?? 0 }} entries
+                </div>
+            </div>
+
+            <div class="col col-sm-6">
+                <div class="text-sm-right float-sm-end listjs-pagination">
+                    <ngb-pagination [collectionSize]=transactions?.length??0 [(page)]="page" [pageSize]=pageSize
+                                    [maxSize]="2">
+                    </ngb-pagination>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,346 @@
+<app-breadcrumbs title="Add Customer" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="card rounded-4 card-animate p-3">
+    <div class="card-body">
+        <ng-container *ngIf="step==1">
+
+            <h4 class="fs-18 fw-semibold">Create New Customer
+                <a routerLink="/retailer/manage-customers" class="btn btn-primary float-end btn-rounded mt-0">View
+                    Customers
+                    List</a>
+            </h4>
+            <p class="text-muted">Enter Required information to Create New Customer.</p>
+
+            <form [formGroup]="customerForm" (ngSubmit)="onStep1Submit()">
+                <div class="row p-3 rounded-4 bg-soft-info mb-3">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="pan">Pan Card No <span class="text-danger mx-2">*</span></label>
+                            <input type="text" name="pan" id="pan" class="form-control rounded-4 fw-bold text-uppercase"
+                                   placeholder="Enter Customer Pan No (Required)" formControlName="pan" maxlength="10" required>
+                            <div *ngIf="isFormSubmitted && cf['pan'].errors" class="text-danger">
+                                <div *ngIf="cf['pan'].errors['required']">Pan Number is required.</div>
+                            </div>
+                            <div *ngIf="isFieldInvalid('pan')" class="text-danger">
+                                Please enter a valid PAN card number.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="aadhaar_no">Aadhaar Card No</label>
+                            <input type="text" name="aadhaar_no" id="aadhaar_no" class="form-control rounded-4 fw-bold"
+                                   placeholder="Enter Aadhaar No" formControlName="aadhaar_no" appNumberOnly maxlength="12">
+                            <div *ngIf="isFieldInvalid('aadhaar_no')" class="text-danger">
+                                Please enter a valid Aadhaar card number.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row p-3 bg-light rounded-4">
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="name">Applicant Name <span class="text-danger mx-2">*</span></label>
+                            <input type="text" name="name" id="name"
+                                   class="form-control rounded-4 fw-bold text-uppercase" placeholder="Customer Name"
+                                   formControlName="name" maxlength="80" appAlphabeticInput>
+                            <div *ngIf="isFormSubmitted && cf['name'].errors" class="text-danger">
+                                <div *ngIf="cf['name'].errors['required']">Customer Name is required.</div>
+                                <div *ngIf="cf['name'].errors['minlength']">Customer Name must be at least 3 characters
+                                    long.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="father_name">Father Name<span class="text-danger mx-2">*</span></label>
+                            <input type="text" name="father_name" id="father_name" formControlName="father_name"
+                                   class="form-control rounded-4 fw-bold text-uppercase" placeholder="Father Name" maxlength="80"
+                                   appAlphabeticInput>
+                            <div *ngIf="isFormSubmitted && cf['father_name'].errors" class="text-danger">
+                                <div *ngIf="cf['father_name'].errors['required']">Father's Name is required.</div>
+                                <div *ngIf="cf['father_name'].errors['minlength']">Father's Name must be at least 3
+                                    characters
+                                    long.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="mobile_no">Mobile No <span class="text-danger mx-2">*</span></label>
+                            <input type="text" name="mobile_no" id="mobile_no"
+                                   class="form-control rounded-4 fw-bold text-uppercase" placeholder="Mobile No" inputmode="numeric"
+                                   formControlName="mobile_no" maxlength="10" appNumberOnly>
+                            <div *ngIf="isFormSubmitted && cf['mobile_no'].errors" class="text-danger">
+                                <div *ngIf="cf['mobile_no'].errors['required']">Mobile No is required.</div>
+                                <div *ngIf="cf['mobile_no'].errors['pattern']">Mobile No Format invalid</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="email">Email <span class="text-danger mx-2">*</span></label>
+                            <input type="email" name="email" id="email" placeholder="Email Address"
+                                   class="form-control rounded-4 fw-bold text-lowercase" formControlName="email">
+                            <div *ngIf="isFormSubmitted && cf['email'].errors" class="text-danger">
+                                <div *ngIf="cf['email'].errors['required']">Email Address is required.</div>
+                                <div *ngIf="cf['email'].errors['email']">Email Format invalid</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="gender">Gender <span class="text-danger mx-2">*</span></label>
+                            <select name="gender" id="gender" class="form-select rounded-4 text-dark-25 fw-bold"
+                                    formControlName="gender">
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="trans_gender">Trans-Gender</option>
+                                <option value="n/a">Not Applicable</option>
+                            </select>
+                            <div *ngIf="isFormSubmitted && cf['gender'].errors" class="text-danger">
+                                <div *ngIf="cf['gender'].errors['required']">Gender Selection is required.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="dob">Date of Birth <span class="text-danger mx-2">*</span></label>
+                            <input name="dob" id="dob" placeholder="DD-MM-YYYY"
+                                   class="form-control rounded-4 fw-bold" formControlName="dob"
+                                   type="text" mwlFlatpickr
+                                   [altInput]="true" [convertModelValue]="true" [maxDate]="maxDob"
+                                   [altFormat]="'d-m-Y'" [dateFormat]="'Y-m-d'"/>
+                            <div *ngIf="isFormSubmitted && cf['dob'].errors" class="text-danger">
+                                <div *ngIf="cf['dob'].errors['required']">Date Selection is required.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="pincode">Pincode <span class="text-danger mx-2">*</span></label>
+                            <input type="text" name="pincode" id="pincode" placeholder="Enter Pin Code"
+                                   class="form-control rounded-4 fw-bold text-uppercase" formControlName="pincode" inputmode="numeric"
+                                   (keyup)="onGetPincodeDetail()" maxlength="6" appNumberOnly>
+                            <div *ngIf="isFormSubmitted && cf['pincode'].errors" class="text-danger">
+                                <div *ngIf="cf['pincode'].errors['required']">Pincode is required.</div>
+                                <div *ngIf="cf['pincode'].errors['pattern']">invalid Pincode .</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="state">State <span class="text-danger mx-2">*</span></label>
+                            <input type="text" name="state" id="state" placeholder="Enter State Name"
+                                   class="form-control rounded-4 fw-bold text-uppercase" formControlName="state">
+                            <div *ngIf="isFormSubmitted && cf['state'].errors" class="text-danger">
+                                <div *ngIf="cf['state'].errors['required']">Enter State Name.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="district">District <span class="text-danger mx-2">*</span></label>
+                            <input type="text" name="district" id="district" placeholder="Enter District Name"
+                                   class="form-control rounded-4 fw-bold text-uppercase" formControlName="district">
+                            <div *ngIf="isFormSubmitted && cf['district'].errors" class="text-danger">
+                                <div *ngIf="cf['district'].errors['required']">Enter District Name.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group mb-3">
+                            <label for="city">City <span class="text-danger mx-2">*</span></label>
+                            <input type="text" name="city" id="city" placeholder="Enter City"
+                                   class="form-control rounded-4 fw-bold text-uppercase" formControlName="city">
+                            <div *ngIf="isFormSubmitted && cf['city'].errors" class="text-danger">
+                                <div *ngIf="cf['city'].errors['required']">Enter City Name.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-8">
+                        <div class="form-group mb-3">
+                            <label for="address">Address <span class="text-danger mx-2">*</span></label>
+                            <input type="text" name="address" id="address"
+                                   placeholder="Enter Customer Permanent Address"
+                                   class="form-control rounded-4 fw-bold text-uppercase" formControlName="address">
+                            <div *ngIf="isFormSubmitted && cf['address'].errors" class="text-danger">
+                                <div *ngIf="cf['address'].errors['required']">Address is Required</div>
+                                <div *ngIf="cf['address'].errors['minlength']">Address seems invalid
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary rounded-4 mt-4">Submit
+                </button>
+            </form>
+        </ng-container>
+
+        <ng-container *ngIf="step==2">
+            <ngx-simplebar class="table-responsive mb-2" *ngIf="step==2">
+                <h5>Verify below Details</h5>
+                <div class="card card-animate">
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped table-hover text-nowrap mt-4">
+                            <tbody>
+                            <tr>
+                                <td colspan="6">
+                                    <span class="fw-bold">Applicant Name : </span>
+                                    <span>{{ cf['name'].value | titlecase}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <span class="fw-bold">Father Name : </span>
+                                    <span>{{cf['father_name'].value |titlecase}}</span>
+                                </td>
+                                <td colspan="3">
+                                    <span class="fw-bold">Mobile No : </span>
+                                    <span>{{   cf['mobile_no'].value}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <span class="fw-bold">Email : </span>
+                                    <span>{{  cf['email'].value}}</span></td>
+                                <td colspan="3">
+                                    <span class="fw-bold">DOB : </span>
+                                    <span>{{  cf['dob'].value |date:'dd-MM-yyyy'}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <span class="fw-bold">Gender : </span>
+                                    <span>{{  cf['gender'].value | titlecase}}</span>
+                                </td>
+                                <td colspan="3">
+                                    <span class="fw-bold">State : </span>
+                                    <span>{{  cf['state'].value| titlecase}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <span class="fw-bold">District : </span>
+                                    <span>{{  cf['district'].value | titlecase}}</span>
+                                </td>
+                                <td colspan="3">
+                                    <span class="fw-bold">City : </span>
+                                    <span>{{  cf['city'].value}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    <span class="fw-bold">Pincode : </span>
+                                    <span>{{  cf['pincode'].value}}</span>
+                                </td>
+                                <td colspan="3">
+                                    <span class="fw-bold">Address : </span>
+                                    <span>{{  cf['address'].value | titlecase}}</span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="3">
+                                    <span class="fw-bold">Aadhaar No : </span>
+                                    <span>{{  cf['aadhaar_no'].value}}</span>
+                                </td>
+                                <td colspan="3">
+                                    <span class="fw-bold">Pan No : </span>
+                                    <span>{{  cf['pan'].value | uppercase}}</span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </ngx-simplebar>
+            <div class="row my-3 gy-3" *ngIf="step==2">
+                <div class="col-12">
+                    <div class="card card-animate">
+                        <div class="card-body">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check mt-2">
+                                            <input class="form-check-input" type="checkbox"
+                                                   name="terms"
+                                                   id="terms"
+                                                   [(ngModel)]="terms">
+                                            <label class="form-check-label fw-medium"
+                                                   for="terms">
+                                                I Accept Rucards
+                                                [<a href="http://rucards.in/terms-and-conditions.php"
+                                                    target="_blank"
+                                                    title="View terms and Conditions">T&amp;C</a>]
+                                                [ <a
+                                                    href="http://rucards.in/privacy-policy.php"
+                                                    target="_blank"
+                                                    title="View Privacy Policy">Privacy
+                                                Policy </a>]
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="text-center text-md-end">
+
+                                            <button class="btn btn-info btn-rounded me-3" (click)="step=1">Back
+                                            </button>
+
+
+                                            <button *ngIf="!confirmed " class="btn btn-primary btn-rounded me-3"
+                                                    [disabled]="!terms"
+                                                    (keyup.enter)="onConfirmedDetails()" (click)="onConfirmedDetails()">
+                                                Confirm
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="col-md-12" *ngIf="confirmed">
+                                <label for="mobile_otp">OTP <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" id="mobile_otp"
+                                       class="form-control rounded-pill"
+                                       placeholder="Enter OTP" name="mobile_otp"
+                                       maxlength="6"
+                                       [(ngModel)]="mobile_otp"
+                                       appNumberOnly>
+                            </div>
+                            <div class="col-md-12" *ngIf="confirmed">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="alert alert-success rounded-pill mt-3">{{otp_msg| titlecase}}</span>
+                                    <div>
+                                        <a *ngIf="!resendCustomerMobileOTP"
+                                           (click)="resendMobileOtp()"
+                                           class="text-secondary cursor-pointer">Resend
+                                            OTP</a>
+                                        <countdown *ngIf="resendCustomerMobileOTP"
+                                                   [config]="config"
+                                                   (event)="handleEvent($event)"></countdown>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+
+
+                                <button class="btn btn-primary btn-rounded"
+                                        *ngIf="confirmed"
+                                        [disabled]="mobile_otp === ''"
+                                        (click)="onFinalSubmit()">Register
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </ng-container>
+    </div>
+</div>
+

@@ -1,0 +1,547 @@
+<app-breadcrumbs title="Platinum Gift Card" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<div class="row">
+    <div class="col-xl">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="mobile" class="form-label"
+                            >Mobile Number</label
+                            >
+                            <input
+                                    class="form-control rounded-4 fw-semibold"
+                                    [(ngModel)]="customer_gc_list.mobile_no"
+                                    type="text"
+                                    id="mobile"
+                                    placeholder="Mobile No"
+                                    name="mobile_no"
+                                    required
+                            />
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="4-digit" class="form-label"
+                            >Last 4 Digit</label
+                            >
+                            <input
+                                    class="form-control rounded-4 fw-semibold"
+                                    type="text"
+                                    id="4-digit"
+                                    [(ngModel)]="customer_gc_list.last_4_digit"
+                                    placeholder="Last 4 Digits of Cards"
+                                    name="last_4_digits"
+                                    required
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="form-label rounded-4"
+                            >Customer Name</label>
+                            <select
+                                    name="customer_name"
+                                    class="form-select rounded-4 fw-semibold"
+                                    [(ngModel)]="customer_gc_list.customer_name_id"
+                                    required>
+                                <option value="">Select Customer Name</option>
+                                <option
+                                        value="{{ customer?.id }}"
+                                        *ngFor="let customer of customers[0]">
+                                    {{ customer?.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="kit_no" class="form-label"
+                            >Kit Number</label
+                            >
+                            <input
+                                    class="form-control rounded-4 fw-semibold"
+                                    name="kit_no"
+                                    id="kit_no"
+                                    type="text"
+                                    [(ngModel)]="customer_gc_list.kit_no"
+                                    placeholder="Enter KIT number"
+                                    required
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                        class="btn-group right ms-auto nexttab"
+                        role="group"
+                        aria-label="Basic example"
+                >
+                    <button
+                            type="button"
+                            class="btn rounded-5"
+                            style="background-color: #112558; color: white"
+                            (click)="onSearch()"
+                    >
+                        Submit
+                    </button>
+                    <button
+                            type="button"
+                            class="btn rounded-5 ms-2"
+                            style="background-color: #112558; color: white"
+                            (click)="resetForm()"
+                    >
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card card-animate">
+    <div class="card-header mb-0 border-0">
+        <h4 class="fw-medium">Recent Gift Cards</h4>
+    </div>
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center justify-content-center">
+                <label for="page" class="me-2">Show</label>
+                <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+                <label for="page" class="ms-2">entries</label>
+            </div>
+            <div>
+                <button type="button" class="btn btn-success float-end btn-rounded me-2 mb-2" (click)="export_to_excel()">
+                    Export
+                </button>
+
+            </div>
+        </div>
+
+        <ngx-simplebar class="table-responsive mt-3">
+            <table
+                    class="table table-sm table-striped table-hover align-middle table-nowrap"
+            >
+                <thead>
+                <tr>
+                    <th class="text-uppercase">#</th>
+                    <th (click)="sort('name')" class="text-uppercase">Customer Name <i class='bx bxs-sort-alt fs-12'></i></th>
+                    <th (click)="sort('mobile')" class="text-uppercase">Mobile No <i class='bx bxs-sort-alt fs-12'></i></th>
+                    <th (click)="sort('card_number')" class="text-uppercase">Card No <i class='bx bxs-sort-alt fs-12'></i></th>
+                    <th (click)="sort('card_id')" class="text-uppercase">Kit No <i class='bx bxs-sort-alt fs-12'></i></th>
+                    <th (click)="sort('card_id')" class="text-uppercase">Bin No <i class='bx bxs-sort-alt fs-12'></i></th>
+                    <th class="text-uppercase">Current Balance</th>
+                    <th class="text-uppercase">Status</th>
+                    <th class="text-uppercase">Action</th>
+                </tr>
+                </thead>
+                <tbody style="min-height: 300px">
+                <tr *ngFor="let item of giftCardList; index as i">
+                    <td class="text-uppercase">{{ (page - 1) * pageSize + i + 1 }}</td>
+                    <td>
+                        {{ item?.name | uppercase }}
+                    </td>
+                    <td>{{ item?.mobile }}</td>
+                    <td>
+                        @if (cvdData && cvdData.pan_mask) {
+                            <div class="vstack">
+                                <span class="text-center fw-semibold text-primary">{{ cvdData?.pan_mask | cardNumberFormat }}</span>
+                                <span class="badge  bg-soft-primary text-primary my-1">Exp: {{ cvdData?.exp }}</span>
+                                <span class="badge  bg-soft-info text-primary">CVV: {{ cvdData?.cvv }}</span>
+
+                            </div>
+
+                        } @else {
+                            <div class="hstack">
+                                <span *ngIf="item.pan_mask">{{ item.pan_mask }}</span>
+                                <span *ngIf="!item.pan_mask">XXXX-XXXX-XXXX-XXXX</span>
+
+                                <a class="cursor-pointer px-2" (click)="showCardDetails(item?.card_number)" title="view Card Details"><i class="ri-information-fill fs-5"></i></a>
+                            </div>
+                        }
+
+
+                    </td>
+                    <td>{{ item?.card_id }}</td>
+                    <td>{{ item?.bin_no }}</td>
+                    <td>
+                        <a *ngIf="!current_card_balance" (click)="getCardBalance(item?.card_number)" title="Check Balance"><i class="ri-restart-line fs-16" title="Refresh Balance"></i></a>
+                        <span class="text-dark fw-bold" *ngIf="current_card_balance">
+                            {{ current_card_balance |dateago }}                    </span>
+                    </td>
+                    <td>
+                        <div class="badge bg-success rounded-pill">Active</div>
+                        <div>{{ item?.activated_on | date : "EEEE, MMMM d, y" }}</div>
+                    </td>
+                    <td>
+                        <div ngbDropdown container="body">
+                            <button type="button" class="btn border-0" ngbDropdownToggle>Actions</button>
+                            <div ngbDropdownMenu>
+                                <button ngbDropdownItem (click)="openCardClosureModal(CardClosureModal)">Card Closure</button>
+                                <button ngbDropdownItem (click)="onLoadGiftCard(load_gift_card,item)">Card Load</button>
+                                <button ngbDropdownItem (click)="openCardBlockModal(CardBlock)">Lock</button>
+                                <button ngbDropdownItem (click)="openCardUnlockModal(CardUnlock)">Unlock</button>
+                                <button ngbDropdownItem (click)="onGenerate_gpr_preferneces( generate_gpr_card_prefernces)">Card Setting</button>
+                                <button ngbDropdownItem (click)="openSetPinModal(CardSetPin)">Set Pin</button>
+                                <button ngbDropdownItem (click)="openUpdatePinModal(CardUpdatePin)">Update Pin</button>
+                            </div>
+                        </div>
+
+                        <ng-template #generate_gc_card_preferences let-offcanvas>
+                            <div class="offcanvas-header">
+                                <p class="fs-18 fw-medium">Gift Card Preferences</p>
+                                <button
+                                        type="button"
+                                        class="btn-close"
+                                        aria-label="Close"
+                                        (click)="offcanvas.dismiss()"
+                                ></button>
+                            </div>
+                            <ngx-simplebar class="offcanvas-body p-3" style=" max-height: calc(100vh - 75px);background-color: #f2f3f4;         ">
+                                <div class="card rounded-4 card-animate">
+                                    <div class="card-body">
+                                        <div class="col-12 mb-3">
+                                            <label for="flexCheckpos">Preferences</label>
+                                            <div class="form-check">
+                                                <input
+                                                        class="form-check-input"
+                                                        type="checkbox"
+                                                        value=""
+                                                        id="flexCheckpos"
+                                                        [(ngModel)]="item.gc_preferences_pos"
+                                                        [checked]="item.gc_preferences_pos"
+                                                />
+                                                <label class="form-check-label" for="flexCheckpos">
+                                                    POS
+                                                </label>
+                                            </div>
+
+                                            <div class="form-check">
+                                                <input
+
+                                                        class="form-check-input"
+                                                        type="checkbox"
+                                                        value=""
+                                                        id="flexCheckecom"
+                                                        [(ngModel)]="item.gc_preferences_ecom"
+                                                        [checked]="item.gc_preferences_ecom"
+                                                />
+                                                <label class="form-check-label" for="flexCheckecom">
+                                                    ECOM
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input"
+                                                       type="checkbox"
+                                                       value=""
+                                                       id="flexCheckcontactless"
+                                                       [(ngModel)]="item.gc_preferences_contactless"
+                                                       [checked]="item.gc_preferences_contactless"
+                                                />
+                                                <label
+                                                        class="form-check-label"
+                                                        for="flexCheckcontactless"
+                                                >
+                                                    CONTACTLESS
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                        <div class="row">
+                                            <div class="col-12 mb-3 mt-2">
+                                                <button class="btn btn-primary btn-grad px-3 py-2" title="Validate Details before Submit" type="submit">
+                                                    Submit
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ngx-simplebar>
+                        </ng-template>
+
+                        <ng-template #CardClosureModal role="document" let-modal>
+                            <div class="modal-header">
+                                <h5 class="modal-title mt-0">Card Closure</h5>
+                                <button
+                                        type="button"
+                                        class="btn-close"
+                                        aria-hidden="true"
+                                        (click)="modal.dismiss('Cross click')"
+                                ></button>
+                            </div>
+                            <div class="modal-body">
+                                <h5>Do You Want to Request for Card Closure??</h5>
+                            </div>
+                            <div class="modal-footer">
+                                <button
+                                        type="button"
+                                        class="btn btn-light"
+                                        (click)="modal.close('Close click')"
+                                >
+                                    No
+                                </button>
+                                <button type="button" class="btn btn-primary" (click)="submitForCardClosure(item)">
+                                    Yes
+                                </button>
+                            </div>
+                        </ng-template>
+
+
+                        <ng-template #CardBlock role="document" let-modal>
+                            <div class="modal-header">
+                                <h5 class="modal-title mt-0">Card Block</h5>
+                                <button
+                                        type="button"
+                                        class="btn-close"
+                                        aria-hidden="true"
+                                        (click)="modal.dismiss('Cross click')"
+                                ></button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="mb-3 mt-3">
+                                    <label for="block_card_reason" class="form-label rounded-4 my-2">
+                                        Block Reason
+                                    </label>
+                                    <select name="block_card_reason" id="block_card_reason" class="form-select rounded-4 fw-semibold" [(ngModel)]="block_reason" required>
+                                        <option value="">Select Block Reason</option>
+                                        <option value="lost">Lost Card</option>
+                                        <option value="stolen">Stolen Card</option>
+                                        <option value="fraudulent_activity">Fraudulent Activity</option>
+                                        <option value="damaged">Damaged Card</option>
+                                        <option value="security_concern">Security Concern</option>
+                                        <option value="other">Other</option>
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-info rounded-5" (click)="modal.close('Close click')" autofocus>
+                                    No, Cancel
+                                </button>
+                                <button type="button" class="btn btn-danger rounded-5" (click)="submitForCardBlock(item?.card_number)">
+                                    Yes, Close
+                                </button>
+                            </div>
+                        </ng-template>
+
+                        <ng-template #CardUnlock role="document" let-modal>
+                            <div class="modal-header">
+                                <h5 class="modal-title mt-0">Card Unlock</h5>
+                                <button
+                                        type="button"
+                                        class="btn-close"
+                                        aria-hidden="true"
+                                        (click)="modal.dismiss('Cross click')"
+                                ></button>
+                            </div>
+                            <div class="modal-body">
+                                <h5>Do You Want to Request for Card Unlock??</h5>
+                            </div>
+
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" (click)="modal.close('Close click')">
+                                    No
+                                </button>
+                                <button type="button" class="btn btn-primary" (click)="submitForCardUnlock(item?.card_number)">
+                                    Yes
+                                </button>
+                            </div>
+                        </ng-template>
+
+                        <ng-template #CardUpdatePin role="document" let-modal>
+                            <div class="modal-header">
+                                <h5 class="modal-title mt-0">Update Card Pin</h5>
+                                <button
+                                        type="button"
+                                        class="btn-close"
+                                        aria-hidden="true"
+                                        (click)="modal.dismiss('Cross click')"
+                                ></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <label class="form-label mt-2">OLD PIN</label>
+                                    <input class="form-control rounded-pill" placeholder="Enter New Pin " name="pin"
+                                           [(ngModel)]="gc_old_pin" appNumberOnly required maxlength="6">
+                                    <div class="text-danger small">{{ oldPinError }}</div>
+                                </div>
+                                <div class="row">
+                                    <label class="form-label mt-2">NEW PIN</label>
+                                    <input class="form-control rounded-pill" placeholder="Enter New Pin " name="pin"
+                                           [(ngModel)]="gc_new_pin" appNumberOnly required maxlength="6">
+                                    <div class="text-danger small">{{ newPinError }}</div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" (click)="modal.close('Close click')">
+                                    CANCEL
+                                </button>
+                                <button type="button" class="btn btn-success" (click)="submitForUpdateSetCardPin(item,'update')">
+                                    UPDATE
+                                </button>
+                            </div>
+                        </ng-template>
+
+                        <ng-template #CardSetPin role="document" let-modal>
+                            <div class="modal-header">
+                                <h5 class="modal-title mt-0">Set Card Pin</h5>
+                                <button
+                                        type="button"
+                                        class="btn-close"
+                                        aria-hidden="true"
+                                        (click)="modal.dismiss('Cross click')"
+                                ></button>
+                            </div>
+                            <div class="modal-header">
+                                <div class="col-12">
+                                    <label class="form-label mt-2">NEW PIN</label>
+                                    <input class="form-control rounded-pill" placeholder="Enter New Pin " name="pin"
+                                           [(ngModel)]="gc_new_pin" appNumberOnly required maxlength="6">
+                                    <div class="text-danger small">{{ newPinError }}</div>
+                                </div>
+                            </div>
+
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-light" (click)="modal.close('Close click')">
+                                    CANCEL
+                                </button>
+                                <button type="button" class="btn btn-primary" (click)="submitForUpdateSetCardPin(item,'set')">
+                                    SET
+                                </button>
+                            </div>
+                        </ng-template>
+
+                        <ng-template #generate_gpr_card_prefernces let-offcanvas>
+                            <div class="offcanvas-header">
+                                <p class="fs-18 fw-medium">GIFT Card Preferences</p>
+                                <button
+                                        type="button"
+                                        class="btn-close"
+                                        aria-label="Close"
+                                        (click)="offcanvas.dismiss()"
+                                ></button>
+                            </div>
+                            <ngx-simplebar class="offcanvas-body p-3" style="max-height: calc(100vh - 75px);background-color: #f2f3f4;">
+                                <div class="card rounded-4 card-animate">
+                                    <div class="card-body">
+                                        <table class="table responsive-table">
+                                            <tr>
+                                                <th>POS</th>
+                                                <td>
+                                                    <ui-switch (valueChange)="onValueChange($event, item,'POS')" [checked]="item.gc_preferences_pos"></ui-switch>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>ATM</th>
+                                                <td>
+                                                    <ui-switch (valueChange)="onValueChange($event, item, 'ATM')" [checked]="item.gc_preferences_atm"></ui-switch>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>ECOM</th>
+                                                <td>
+                                                    <ui-switch (valueChange)="onValueChange($event, item, 'ECO')" [checked]="item.gc_preferences_ecom"></ui-switch>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>CNP/CONTACTLESS</th>
+                                                <td>
+                                                    <ui-switch (valueChange)="onValueChange($event, item, 'CNP')" [checked]="item.gc_preferences_contactless"></ui-switch>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>CSI</th>
+                                                <td>
+                                                    <ui-switch (valueChange)="onValueChange($event, item,'CSI')" [checked]="item.gc_preferences_csi"></ui-switch>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </ngx-simplebar>
+                        </ng-template>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </ngx-simplebar>
+        <div class="row justify-content-md-between align-items-md-center mt-2">
+            <div class="col col-sm-6">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    Showing {{ (page - 1) * pageSize + 1 }} to {{ getMax() }} of {{ total }} entries
+                </div>
+            </div>
+            <div class="col col-sm-6">
+                <div class="text-sm-right float-sm-end listjs-pagination">
+                    <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="pageSize" [maxSize]="2"
+                                    (pageChange)="onPageChange($event)">
+                    </ngb-pagination>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #load_gift_card let-offcanvas>
+    <div class="offcanvas-header">
+        <p class="fs-18 fw-medium">Load Gift Card</p>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <ngx-simplebar class="offcanvas-body p-3" style="max-height: calc(100vh - 75px); background-color: #F2F3F4;">
+        <div class="card rounded-4 card-animate">
+            <div class="card-body">
+                <div class="col-12">
+                    <label for="amount" class="form-label mt-2">Name</label>
+                    <input class="form-control rounded-pill" placeholder="0" id="name" name="name"
+                           [(ngModel)]="gc_load_name" disabled>
+                </div>
+                <div class="col-12">
+                    <label for="amount" class="form-label mt-2">Mobile Number</label>
+                    <input class="form-control rounded-pill" placeholder="0" id="mobile_number" name="mobile_number"
+                           [(ngModel)]="gc_load_mobile_number" disabled>
+
+                </div>
+                <div class="col-12">
+                    <label for="amount" class="form-label mt-2">Card Number</label>
+                    <input class="form-control rounded-pill" placeholder="0" id="card_number" name="card_number"
+                           [(ngModel)]="gc_load_card_number" disabled>
+                </div>
+                <div class="col-12">
+                    <label for="amount" class="form-label mt-2">Amount</label>
+                    <input class="form-control rounded-pill" placeholder="0" id="amount" name="amount"
+                           [(ngModel)]="gc_load_amount" appNumberOnly required>
+                    <div class="text-danger small">{{ amountError }}</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-3 mt-2">
+                        <button class="btn btn-primary btn-grad px-3 py-2" title="Validate Details before Submit"
+                                type="submit" (click)="submitLoadGiftCardDetails()">Generate
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </ngx-simplebar>
+</ng-template>
+<!--Generate gift Card  end -->
+
+
+

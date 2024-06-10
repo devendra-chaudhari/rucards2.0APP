@@ -1,0 +1,306 @@
+<app-breadcrumbs
+  title="Add Payment Gateway"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-5">
+      <div class="my-4">
+        <div class="row">
+          <div class="form-group row mb-2 rounded-4">
+            <div class="col-12">
+              <div class="bg-vertical-gradient-3 pb-5 pt-2 rounded-2 px-3">
+                <div class="float-start">
+                  <select
+                    name="wallet_name"
+                    id="wallet_name"
+                    class="form-select fs-16 fw-bold"
+                  >
+                    <option value="MAIN_WALLET" selected="">Main Wallet</option>
+                    <option value="LIEN_WALLET" disabled="">Lien Wallet</option>
+                    <option value="PREPAID_WALLET">Prepaid Wallet</option>
+                  </select>
+                </div>
+                <strong
+                  id="currentBalance"
+                  class="text-white fs-18 ms-3 float-end mt-1 d-none"
+                  >Balance:</strong
+                >
+              </div>
+            </div>
+          </div>
+          <div class="form-group row my-4">
+            <div class="col-12">
+              <label for="amount">Amount</label>
+              <input
+                id="amount"
+                placeholder="Amount"
+                type="number"
+                inputmode="numeric"
+                class="form-control fw-bold is-invalid rounded-4"
+                name="amount"
+                value=""
+                required=""
+                autocomplete="amount"
+              />
+              <strong class="text-danger">Enter Amount to proceed.</strong>
+            </div>
+          </div>
+
+          <div class="form-group row my-3">
+            <label for="amount" class="pb-2">Choose Payment Gateway</label>
+            <div class="col-md-6">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="pg"
+                  id="safexpay_pg"
+                  disabled=""
+                />
+                <label
+                  class="form-check-label"
+                  for="safexpay_pg"
+                  title="Add Payment in Selected Wallet Using Safexpay Payment Gateway"
+                >
+                  <img
+                    src="https://business.payswap.in/assets/images/safexpg.jpg"
+                    alt="Image 1"
+                    width="100"
+                  />
+                </label>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="pg"
+                  id="cashfree_pg"
+                  value="cashfree_pg"
+                />
+                <label
+                  class="form-check-label"
+                  for="cashfree_pg"
+                  title="Add Payment in Main Wallet Using Cashfree Payment Gateway"
+                >
+                  <img
+                    src="https://business.payswap.in/assets/images/cf.jpg"
+                    alt="Image 1"
+                    width="100"
+                  />
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row my-3 d-none" id="cashfree_payment_modes">
+            <div class="col-12 mb-3">
+              <label for="amount">Select Cashfree Payment Mode</label>
+              <div class="d-flex gap-2">
+                <div class="form-check" title="UPI">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="mode"
+                    id="UPI"
+                    value="UPI"
+                    checked=""
+                  />
+                  <label class="form-check-label" for="UPI"> UPI </label>
+                </div>
+                <div class="form-check" title="Debit Card">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="mode"
+                    id="DEBIT_CARD"
+                    value="DEBIT_CARD_VISA"
+                  />
+                  <label class="form-check-label" for="DEBIT_CARD"> DC </label>
+                </div>
+                <div class="form-check" title="Credit card">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="mode"
+                    id="CREDIT_CARD"
+                    value="CREDIT_CARD"
+                  />
+                  <label class="form-check-label" for="CREDIT_CARD"> CC </label>
+                </div>
+                <div class="form-check" title="Net Banking">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="mode"
+                    id="NET_BANKING"
+                    value="NET_BANKING"
+                  />
+                  <label class="form-check-label" for="NET_BANKING"> NB </label>
+                </div>
+                <div class="form-check" title="Prepaid Card">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="mode"
+                    id="PREPAID_CARD"
+                    value="PREPAID_CARD"
+                  />
+                  <label class="form-check-label" for="PREPAID_CARD">
+                    PPC
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group row mb-2">
+            <div class="col-12">
+              <label for="remark">Remark</label>
+              <input
+                id="remark"
+                placeholder="Remark(If any)"
+                type="text"
+                class="form-control rounded-4"
+                name="remark"
+                value="Wallet Loading"
+              />
+            </div>
+          </div>
+          <div class="alert alert-warning my-3 rounded-4" role="alert">
+            <strong
+              >Please Note: In Case of Wrong Wallet Select, No Reversal Will be
+              provided</strong
+            >
+          </div>
+          <div class="form-actions center mt-4 rounded-4">
+            <button
+              type="submit"
+              class="btn btn-raised btn-primary btn-page-block-custom rounded-4"
+            >
+              <i class="bx bx-send"></i> Submit
+            </button>
+          </div>
+          <div></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div
+            class="alert alert-danger alert-dismissible fade show rounded-4"
+            role="alert"
+          >
+            <ul>
+              <li>Enter Amount to proceed.</li>
+              <li>Choose Payment Gateway.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7">
+      <h5>
+        General Instructions
+        <a
+          class="float-end me- btn btn-sm btn-primary me-3"
+          routerLink="/manage-balance/view-pg-orders"
+          >View PG Transactions</a
+        >
+
+        <a
+          class="float-end btn btn-sm btn-primary me-3"
+          routerLink="/manage-balance/pg-transaction"
+        >
+          <i class="ri ri-history-line me-2"></i>View PG Orders</a
+        >
+      </h5>
+      <div class="bg-soft-info p-2 mt-3 rounded-4">
+        <strong>How to Add Wallet Balance in Payswap</strong>
+        <ul>
+          <li>
+            Load Balance (PG) Will Update your Wallet limit instantly once
+            transaction is success.
+          </li>
+          <li>
+            Fund Request is Subject to manual Verification by Receiver. it makes
+            take couple to minutes in working days.
+          </li>
+          <li>For MDR Charges Kindly Check Following Details.</li>
+          <li class="text-dark fw-semibold">
+            Please ensure not to close or press the refresh or stop or back
+            button while the transaction is being processed.
+          </li>
+        </ul>
+      </div>
+
+      <p class="mt-2 rounded-4">
+        Payswap Provides Several payment methods to upgrade Wallet Limit. You
+        can add money to your wallet through the Payment Gateway mode using the
+        Debit card, Credit card or the Net Banking Service.
+      </p>
+      <div class="table-responsive table-card mt-3 rounded-4">
+        <table
+          id="cashfree_charges_list"
+          class="table table-bordered table-active table-sm table-striped align-middle table-nowrap table-striped-columns mb-0"
+        >
+          <thead>
+            <tr>
+              <th>Service</th>
+              <th>PG Charges</th>
+            </tr>
+          </thead>
+          <tbody id="charges_table_body">
+            <tr>
+              <td>NET BANNKING</td>
+              <td>17.7</td>
+              <td>FLAT</td>
+            </tr>
+            <tr>
+              <td>UPI</td>
+              <td>0</td>
+              <td>PERCENTAGE</td>
+            </tr>
+            <tr>
+              <td>DEBIT CARD( RUPAY)</td>
+              <td>0</td>
+              <td>PERCENTAGE</td>
+            </tr>
+            <tr>
+              <td>DEBIT CARD(Mastercard,Visa,Maestro)More than 2000</td>
+              <td>1.18</td>
+              <td>PERCENTAGE</td>
+            </tr>
+            <tr>
+              <td>DEBIT CARD(Mastercard,Visa,Maestro) upto 2000</td>
+              <td>0.59</td>
+              <td>PERCENTAGE</td>
+            </tr>
+            <tr>
+              <td>CREDIT CARD</td>
+              <td>1.5</td>
+              <td>PERCENTAGE</td>
+            </tr>
+            <tr>
+              <td>PREPAID CARD</td>
+              <td>1.5</td>
+              <td>PERCENTAGE</td>
+            </tr>
+            <tr>
+              <td>WALLET</td>
+              <td>2.36</td>
+              <td>PERCENTAGE</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="alert alert-secondary mt-2 rounded-4">
+          For all payments, applicable taxes will apply.
+          <span class="text-danger mx-2"
+            >All Above Pg Charges are GST Inclusive.</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

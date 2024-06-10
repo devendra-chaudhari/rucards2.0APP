@@ -1,0 +1,7 @@
+.angular/
+.idea/
+node_modules/
+.vscode/
+dist/
+.src/app/practice/
+src\app\practice

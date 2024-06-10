@@ -1,0 +1,56 @@
+
+.registration-congrats {
+  text-align: center;
+  animation: scaleIn 1s;
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pin-form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.pin-form h2 {
+  margin-top: 0;
+}
+
+.pin-form form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pin-form label {
+  margin-bottom: 5px;
+}
+
+.pin-form input {
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.pin-form button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pin-form button:hover {
+  background-color: #45a049;
+}
+

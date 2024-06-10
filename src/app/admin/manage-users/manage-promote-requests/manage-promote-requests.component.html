@@ -1,0 +1,143 @@
+<app-breadcrumbs title="Manage Promote Requests" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="card rounded-4 p-3">
+    <div class="card-header border-0">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <h4 class="fw-medium">Manage Promote Requests</h4>
+            </div>
+            <div class="col-md-6">
+                <!--                <div class="float-end">-->
+                <!--                    <a routerLink="/retailer/manage-customers/create"-->
+                <!--                       class="btn btn-rounded  mb-2"  style="background-color: #3FA5D3; color: white;">-->
+                <!--                        Add Customer</a>-->
+                <!--                </div>-->
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-start align-items-center gap-2">
+                    <div class="search-box w-100">
+                        <input class="form-control rounded-pill search bg-light border-light"
+                               placeholder="Search User Details By Username..." >
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+                    <button type="button" class="btn btn-primary  btn-rounded me-2 mb-2">Search</button>
+                    <button type="button" class="btn btn-primary  btn-rounded me-2 mb-2">Filters</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center gap-2">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <label for="page" class="me-2 mt-2">Show</label>
+                        <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1" >
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <label for="page" class="ms-2 mt-2">entries</label>
+                    </div>
+                    <button type="button" class="btn btn-success  btn-rounded me-2 mb-2" >
+                        Export
+                    </button>
+                </div>
+            </div>
+        </div>
+            <table class="table table-sm table-striped table-hover align-middle table-nowrap">
+                <thead>
+                    <tr>
+                        <th class="text-uppercase">sr</th>
+                        <th class="text-uppercase cursor-pointer">
+                            Full Name
+                        </th>
+                        <th class="text-uppercase">Contact Info</th>
+                        <th class="text-uppercase">Request Info</th>
+                        <th class="text-uppercase">Role Info</th>
+                        <th class="text-uppercase">Action</th>
+                    </tr>
+                </thead>
+                <tbody style="min-height: 300px;">
+                    <ng-container *ngFor="let promoteRequest of promoteRequests ; let i = index;">
+                        <tr class="cursor-pointer card-animate" >
+                            <td>{{(page - 1) * page_size + i+ 1 }}</td>
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-1">{{promoteRequest?.full_name | uppercase}}</span>
+                                    <span class="text-muted mb-0">&#64; {{promoteRequest?.previous_username | uppercase}}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-0"> 
+                                        <i class="ri-phone-line me-1"></i>
+                                        {{promoteRequest?.mobile}}
+                                    </span>
+                                    <span class="text-muted mb-0"> <i class="ri-mail-check-line me-1"></i>
+                                        {{promoteRequest?.email | lowercase}}
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-0"> 
+                                        <i class="ri-phone-line me-1"></i>
+                                        {{promoteRequest?.created_date | dateago}}
+                                    </span>
+                                    <span class="badge rounded-pill text-bg-warning mb-0" *ngIf="promoteRequest.request_status == 'Pending'"> 
+                                        {{promoteRequest?.request_status | uppercase}}
+                                    </span>
+                                    <span class="badge rounded-pill text-bg-success mb-0 me-3" *ngIf="promoteRequest.request_status == 'Accepted'"> 
+                                        {{promoteRequest?.request_status | uppercase}}
+                                    </span>
+                                    <span class="badge rounded-pill text-bg-danger mb-0" *ngIf="promoteRequest.request_status == 'Rejected'"> 
+                                        {{promoteRequest?.request_status | uppercase}}
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-1">{{promoteRequest?.previous_role | uppercase}}</span>
+                                    <span class="text-muted mb-0">{{promoteRequest?.request_new_role | uppercase}}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="btn bg-success btn-sm me-2 btn-rounded" title="Accept" (click)="onAccept(promoteRequest)" *ngIf="promoteRequest.request_status == 'Pending'">
+                                    Accept
+                                </button>
+                                <button class="btn bg-danger btn-sm me-2 btn-rounded" title="Reject" (click)="onReject(+promoteRequest.id)" *ngIf="promoteRequest.request_status == 'Pending'">
+                                    Reject
+                                </button>
+                                <span class="badge rounded-pill text-bg-danger mb-0" *ngIf="promoteRequest.request_status == 'Rejected'"> 
+                                    {{promoteRequest?.request_status | uppercase}}
+                                </span>
+                                <span class="badge rounded-pill text-bg-success mb-0" *ngIf="promoteRequest.request_status == 'Accepted'"> 
+                                    {{promoteRequest?.request_status | uppercase}}
+                                </span>
+                            </td>
+                        </tr>
+                    </ng-container>
+                    
+                </tbody>
+            </table>
+        <div class="row justify-content-md-between align-items-md-center mt-2">
+            <div class="col col-sm-4">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    
+                </div>
+            </div>
+
+            <div class="col col-sm-4">
+                <div class="text-sm-right float-sm-end listjs-pagination">
+                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+

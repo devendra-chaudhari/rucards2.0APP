@@ -1,0 +1,93 @@
+<app-breadcrumbs title="Daily Wallet Transactions" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+
+<div class="card rounded-4 p-3">
+    <div class="card-header border-0">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <h4 class="fw-medium">Daily Wallet Transactions</h4>
+            </div>
+            <div class="col-md-6">
+                <!--                <div class="float-end">-->
+                <!--                    <a routerLink="/retailer/manage-customers/create"-->
+                <!--                       class="btn btn-rounded  mb-2"  style="background-color: #3FA5D3; color: white;">-->
+                <!--                        Add Customer</a>-->
+                <!--                </div>-->
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-start align-items-center gap-2">
+                    <div class="search-box w-100">
+                        <input class="form-control rounded-pill search bg-light border-light"
+                               placeholder="Search Customer Details By Name, Address, DOB, PAN and more..."
+                        >
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+                    <button type="button" class="btn btn-primary  btn-rounded me-2 mb-2">Search</button>
+                    <button type="button" class="btn btn-primary  btn-rounded me-2 mb-2">Filters</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center gap-2">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <label for="page" class="me-2">Show</label>
+                        <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1" [(ngModel)]="userData.page_size" (change)="onChange()">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <label for="page" class="ms-2">entries</label>
+                    </div>
+                    <button type="button" class="btn btn-success  btn-rounded me-2 mb-2" >
+                        Export
+                    </button>
+                </div>
+            </div>
+        </div>
+        <ngx-simplebar class="table-responsive mt-3">
+            <table class="table table-sm table-striped table-hover align-middle table-nowrap">
+                <thead>
+                <tr>
+                    <th class="text-uppercase">SR</th>
+                    <th class="text-uppercase">DATE</th>
+                    <th class="text-uppercase cursor-pointer">
+                        Opening Balance
+                    </th>
+                    <th class="text-uppercase">Closing Balance</th>
+                    <th class="text-uppercase">Difference</th>
+                </tr>
+                </thead>
+                <tbody style="min-height: 300px;">
+                    <tr *ngFor="let transaction of transactions; let i = index;">
+                        <td>{{i+1}}</td>
+                        <td>{{transaction.date}}</td>
+                        <td>{{transaction.opening_balance}}</td>
+                        <td>{{transaction.closing_balance}}</td>
+                        <td>{{transaction.closing_balance - transaction.opening_balance }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </ngx-simplebar>
+        <div class="row justify-content-md-between align-items-md-center mt-2">
+            <div class="col col-sm-4">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    Showing {{ (page - 1) * userData.page_size + 1 }} to {{ getMax() }} of {{ total }} entries
+                </div>
+            </div>
+
+            <div class="col col-sm-4">
+                <div class="text-sm-right float-sm-end listjs-pagination">
+                    <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="userData.page_size" [maxSize]="2" (pageChange)="onPageChange($event)">
+                    </ngb-pagination>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

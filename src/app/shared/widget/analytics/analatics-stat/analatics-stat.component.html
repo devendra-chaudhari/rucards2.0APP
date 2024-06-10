@@ -1,0 +1,24 @@
+<div class="card card-animate rounded-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between">
+            <div>
+                <p class="fw-medium text-muted mb-0">{{title}}</p>
+                <h2 class="mt-4 ff-secondary fw-semibold">
+                    {{value}}
+                </h2>
+                <p class="mb-0 text-muted"><span class="badge bg-light text-success mb-0" [ngClass]=" { 'text-danger': profit === 'down'}">
+                    <i class="align-middle" [ngClass]=" { 'ri-arrow-up-line': profit === 'up','ri-arrow-down-line': profit === 'down'}"></i> {{persantage}} %
+                </span> vs. previous month</p>
+            </div>
+            <div>
+                <div class="avatar-sm flex-shrink-0">
+                    <a [routerLink]="link" class="btn-rounded">
+                        <span class="avatar-title bg-soft-primary rounded-circle fs-2">
+                                <i-feather name="{{icon}}" class="text-primary feather-icon-align"></i-feather>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div><!-- end card body -->
+</div> <!-- end card-->

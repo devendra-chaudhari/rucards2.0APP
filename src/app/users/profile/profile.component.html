@@ -1,0 +1,1000 @@
+<app-breadcrumbs title="Profile" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="card rounded-4">
+    <div class="card-body">
+        <div class="row gy-3">
+            <div class="col-md-3">
+                <div class="card card-animate">
+                    <div class="card-body">
+                        <div class="text-center">
+                            <div class="profile-user position-relative d-inline-block mx-auto mb-4">
+                                <img src="assets/images/avatar.png" class="rounded-circle avatar-lg img-thumbnail"
+                                     alt="User Profile img">
+                                <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+                                    <input id="profile-img-file-input" type="file" class="profile-img-file-input">
+                                    <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
+                                      <span class="avatar-title rounded-circle bg-light text-body">
+                                          <i class="ri-camera-fill"></i>
+                                      </span>
+                                    </label>
+                                </div>
+                            </div>
+                            <h4 class="fs-16 mb-1 text-uppercase">{{user?.name | titlecase}}</h4>
+                            <span class="text-muted mb-0 text-capitalize fs-14 fw-bold">&#64; {{personalInfo?.username}}</span>
+                            <p class="text-muted mb-0 text-capitalize">{{user?.role | titlecase}}</p>
+                            <div class="d-flex justify-content-center align-items-center mt-3 flex-column">
+                                <div class="profile-user position-relative d-inline-block mx-auto mb-4">
+                                    <img src="assets/images/sign.jpg" alt="sign img" height="50" width="110">
+                                    <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+                                        <input id="sign-img-file-input" type="file" class="profile-img-file-input">
+                                        <label for="sign-img-file-input" class="profile-photo-edit avatar-xs">
+                                          <span class="avatar-title rounded-circle bg-light text-body ms-4">
+                                              <i class="ri-edit-fill"></i>
+                                          </span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <p>Authorised Signature</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card animate mt-3">
+                    <div class="card-header">
+                        <h6 class="mb-4">Profile Score
+                            <i class="ri-information-line me-2 fs-18 float-end cursor-pointer"
+                               (click)="onpenProfileScore(profileScore)"></i></h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="progress animated-progress custom-progress progress-label">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 30%"
+                                 aria-valuenow="30"
+                                 aria-valuemin="0" aria-valuemax="100">
+                                <div class="label">30%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card animate mt-3">
+                    <div class="card-header">
+                                <h6>Linked Bank Accounts <i class="ri-information-line me-2 float-end"></i>
+                                </h6>
+                    </div>
+                    <div class="card-body">
+                        <ngx-simplebar style="max-height: 320px;">
+                            <ng-container *ngFor="let bank of banks;">
+                                <div class="card rounded-3 shadow-sm"
+                                     [ngClass]="{'bg-soft-success': bank.is_default, 'bg-light': !bank.is_default}">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avatar-xs">
+                                                    <div class="avatar-title rounded-circle fs-18"
+                                                         [ngClass]="{'bg-soft-success': bank.is_default, 'text-success': bank.is_default, 'bg-soft-dark': !bank.is_default, 'text-dark': !bank.is_default}">
+                                                        <i class="ri-bank-line"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <div class="d-flex flex-column">
+                                                    <p class="mb-0">{{bank.beneficiary_name | titlecase}}</p>
+                                                    <small class="text-muted">{{bank.bank_name | titlecase}}</small>
+                                                    <small class="text-muted">{{bank.account_no}}</small>
+                                                    <small class="text-muted">{{bank.ifsc_code}}</small>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <p class="badge bg-soft-success text-success ms-1 rounded-pill mb-1"
+                                                   *ngIf="bank.is_default">ACTIVE</p>
+                                                <button class="btn btn-rounded btn-success btn-icon"
+                                                        (click)="setToDefault(bank.id)"
+                                                        *ngIf="!bank.is_default"
+                                                        ngbTooltip="Set as Default">
+                                                    <i class="ri-checkbox-circle-line fs-16"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ngx-simplebar>
+                        <div class="text-start">
+                            <button class="btn btn-rounded btn-light"
+                                    (click)="openAccount(addAccount)"><i
+                                    class="ri-add-line align-middle"></i>
+                                Add Bank
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                        <div class="card card-animate card-animate mt-3"
+                             *ngIf="!personalInfo?.email_verified">
+                            <div class="card-header border border-top-0 border-start-0 border-end-0">
+                                <h5>Email Verification</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-warning rounded-4">
+                                    <i class="ri-alert-line fs-24 align-middle"></i>
+                                    Your email address is unverified. If you want to verify, click to verify
+                                    button & fill OTP received on registered email id.
+                                </div>
+                                <input type="text" class="form-control rounded-pill bg-light"
+                                       value="{{personalInfo?.email}}"
+                                       readonly>
+                                <div class="text-start mt-3">
+                                    <button class="btn btn-rounded btn-light">
+                                        <i class="ri-checkbox-circle-line align-middle"></i>
+                                        Verify Email
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+            </div>
+            <div class="col-md-9">
+                <ul ngbNav #nav="ngbNav" [activeId]="1" class="nav nav-tabs">
+                    <li [ngbNavItem]="1">
+                        <a ngbNavLink>
+                            <span class="d-sm-block">Profile</span>
+                        </a>
+                        <ng-template ngbNavContent>
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="card card-animate card-animate">
+                                        <div class="card-header border border-top-0 border-start-0 border-end-0">
+                                            <h5>Contact Information</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <form>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="first_name" class="form-label">Applicant
+                                                                Name</label>
+                                                            <input type="text"
+                                                                   class="form-control rounded-pill bg-light"
+                                                                   value="{{personalInfo?.name | titlecase}}"
+                                                                   id="first_name"
+                                                                   readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="father_name" class="form-label">Father
+                                                                Name</label>
+                                                            <input type="text"
+                                                                   class="form-control rounded-pill bg-light"
+                                                                   value="{{personalInfo?.father_name | titlecase}}"
+                                                                   id="father_name" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="mobile" class="form-label">Mobile Number</label>
+                                                            <div class="form-icon right">
+                                                                <input type="text" value="{{personalInfo?.mobile}}"
+                                                                       id="mobile"
+                                                                       class="form-control rounded-pill form-control-icon bg-light"
+                                                                       readonly>
+                                                                <i class="ri-checkbox-circle-fill text-success fs-22"
+                                                                   title="Verified"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="email" class="form-label">Email</label>
+                                                            <input type="text"
+                                                                   class="form-control rounded-pill bg-light"
+                                                                   value="{{personalInfo?.email}}" id="email" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="kyc_type" class="form-label">KYC Type</label>
+                                                            <input type="text"
+                                                                   class="form-control rounded-pill bg-light"
+                                                                   value="{{personalInfo?.kyc_type | titlecase}}"
+                                                                   id="kyc_type" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="dob" class="form-label">Date of Birth</label>
+                                                            <input type="text"
+                                                                   class="form-control rounded-pill bg-light"
+                                                                   value="{{personalInfo?.dob | date: 'dd-MM-yyyy'}}"
+                                                                   id="dob"
+                                                                   readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="join_date" class="form-label">Date of
+                                                                Joining</label>
+                                                            <input type="text"
+                                                                   class="form-control rounded-pill bg-light"
+                                                                   value="{{personalInfo?.join_date | date: 'dd-MM-yyyy'}}"
+                                                                   id="join_date" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+
+                                                            <label for="aadhar_no" class="form-label">Aadhaar No</label>
+                                                            <div class="form-icon right">
+                                                                <input type="text"
+                                                                       class="form-control rounded-pill bg-light"
+                                                                       value="{{personalInfo?.aadhar_no}}"
+                                                                       id="aadhar_no"
+                                                                       readonly>
+                                                                <i class="ri-checkbox-circle-fill text-success fs-22"
+                                                                   title="Verified"
+                                                                   *ngIf="personalInfo?.aadhaar_verified"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="pan_no" class="form-label">PAN No</label>
+                                                            <div class="form-icon right">
+                                                                <input type="text"
+                                                                       class="form-control rounded-pill bg-light"
+                                                                       value="{{personalInfo?.pan}}" id="pan_no"
+                                                                       readonly>
+                                                                <i class="ri-checkbox-circle-fill text-success fs-22"
+                                                                   title="Verified"
+                                                                   *ngIf="personalInfo?.pan_verified"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="enable_2fa" class="form-label">2-FA
+                                                                Status</label>
+                                                            <input type="text"
+                                                                   class="form-control rounded-pill bg-light"
+                                                                   [value]="personalInfo?.enable_2fa ? 'Enabled' : 'Disabled'"
+                                                                   id="enable_2fa"
+                                                                   readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="city" class="form-label">City</label>
+                                                            <input type="text"
+                                                                   class="form-control rounded-pill bg-light"
+                                                                   value="{{personalInfo?.city | titlecase}}" id="city"
+                                                                   readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="district" class="form-label">District</label>
+                                                            <input type="text"
+                                                                   class="form-control rounded-pill bg-light"
+                                                                   value="{{personalInfo?.district | titlecase}}"
+                                                                   id="district"
+                                                                   readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="pincode" class="form-label">Pincode</label>
+                                                            <input type="text"
+                                                                   class="form-control rounded-pill bg-light"
+                                                                   value="{{personalInfo?.pincode | titlecase}}"
+                                                                   id="pincode"
+                                                                   readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="mb-3">
+                                                            <label for="state" class="form-label">State</label>
+                                                            <input type="text"
+                                                                   class="form-control rounded-pill bg-light"
+                                                                   value="{{personalInfo?.state | titlecase}}"
+                                                                   id="state"
+                                                                   readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="mb-3">
+                                                            <label for="address" class="form-label">Address</label>
+                                                            <input type="text"
+                                                                   class="form-control rounded-pill bg-light"
+                                                                   value="{{personalInfo?.address | titlecase}}"
+                                                                   id="address"
+                                                                   readonly>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="card-header border border-top-0 border-start-0 border-end-0">
+                                            <h5>Business Information</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row gy-2" *ngIf="!personalInfo?.business_verified">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="isGst">Do You Have GST No?</label>
+                                                        <select id="isGst" class="form-select rounded-pill" name="isGst"
+                                                                [(ngModel)]="isGst">
+                                                            <option value="">Select Option</option>
+                                                            <option value="yes">Yes</option>
+                                                            <option value="no">No</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6" *ngIf="isGst == 'yes'">
+                                                    <div class="mb-3">
+                                                        <label for="gst" class="form-label">GST No</label>
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                   class="form-control rounded rounded-5 rounded-end bg-light"
+                                                                   placeholder="Verify GST No" id="gst" readonly>
+                                                            <button class="btn btn-outline-primary rounded rounded-5 rounded-start"
+                                                                    type="button" (click)="openGstin(gstIn)">Verify
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row gy-2" *ngIf="isGst == 'no'">
+                                                <div class="col-md-6">
+                                                    <label for="trade_name" class="form-label">Trade Name <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control rounded-pill"
+                                                           placeholder="Enter Trade Name" id="trade_name"
+                                                           name="trade_name" [(ngModel)]="nonGstData.business_name">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="shop_address" class="form-label">Office/Shop
+                                                        Address <span class="text-danger">*</span></label>
+                                                    <textarea type="text" class="form-control"
+                                                              placeholder="Enter Office/Shop Address"
+                                                              id="shop_address" name="shop_address"
+                                                              [(ngModel)]="nonGstData.business_address"></textarea>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-check mt-2">
+                                                        <input class="form-check-input" type="checkbox"
+                                                               name="nonGstConsult"
+                                                               id="terms" [(ngModel)]="nonGstConsult">
+                                                        <label class="form-check-label" for="terms">
+                                                            All information Provided by me are True And Up to Date as
+                                                            per my Knowledge.
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="text-end">
+                                                        <button class="btn btn-primary btn-rounded"
+                                                                (click)="updateNonGst()" [disabled]="!nonGstConsult">
+                                                            Save
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row" *ngIf="personalInfo?.business_verified">
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="gstin" class="form-label">GST No</label>
+                                                        <input type="text" class="form-control rounded-pill bg-light"
+                                                               id="gstin" readonly value="{{businessInfo?.gstin}}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="legal_name" class="form-label">Legal Name</label>
+                                                        <input type="text" class="form-control rounded-pill bg-light"
+                                                               id="legal_name" readonly
+                                                               value="{{businessInfo?.business_name | titlecase}}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="jurisdiction"
+                                                               class="form-label">Jurisdiction</label>
+                                                        <input type="text" class="form-control rounded-pill bg-light"
+                                                               id="jurisdiction" readonly
+                                                               value="{{businessInfo?.jurisdiction | titlecase}}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="constitution" class="form-label">Constitution of
+                                                            Business</label>
+                                                        <input type="text" class="form-control rounded-pill bg-light"
+                                                               id="constitution" readonly
+                                                               value="{{businessInfo?.constitution_category | titlecase}}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="nature" class="form-label">Business Nature</label>
+                                                        <input type="text" class="form-control rounded-pill bg-light"
+                                                               id="nature" readonly
+                                                               value="{{businessInfo?.nature_of_business}}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="mb-3">
+                                                        <label for="taxpayer_type" class="form-label">Taxpayer
+                                                            Type</label>
+                                                        <input type="text" class="form-control rounded-pill bg-light"
+                                                               id="taxpayer_type" readonly
+                                                               value="{{businessInfo?.taxpayer_type| titlecase}}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="mb-3">
+                                                        <label for="business_address" class="form-label">Address</label>
+                                                        <textarea class="form-control bg-light" id="business_address"
+                                                                  readonly
+                                                                  value="{{businessInfo?.business_address | titlecase}}"
+                                                        ></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="2">
+                        <a ngbNavLink>
+                            <span class="d-sm-block">Payments</span>
+                        </a>
+                        <ng-template ngbNavContent>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5>Showing 1 payment</h5>
+                                    <div class="border card-animate rounded-4">
+                                        <div class="card-body">
+                                            <ngx-simplebar class="table-responsive">
+                                                <table class="table align-middle table-nowrap table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="text-uppercase">Payment status</th>
+                                                        <th class="text-uppercase">Payment Id</th>
+                                                        <th class="text-uppercase">Payment Amount</th>
+                                                        <th class="text-uppercase">Tax Withholding</th>
+                                                        <th class="text-uppercase">Merchant Fees</th>
+                                                        <th class="text-uppercase">Payment Purpose</th>
+                                                        <th class="text-uppercase">Tax Form</th>
+                                                        <th class="text-uppercase">Updated On</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </ngx-simplebar>
+                                            <div class="row justify-content-md-between align-items-md-center mt-3">
+                                                <div class="col col-sm-6">
+                                                    <p class="mb-2">
+                                                        Showing 1 to 10 of 20 entries
+                                                    </p>
+                                                </div>
+                                                <div class="col col-sm-6">
+                                                    <div class="text-sm-right float-sm-end listjs-pagination">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <h5>Showing 0 Offline payments</h5>
+                                    <div class="border card-animate rounded-4">
+                                        <div class="card-body">
+                                            <div class="text-center bg-soft-dark p-4">
+                                                No offline payments found
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="3">
+                        <a ngbNavLink>
+                            <span class="d-sm-block">Tax</span>
+                        </a>
+                        <ng-template ngbNavContent>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5>Showing 1 tax form</h5>
+                                    <div class="border card-animate rounded-4">
+                                        <div class="card-body">
+                                            <ngx-simplebar class="table-responsive">
+                                                <table class="table align-middle table-nowrap table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="text-uppercase">Form status</th>
+                                                        <th class="text-uppercase">Tax Form Type</th>
+                                                        <th class="text-uppercase">Us Tin Status</th>
+                                                        <th class="text-uppercase">Withholding Rate</th>
+                                                        <th class="text-uppercase">Signed On</th>
+                                                        <th class="text-uppercase">Actions</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    </tbody>
+                                                </table>
+                                            </ngx-simplebar>
+                                            <div class="row justify-content-md-between align-items-md-center mt-3">
+                                                <div class="col col-sm-6">
+                                                    <p class="mb-2">
+                                                        Showing 1 to 10 of 20 entries
+                                                    </p>
+                                                </div>
+                                                <div class="col col-sm-6">
+                                                    <div class="text-sm-right float-sm-end listjs-pagination">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="4">
+                        <a ngbNavLink>
+                            <span class="d-sm-block">Compliance</span>
+                        </a>
+                        <ng-template ngbNavContent>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5>Compliance Check (0)</h5>
+                                    <div class="border card-animate rounded-4">
+                                        <div class="card-body">
+                                            <div class="text-center bg-soft-dark p-4">
+                                                No compliance checks recorded
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="5">
+                        <a ngbNavLink>
+                            <span class="d-sm-block">Notification</span>
+                        </a>
+                        <ng-template ngbNavContent>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5>Showing 1 notification</h5>
+                                    <div class="border card-animate rounded-4">
+                                        <div class="card-body">
+                                            <ngx-simplebar class="table-responsive">
+                                                <table class="table align-middle table-nowrap table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="text-uppercase">status</th>
+                                                        <th class="text-uppercase">Type</th>
+                                                        <th class="text-uppercase">Notified To</th>
+                                                        <th class="text-uppercase">Topic</th>
+                                                        <th class="text-uppercase">Date</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    </tbody>
+                                                </table>
+                                            </ngx-simplebar>
+                                            <div class="row justify-content-md-between align-items-md-center mt-3">
+                                                <div class="col col-sm-6">
+                                                    <p class="mb-2">
+                                                        Showing 1 to 10 of 20 entries
+                                                    </p>
+                                                </div>
+                                                <div class="col col-sm-6">
+                                                    <div class="text-sm-right float-sm-end listjs-pagination">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="6">
+                        <a ngbNavLink (click)="getLoginHistory()">
+                            <span class="d-sm-block">Login History</span>
+                        </a>
+                        <ng-template ngbNavContent>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5>My Recent Login History</h5>
+                                    <div class="border card-animate rounded-4">
+                                        <div class="card-body">
+                                            <ngx-simplebar class="table-responsive">
+                                                <table class="table align-middle table-nowrap table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Ip</th>
+                                                        <th>Client</th>
+                                                        <th>Channel</th>
+                                                        <th>Device Id</th>
+                                                        <th>Longitude</th>
+                                                        <th>Latitude</th>
+                                                        <th>Login At</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr class="card-animate cursor-pointer"
+                                                        *ngFor="let history of loginHistories;">
+                                                        <td>{{history.ip}}</td>
+                                                        <td>{{history.client}}</td>
+                                                        <td>{{history.channel}}</td>
+                                                        <td>{{history.device_id}}</td>
+                                                        <td>{{history.longitude}}</td>
+                                                        <td>{{history.latitude}}</td>
+                                                        <td>{{history.created_at | date: 'dd-MM-yyyy h:mm:ss a'}}</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </ngx-simplebar>
+                                            <div class="row justify-content-md-between align-items-md-center mt-3">
+                                                <div class="col col-sm-6">
+                                                    <p class="mb-2">
+                                                        Showing 1 to 10 of 20 entries
+                                                    </p>
+                                                </div>
+                                                <div class="col col-sm-6">
+                                                    <div class="text-sm-right float-sm-end listjs-pagination">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </li>
+                </ul>
+                <div class="tab-content pt-3">
+                    <div [ngbNavOutlet]="nav"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #gstIn let-offcanvas>
+    <div class="offcanvas-header pb-0">
+        <h4 class="fw-semibold mb-0">GST Verification</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <hr class="mb-0">
+    <div class="offcanvas-body" *ngIf="!gstExist">
+        <div class="text-center mb-3">
+            <p class="text-muted">
+                In Addition to claiming input Tax Credit, updating GSTIN will also help you gain access to all the
+                features available.
+            </p>
+            <p class="text-muted mt-2">
+                Once you confirm, we'll be verifying your GSTIN digitally.
+            </p>
+        </div>
+        <div class="mb-3">
+            <label for="gst_no" class="form-label">GSTIN <span class="text-danger">*</span>
+            </label>
+            <input type="text" class="form-control rounded-pill fw-semibold" id="gst_no" name="gstin"
+                   [(ngModel)]="gstin" maxlength="15" placeholder="XXBXGPS7201BXXX">
+        </div>
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-primary btn-rounded" (click)="verifyGst();" [disabled]="loading">
+                <div class="spinner-border spinner-border-sm text-light align-middle me-1" role="status"
+                     *ngIf="loading">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                Verify GSTIN
+            </button>
+        </div>
+    </div>
+    <ngx-simplebar class="offcanvas-body" *ngIf="gstExist" style="max-height: calc(100vh - 110px)">
+        <div class="text-center">
+            <i class="ri-checkbox-circle-fill display-4 text-success"
+               *ngIf="businessData.gst_in_status == 'Active'"></i>
+            <i class="ri-close-circle-fill display-4 text-danger" *ngIf="businessData.gst_in_status != 'Active'"></i>
+            <h4 *ngIf="businessData.gst_in_status == 'Active'">GST Valid</h4>
+            <h4 *ngIf="businessData.gst_in_status != 'Active'">GST Invalid</h4>
+        </div>
+        <div class="card card-animate rounded-4 mt-3">
+            <div class="card-body">
+                <ngx-simplebar class="table-responsive mb-2">
+                    <table class="table table-sm text-nowrap mt-4">
+                        <tbody>
+                        <tr>
+                            <td colspan="6">
+                                <span class="fw-bold">GST No : </span>
+                                <span>{{businessData.GSTIN}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <span class="fw-bold">Legal Name : </span>
+                                <span>{{businessData.legal_name_of_business | titlecase}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <span class="fw-bold">Jurisdiction : </span>
+                                <span>{{businessData.center_jurisdiction | titlecase}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <span class="fw-bold">Constitution of Business : </span>
+                                <span>{{businessData.constitution_of_business | titlecase}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <span class="fw-bold">Registration Date : </span>
+                                <span>{{businessData.date_of_registration}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <span class="fw-bold">Business Nature : </span>
+                                <span>{{businessData.nature_of_business_activities | titlecase}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <span class="fw-bold">Taxpayer Type : </span>
+                                <span>{{businessData.taxpayer_type | titlecase}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <span class="fw-bold">Address : </span>
+                                <span>{{businessData.principal_place_address | titlecase}}</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </ngx-simplebar>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <button class="btn btn-rounded btn-primary" (click)="updateBusnissInfo()">
+                Save
+            </button>
+        </div>
+    </ngx-simplebar>
+</ng-template>
+
+<ng-template #addAccount let-offcanvas>
+    <div class="offcanvas-header pb-0">
+        <h4 class="fw-semibold mb-0">Add Bank Account</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <hr class="mb-0">
+    <div class="offcanvas-body" *ngIf="!bankorupiExist">
+        <form>
+            <div class="mb-3">
+                <label for="mode" class="form-label">Choose Mode <span class="text-danger">*</span></label>
+                <select class="form-control form-select rounded-pill fw-semibold" id="mode" name="mode"
+                        [(ngModel)]="mode">
+                    <option value="BANK">Bank</option>
+                    <option value="UPI">UPI/VPA</option>
+                </select>
+            </div>
+            <div *ngIf="mode == 'BANK'">
+                <div class="mb-3">
+                    <label for="acno" class="form-label">Account Number <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control rounded-pill fw-semibold" id="acno"
+                           placeholder="Enter Account Number" appNumberOnly maxlength="30" name="acno"
+                           [(ngModel)]="bankData.account_no">
+                    <div *ngIf="invalidBank" class="text-danger">
+                        <div>Account No is required</div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="ac_type" class="form-label">Account Type <span class="text-danger">*</span></label>
+                    <select class="form-select rounded-pill fw-semibold" id="ac_type" name="account_type"
+                            [(ngModel)]="bankData.account_type">
+                        <option value="">Select Account Type</option>
+                        <option value="SAVING">Saving</option>
+                        <option value="CURRENT">Current</option>
+                    </select>
+                    <div *ngIf="invalidacType" class="text-danger">
+                        <div>Account type is required</div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="ifsc" class="form-label">IFSC Code <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control rounded-pill fw-semibold text-uppercase" id="ifsc"
+                           placeholder="Enter IFSC Code" maxlength="11" name="ifsc_code"
+                           [(ngModel)]="bankData.ifsc_code">
+                    <div *ngIf="invalidIfsc" class="text-danger">
+                        <div>IFSC Code is required</div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3" *ngIf="mode == 'UPI'">
+                <label for="upi_vpa" class="form-label">UPI/VPA <span class="text-danger">*</span></label>
+                <input type="text" class="form-control rounded-pill fw-semibold" id="upi_vpa"
+                       placeholder="Enter UPI/VPA"
+                       maxlength="25" name="up" [(ngModel)]="upiData.vpa">
+                <div *ngIf="invalidUpi" class="text-danger">
+                    <div>UPI/VPA is required</div>
+                </div>
+            </div>
+        </form>
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-primary btn-rounded" (click)="verifyBank()">Verify</button>
+        </div>
+    </div>
+    <ngx-simplebar class="offcanvas-body" *ngIf="bankorupiExist && mode == 'BANK'"
+                   style="max-height: calc(100vh - 110px)">
+        <div class="text-center">
+            <i class="ri-checkbox-circle-fill display-4 text-success"
+               *ngIf="bankDetails.accountStatus == 'VALID'"></i>
+            <i class="ri-close-circle-fill display-4 text-danger" *ngIf="bankDetails.accountStatus != 'VALID'"></i>
+            <h4 *ngIf="bankDetails.accountStatus == 'VALID'">Bank Valid</h4>
+            <h4 *ngIf="bankDetails.accountStatus != 'VALID'">Bank Invalid</h4>
+        </div>
+        <div class="card card-animate rounded-4 mt-3">
+            <div class="card-body">
+                <ngx-simplebar class="table-responsive mb-2">
+                    <table class="table table-sm text-nowrap mt-4">
+                        <tbody>
+                        <tr>
+                            <td colspan="6">
+                                <span class="fw-bold">Bank Name : </span>
+                                <span>{{bankDetails?.bankName | titlecase}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <span class="fw-bold">Branch : </span>
+                                <span>{{bankDetails?.branch | titlecase}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <span class="fw-bold">City : </span>
+                                <span>{{bankDetails?.city | titlecase}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <span class="fw-bold">Name : </span>
+                                <span>{{bankDetails?.name | titlecase}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <span class="fw-bold">UTR : </span>
+                                <span>{{bankDetails?.utr}}</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </ngx-simplebar>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <button class="btn btn-rounded btn-info me-2" (click)="bankorupiExist = false">Back</button>
+            <button class="btn btn-rounded btn-primary" (click)="updateBank()"
+                    *ngIf="bankDetails.accountStatus == 'VALID'">Save
+            </button>
+        </div>
+    </ngx-simplebar>
+    <ngx-simplebar class="offcanvas-body" *ngIf="bankorupiExist && mode == 'UPI'"
+                   style="max-height: calc(100vh - 110px)">
+        <div class="text-center">
+            <i class="ri-checkbox-circle-fill display-4 text-success"
+               *ngIf="upiDetails?.status == 'SUCCESS'"></i>
+            <i class="ri-close-circle-fill display-4 text-danger" *ngIf="upiDetails?.status != 'SUCCESS'"></i>
+            <h4 *ngIf="upiDetails?.status == 'SUCCESS'">UPI/VPA Valid</h4>
+            <h4 *ngIf="upiDetails?.status != 'SUCCESS'">UPI/VPA Invalid</h4>
+        </div>
+        <div class="card card-animate rounded-4 mt-3">
+            <div class="card-body">
+                <ngx-simplebar class="table-responsive mb-2">
+                    <table class="table table-sm text-nowrap mt-4">
+                        <tbody>
+                        <tr>
+                            <td colspan="6">
+                                <span class="fw-bold">Name : </span>
+                                <span>{{upiDetails?.name | titlecase}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <span class="fw-bold">Account Exist : </span>
+                                <span>{{upiDetails?.accountExist | titlecase}}</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </ngx-simplebar>
+            </div>
+        </div>
+        <div class="text-center mt-3">
+            <button class="btn btn-rounded btn-info me-2" (click)="bankorupiExist = false">Back</button>
+            <button class="btn btn-rounded btn-primary" (click)="updateUpi()" *ngIf="upiDetails?.status == 'SUCCESS'">
+                Save
+            </button>
+        </div>
+    </ngx-simplebar>
+</ng-template>
+
+<ng-template #profileScore let-offcanvas>
+    <div class="offcanvas-header pb-0">
+        <h4 class="fw-semibold mb-0">Profile Score Paremeters</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ngx-simplebar class="table-responsive">
+            <table class="table table-nowrap table-bordered table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>%</th>
+                    <th>Documents</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>20%</td>
+                    <td>For Aadhaar & Pan</td>
+                </tr>
+                <tr>
+                    <td>20%</td>
+                    <td>For Mobile & Email</td>
+                </tr>
+                <tr>
+                    <td>10%</td>
+                    <td>For Bank</td>
+                </tr>
+                <tr>
+                    <td>10%</td>
+                    <td>For Business Certificate (GST , BRN & Shop Act)</td>
+                </tr>
+                <tr>
+                    <td>10%</td>
+                    <td>For Shop OutSide & Inside Photo</td>
+                </tr>
+                <tr>
+                    <td>5%</td>
+                    <td>Apptdcant Photo</td>
+                </tr>
+                <tr>
+                    <td>5%</td>
+                    <td>Apptdcant Signature</td>
+                </tr>
+                <tr>
+                    <td>Note</td>
+                    <td>100% Profile Score is Required for Lien Wallet Activation</td>
+                </tr>
+                </tbody>
+            </table>
+        </ngx-simplebar>
+    </div>
+</ng-template>

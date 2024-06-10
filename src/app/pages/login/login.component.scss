@@ -1,0 +1,37 @@
+.parent {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+.child {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 850px;
+  width: 100%;
+
+}
+
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  box-sizing: border-box;
+  padding: 8px;
+
+}
+.marquee-content {
+  display: inline-list-item;
+  animation: marqueeScroll 40s linear infinite;
+}
+.marquee-content:hover {
+  animation-play-state: paused; /* Pause animation on hover */
+}
+@keyframes marqueeScroll {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.shadow-login{
+  box-shadow: rgba(0, 0, 0, 0.1) 0 10px 50px;}

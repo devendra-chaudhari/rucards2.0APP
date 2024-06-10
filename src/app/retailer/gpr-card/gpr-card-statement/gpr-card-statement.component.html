@@ -1,0 +1,72 @@
+<app-breadcrumbs title="GPR card" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="card card-animate">
+    <div class="card-header mb-0 border-0">
+        <h4 class="fw-medium">GPR Card Statement</h4>
+    </div>
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center justify-content-center">
+                <label for="page" class="me-2">Show</label>
+                <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+                <label for="page" class="ms-2">entries</label>
+            </div>
+            <div>
+                <button type="button" class="btn btn-success float-end btn-rounded me-2 mb-2" >
+                    Export
+                </button>
+                <button type="button" class="btn btn-primary  btn-rounded me-2 mb-2" >Filters</button>
+
+            </div>
+        </div>
+
+        <ngx-simplebar class="table-responsive mt-3">
+            <table class="table table-sm table-striped table-hover align-middle table-nowrap">
+                <thead>
+                    <tr>
+                        <th class="text-uppercase">#</th>
+                        <th class="text-uppercase">TransactionId</th>
+                        <th class="text-uppercase">TxnDate</th>
+                        <th class="text-uppercase">OpeningBalance</th>
+                        <th class="text-uppercase">Amount</th>
+                        <th class="text-uppercase">ClosingBalance</th>
+                        <th class="text-uppercase">TxnType</th>
+                        <th class="text-uppercase">TxnCategory</th>
+                    </tr>
+                </thead>
+                <tbody style="min-height: 300px">
+                    <tr  *ngFor="let item of gpr_card_statement; index as i">
+                        <th class="text-uppercase">{{i+1}}</th>
+                        <th class="text-uppercase">{{item.TransactionId}}</th>
+                        <th class="text-uppercase">{{item.TxnDate | dateago }}</th>
+                        <th class="text-uppercase">{{item.OpeningBalance}}</th>
+                        <th class="text-uppercase">{{item.Amount}}</th>
+                        <th class="text-uppercase">{{item.ClosingBalance}}</th>
+                        <th class="text-uppercase">{{item.TxnType}}</th>
+                        <th class="text-uppercase">{{item.TxnCategory}}</th>
+                    </tr>
+                </tbody>
+            </table>
+        </ngx-simplebar>
+        <div class="row justify-content-md-between align-items-md-center mt-2">
+            <div class="col col-sm-6">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    Showing {{ (page - 1) * pageSize + 1 }} to {{ getMax() }} of {{ total }} entries
+                </div>
+            </div>
+
+            <div class="col col-sm-6">
+                <div class="text-sm-right float-sm-end listjs-pagination">
+                    <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="pageSize" [maxSize]="2" (pageChange)="onPageChange($event)">
+                    </ngb-pagination>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

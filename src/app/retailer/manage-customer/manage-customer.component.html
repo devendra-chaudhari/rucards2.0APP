@@ -1,0 +1,270 @@
+<app-breadcrumbs title="Manage Customer" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+
+<div class="row">
+    <div class="col-xl-4 col-md-4">
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                            Total Gift Cards
+                        </p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-4">
+                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                        <span class="counter-value">
+                        0
+                        </span>
+                    </h4>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-white fs-3 rounded">
+                            <i class="ri-gift-2-line display-6 " style="color: #112558;"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-4">
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                            Total GPR CARDS
+                        </p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-4">
+                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                        <span class="counter-value">
+                            0
+                        </span>
+                    </h4>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-white fs-3 rounded">
+                            <i class="bx bx-wallet display-6" style="color: #112558;"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-4">
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                            Total CUSTOMERS
+                        </p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-4">
+                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                        <span class="counter-value">
+                         0
+                        </span>
+                    </h4>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-white fs-3 rounded">
+                            <i class="ri-user-line display-6" style="color: #112558;"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card rounded-4 p-3">
+    <div class="card-header border-0">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <h4 class="fw-medium">Manage Customer</h4>
+            </div>
+            <div class="col-md-6">
+                <div class="float-end">
+                    <a routerLink="/retailer/manage-customers/create"
+                       class="btn btn-rounded  mb-2" style="background-color: #3FA5D3; color: white;">
+                        Add Customer</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-start align-items-center gap-2">
+                    <div class="search-box w-100">
+                        <input class="form-control rounded-pill search bg-light border-light"
+                               placeholder="Search Customer Details By Name, Address, DOB, PAN and more..."
+
+                        >
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+                    <button type="button" class="btn btn-primary  btn-rounded me-2 mb-2">Search</button>
+                    <button type="button" class="btn btn-primary  btn-rounded me-2 mb-2">Filters
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center gap-2">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <label for="page" class="me-2">Show</label>
+                        <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">75</option>
+                        </select>
+                        <label for="page" class="ms-2">entries</label>
+                    </div>
+                    <button type="button" class="btn btn-success  btn-rounded me-2 mb-2">
+                        Export
+                    </button>
+                </div>
+            </div>
+        </div>
+        <ngx-simplebar class="table-responsive mt-3">
+            <nz-skeleton [nzLoading]="loading">
+                <table class="table table-sm table-striped table-hover align-middle table-nowrap">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th class="cursor-pointer">Customer Name <i class='bx bxs-sort-alt fs-12'></i></th>
+                        <th>Father Name <i class='bx bxs-sort-alt fs-12'></i></th>
+                        <th>Email <i class='bx bxs-sort-alt fs-12'></i></th>
+                        <th>Mobile <i class='bx bxs-sort-alt fs-12'></i></th>
+                        <th>Status <i class='bx bxs-sort-alt fs-12'></i></th>
+                        <th>Created on <i class='bx bxs-sort-alt fs-12'></i></th>
+                        <th>Action <i class='bx bxs-sort-alt fs-12'></i></th>
+                    </tr>
+                    </thead>
+                    <tbody style="min-height: 300px;">
+                        @if (customers.length > 0) {
+                            <tr *ngFor="let customer of customers; index as i;">
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ customer?.full_name | uppercase }}</td>
+                                <td>{{ customer?.father_name | uppercase }}</td>
+                                <td>{{ customer?.email }}</td>
+                                <td>{{ customer?.mobile }}</td>
+                                <td>
+            <span [class.badge-success]="customer?.active" [class.badge-warning]="!customer?.active" class="badge rounded-pill">
+              {{ customer?.active ? 'Active' : 'Inactive' }}
+            </span>
+                                </td>
+                                <td>{{ customer?.created_at | dateago }}</td>
+                                <td>
+                                    <div class="hstack">
+                                        <div ngbDropdown container="body">
+                                            <button type="button" class="btn btn-sm btn-primary rounded-4 me-2" ngbDropdownToggle>GPR CARD</button>
+                                            <div ngbDropdownMenu>
+                                                <button ngbDropdownItem title="Generate New GPR Card" (click)="openGprDrawer(gpr)">Assign GPR Card</button>
+                                                <button ngbDropdownItem>View Card Details</button>
+                                                <button ngbDropdownItem>Create Full-KYC Wallet</button>
+                                            </div>
+                                        </div>
+
+                                        <button class="btn btn-sm btn-info rounded-4 me-2" (click)="openGiftDrawer(gpr)" title="Generate Gift Card">
+                                            <i class="ri-gift-2-line me-2"></i>GIFT
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        } @else {
+                            <tr>
+                                <td colspan="8" class="center-content">
+                                    <div class="vstack justify-content-center align-items-center">
+                                        <img src="assets/images/bell.svg" alt="No Records Found" class="img-fluid" style="width: 120px;">
+                                        <p>No Records Found</p>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        }
+                    </tbody>
+                </table>
+            </nz-skeleton>
+        </ngx-simplebar>
+
+    </div>
+</div>
+
+
+<ng-template #gpr let-offcanvas>
+    <div class="offcanvas-header">
+        <h4 class="offcanvas-title" id="offcanvas-basic-title">Assign GPR Card</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="card card-animate">
+            <div class="card-body">
+                <nz-spin [nzSpinning]="isAssignGPRProcessing">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label for="product_name">Select Product Name</label>
+                            <select name="product_name" id="product_name" class="form-select rounded-4">
+                                @for(product of products; track product.id){
+                                    <option value="{{product?.id}}">{{ product?.product_name }}</option>
+                                } @empty {
+                                    <option value="">No Product Found</option>
+                                }
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <button class="btn btn-primary btn-grad btn-rounded px-3 py-2" (click)="assignGprCard()"
+                                title="Create New GPR Card">Submit
+                        </button>
+                    </div>
+                </nz-spin>
+
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #gift let-offcanvas>
+    <div class="offcanvas-header">
+        <h4 class="offcanvas-title" id="createGiftCardCanwas">Assign GPR Card</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="row">
+
+                    <div class="col-12 mb-3">
+                        <label for="product_name">Select Product Name</label>
+                        <select name="product_name" id="gift_product_name" class="form-select rounded-4">
+                            @for(product of products; track product.id){
+                                <option value="{{product?.id}}">{{ product?.product_name }}</option>
+                            } @empty {
+                                <option value="">No Product Found</option>
+                            }
+                        </select>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <button class="btn btn-primary btn-grad btn-rounded px-3 py-2"
+                            title="Create New GPR Card">Submit
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+
+
+
+

@@ -1,0 +1,153 @@
+<app-breadcrumbs title="Manage Account" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card rounded-4">
+            <div class="card-header">
+                <ul ngbNav #customNav="ngbNav" [activeId]="1"
+                    class="nav nav-tabs-custom rounded card-header-tabs border-bottom-0" role="tablist">
+                    <li [ngbNavItem]="1" class="nav-item">
+                        <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">Change Password</a>
+                        <ng-template ngbNavContent>
+                            <form [formGroup]="passwordForm">
+                                <div class="row g-2">
+                                    <div class="col-lg-4">
+                                        <div>
+                                            <label for="old_password" class="form-label">Old Password
+                                                <span class="text-danger">*</span></label>
+                                            <input type="password" class="form-control rounded-pill" id="old_password"
+                                                   placeholder="Enter current password" formControlName="old_password">
+                                            <div *ngIf="passwordSubmitted && pf['old_password'].errors"
+                                                 class="text-danger">
+                                                <div *ngIf="pf['old_password'].errors['required']">
+                                                    Old Password is required
+                                                </div>
+                                                <div *ngIf="pf['old_password'].errors['minlength']">
+                                                    Old Password length must be 8 characters
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div>
+                                            <label for="password" class="form-label">New Password
+                                                <span class="text-danger">*</span></label>
+                                            <input type="password" class="form-control rounded-pill" id="password"
+                                                   placeholder="Enter new password" formControlName="password">
+                                            <div *ngIf="passwordSubmitted && pf['password'].errors"
+                                                 class="text-danger">
+                                                <div *ngIf="pf['password'].errors['required']">
+                                                    New Password is required
+                                                </div>
+                                                <div *ngIf="pf['password'].errors['minlength']">
+                                                    New Password length must be 8 characters
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div>
+                                            <label for="confirm_password" class="form-label">Confirm
+                                                Password <span class="text-danger">*</span></label>
+                                            <input type="password" class="form-control rounded-pill"
+                                                   id="confirm_password"
+                                                   placeholder="Confirm password" formControlName="confirm_password">
+                                            <div *ngIf="passwordSubmitted && pf['confirm_password'].errors"
+                                                 class="text-danger">
+                                                <div *ngIf="pf['confirm_password'].errors['required']">
+                                                    Confirm Password is required
+                                                </div>
+                                                <div *ngIf="pf['confirm_password'].errors['minlength']">
+                                                    Confirm Password length must be 8 characters
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="text-end mt-2">
+                                            <button type="submit" class="btn btn-primary btn-rounded"
+                                                    (click)="changePass()">Change Password
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-template>
+                    </li>
+                    <li [ngbNavItem]="2" class="nav-item">
+                        <a ngbNavLink class="nav-link" data-bs-toggle="tab" role="tab">Change T-Pin</a>
+                        <ng-template ngbNavContent>
+                            <form [formGroup]="tpinForm">
+                                <div class="row g-2">
+                                    <div class="col-lg-4">
+                                        <div>
+                                            <label for="old_tpin" class="form-label">Old T-Pin
+                                                <span class="text-danger">*</span></label>
+                                            <input type="password" class="form-control rounded-pill" id="old_tpin"
+                                                   appNumberOnly inputmode="numeric" placeholder="Enter current T-Pin"
+                                                   maxlength="4" formControlName="old_pin">
+                                            <div *ngIf="tpinSubmitted && tf['old_pin'].errors" class="text-danger">
+                                                <div *ngIf="tf['old_pin'].errors['required']">
+                                                    Old T-Pin is required
+                                                </div>
+                                                <div *ngIf="tf['old_pin'].errors['minlength']">
+                                                    Old T-Pin length must be 4 characters
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div>
+                                            <label for="new_tpin" class="form-label">New T-Pin
+                                                <span class="text-danger">*</span></label>
+                                            <input type="password" class="form-control rounded-pill" id="new_tpin"
+                                                   appNumberOnly inputmode="numeric" placeholder="Enter New T-Pin"
+                                                   maxlength="4" formControlName="pin">
+                                            <div *ngIf="tpinSubmitted && tf['pin'].errors" class="text-danger">
+                                                <div *ngIf="tf['pin'].errors['required']">
+                                                    New T-Pin is required
+                                                </div>
+                                                <div *ngIf="tf['pin'].errors['minlength']">
+                                                    New T-Pin length must be 4 characters
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div>
+                                            <label for="confirm_tpin" class="form-label">Confirm T-Pin
+                                                <span class="text-danger">*</span></label>
+                                            <input type="password" class="form-control rounded-pill" id="confirm_tpin"
+                                                   appNumberOnly inputmode="numeric" placeholder="Confirm T-Pin"
+                                                   maxlength="4" formControlName="confirm_pin">
+                                            <div *ngIf="tpinSubmitted && tf['confirm_pin'].errors" class="text-danger">
+                                                <div *ngIf="tf['confirm_pin'].errors['required']">
+                                                    Confirm T-Pin is required
+                                                </div>
+                                                <div *ngIf="tf['confirm_pin'].errors['minlength']">
+                                                    Confirm T-Pin length must be 4 characters
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="text-end mt-2">
+                                            <button type="submit" class="btn btn-primary btn-rounded"
+                                                    (click)="changeTpin()">Change T-Pin
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </ng-template>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body p-4">
+                <div class="tab-content">
+                    <div [ngbNavOutlet]="customNav"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

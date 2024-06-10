@@ -1,0 +1,30 @@
+.invoice-table {
+  tbody {
+    &:last-child {
+      border: none;
+    }
+  }
+}
+
+.currency-select {
+  .choices__inner {
+    padding: 0 15px 0 0;
+    min-height: 0;
+  }
+
+  .choices__list--single {
+    padding: 0 16px 0 4px;
+  }
+
+  .choices[data-type*=select-one] {
+    bottom: 0;
+
+    :after {
+      top: 4px;
+    }
+
+    .choices__inner {
+      padding-bottom: 0;
+    }
+  }
+}

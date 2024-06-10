@@ -1,0 +1,654 @@
+<app-breadcrumbs title="Edit Corporate" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row gy-2">
+            <div class="col-md-3">
+                <div class="border rounded-4">
+                    <div class="card-body">
+                        <div class="text-center">
+                            <div class="profile-user position-relative d-inline-block mx-auto mb-4">
+                                <img src="assets/images/avatar.png" class="rounded-circle avatar-lg img-thumbnail"
+                                     alt="User Profile img">
+                            </div>
+                            <h4 class="fs-16 mb-1 text-uppercase">{{personalInfo?.name | titlecase}}</h4>
+                            <span class="text-muted mb-0 text-capitalize fs-14 fw-bold">{{personalInfo?.username | titlecase}}</span>
+                            <p class="text-muted mb-0 text-capitalize">{{personalInfo?.user_type | titlecase}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <div class="border rounded-4 mt-4">
+                    <div class="card-body">
+                        <h2 class="mb-5 mt-3">Profile Score <i
+                                class="ri-information-line me-2 float-end cursor-pointer"
+                                (click)="onpenProfileScore(profileScore)"></i></h2>
+                        <div class="progress animated-progress custom-progress progress-label mb-3"
+                             style="height: 25px;">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: 30%"
+                                 aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">
+                                <div class="label">30%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card rounded-4">
+    <div class="card-body">
+        <ul ngbNav #nav="ngbNav" [activeId]="1" class="nav nav-tabs">
+            <li [ngbNavItem]="1">
+                <a ngbNavLink>
+                    <span class="d-sm-block">Profile</span>
+                </a>
+                <ng-template ngbNavContent>
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <div class="border rounded-4 card-animate">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="card-header border border-top-0 border-start-0 border-end-0">
+                                            <h5>Contact Information</h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <button class="btn btn-primary rounded-4 float-end m-3" (click)="toggleEditMode()">Edit</button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="first_name" class="form-label">Applicant
+                                                        Name</label>
+                                                    <input type="text"
+                                                           class="form-control rounded-pill {{editMode ? '' : 'bg-light'}}"
+                                                           value="{{personalInfo?.name | titlecase}}"
+                                                           id="first_name"
+                                                           [readonly]="!editMode"
+                                                           [(ngModel)] = "edit_personalInfo.name">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="father_name" class="form-label">Father
+                                                        Name</label>
+                                                    <input type="text"
+                                                           class="form-control rounded-pill  {{editMode ? '' : 'bg-light'}}"
+                                                           value="{{personalInfo?.father_name | titlecase}}"
+                                                           id="father_name" [readonly]="!editMode"
+                                                           [(ngModel)] = "edit_personalInfo.father_name">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="mobile" class="form-label">Mobile Number</label>
+                                                    <div class="form-icon right">
+                                                        <input type="text" value="{{personalInfo?.mobile}}"
+                                                               id="mobile"
+                                                               class="form-control rounded-pill form-control-icon  {{editMode ? '' : 'bg-light'}}"
+                                                               [readonly]="!editMode"
+                                                               [(ngModel)] = "edit_personalInfo.mobile">
+                                                        <i class="ri-checkbox-circle-fill text-success fs-22"
+                                                           title="Verified" *ngIf="personalInfo?.mobile_verified"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="email" class="form-label">Email</label>
+                                                    <div class="form-icon right">
+                                                        <input type="text"
+                                                        class="form-control rounded-pill  {{editMode ? '' : 'bg-light'}}"
+                                                        value="{{personalInfo?.email}}" id="email" [readonly]="!editMode"
+                                                        [(ngModel)] = "edit_personalInfo.email">
+                                                        <i class="ri-checkbox-circle-fill text-success fs-22"
+                                                        title="Verified" *ngIf="personalInfo?.mobile_verified"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="kyc_type" class="form-label">KYC Type</label>
+                                                    <input type="text"
+                                                           class="form-control rounded-pill bg-light"
+                                                           value="{{personalInfo?.kyc_type.replace('-', ' ') | titlecase}}"
+                                                           id="kyc_type" *ngIf="!editMode" readonly>
+                                                    <select id="kyc_type" class="form-select rounded-4" *ngIf="editMode">
+                                                        <option class="form-control rounded-pill">
+                                                            {{personalInfo?.kyc_type.replace('-', ' ') | titlecase}}
+                                                        </option>
+                                                        <option value="full-kyc" [(ngModel)] = "edit_personalInfo.kyc_type">Full Kyc</option>
+                                                        <option value="min-kyc" [(ngModel)] = "edit_personalInfo.kyc_type">Min Kyc</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="dob" class="form-label">Date of Birth</label>
+                                                    <input type="text"
+                                                           class="form-control rounded-pill  bg-light"
+                                                           value="{{personalInfo?.dob | date: 'dd-MM-yyyy'}}"
+                                                           id="dob"
+                                                           *ngIf="!editMode"
+                                                           [(ngModel)] = "edit_personalInfo.dob" readonly>
+                                                    <input class="form-control flatpickr-input rounded-4" type="text" mwlFlatpickr [altInput]="true"
+                                                           [convertModelValue]="true" altFormat="F j, Y" dateFormat="Y-m-d" *ngIf="editMode">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="join_date" class="form-label">Date of
+                                                        Joining</label>
+                                                    <input type="text"
+                                                           class="form-control rounded-pill  {{editMode ? '' : 'bg-light'}}"
+                                                           value="{{personalInfo?.join_date | date: 'dd-MM-yyyy'}}"
+                                                           id="join_date" *ngIf="!editMode"
+                                                           [(ngModel)] = "edit_personalInfo.join_date" readonly>
+                                                    <input class="form-control flatpickr-input rounded-4" type="text" mwlFlatpickr [altInput]="true"
+                                                           [convertModelValue]="true" altFormat="F j, Y" dateFormat="Y-m-d" *ngIf="editMode">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="aadhar_no" class="form-label">Aadhaar No</label>
+                                                    <div class="form-icon right">
+                                                        <input type="text"
+                                                               class="form-control rounded-pill  {{editMode ? '' : 'bg-light'}}"
+                                                               value="{{personalInfo?.aadhar_no}}"
+                                                               id="aadhar_no"
+                                                               [readonly]="!editMode"
+                                                               [(ngModel)] = "edit_personalInfo.aadhar_no">
+                                                        <i class="ri-checkbox-circle-fill text-success fs-22"
+                                                           title="Verified"
+                                                           *ngIf="personalInfo?.aadhaar_verified"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="pan_no" class="form-label">PAN No</label>
+                                                    <div class="form-icon right">
+                                                        <input type="text"
+                                                               class="form-control rounded-pill  {{editMode ? '' : 'bg-light'}}"
+                                                               value="{{personalInfo?.pan}}" id="pan_no"
+                                                               [readonly]="!editMode"
+                                                               [(ngModel)] = "edit_personalInfo.pan">
+                                                        <i class="ri-checkbox-circle-fill text-success fs-22"
+                                                           title="Verified"
+                                                           *ngIf="personalInfo?.pan_verified"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="enable_2fa" class="form-label">2-FA
+                                                        Status</label>
+                                                    <input type="text"
+                                                           class="form-control rounded-pill  {{editMode ? '' : 'bg-light'}}"
+                                                           [value]="personalInfo?.enable_2fa ? 'Enabled' : 'Disabled'"
+                                                           id="enable_2fa"
+                                                           *ngIf="!editMode" readonly>
+                                                    <select id="enable_2fa" class="form-select rounded-4" *ngIf="editMode">
+                                                        <option class="form-control rounded-pill">
+                                                            {{personalInfo?.enable_2fa }}
+                                                        </option>
+                                                        <option value="true" [(ngModel)] = "edit_personalInfo.enable_2fa">Enabled</option>
+                                                        <option value="false" [(ngModel)] = "edit_personalInfo.enable_2fa">Disabled</option>
+                                                    </select>
+                                                    {{personalInfo?.enable_2fa }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="city" class="form-label">City</label>
+                                                    <input type="text"
+                                                           class="form-control rounded-pill  {{editMode ? '' : 'bg-light'}}"
+                                                           value="{{personalInfo?.city | titlecase}}" id="city"
+                                                           [readonly]="!editMode"
+                                                           [(ngModel)] = "edit_personalInfo.city">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="district" class="form-label">District</label>
+                                                    <input type="text"
+                                                           class="form-control rounded-pill  {{editMode ? '' : 'bg-light'}}"
+                                                           value="{{personalInfo?.district | titlecase}}"
+                                                           id="district"
+                                                           [readonly]="!editMode"
+                                                           [(ngModel)] = "edit_personalInfo.district">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="pincode" class="form-label">Pincode</label>
+                                                    <input type="text"
+                                                           class="form-control rounded-pill  {{editMode ? '' : 'bg-light'}}"
+                                                           value="{{personalInfo?.pincode | titlecase}}"
+                                                           id="pincode"
+                                                           [readonly]="!editMode"
+                                                           [(ngModel)] = "edit_personalInfo.pincode">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label for="state" class="form-label">State</label>
+                                                    <input type="text"
+                                                           class="form-control rounded-pill  {{editMode ? '' : 'bg-light'}}"
+                                                           value="{{personalInfo?.state | titlecase}}"
+                                                           id="state"
+                                                           [readonly]="!editMode"
+                                                           [(ngModel)] = "edit_personalInfo.state">
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="mb-3">
+                                                    <label for="address" class="form-label">Address</label>
+                                                    <input type="text"
+                                                           class="form-control rounded-pill  {{editMode ? '' : 'bg-light'}}"
+                                                           value="{{personalInfo?.address | titlecase}}"
+                                                           id="address"
+                                                           [readonly]="!editMode"
+                                                           [(ngModel)] = "edit_personalInfo.home_address">
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <button class="btn btn-primary rounded-4 float-end m-3" (click)="onSubmitPersonalInfo(personalInfo.id)" *ngIf="editMode" (click)="toggleEditMode()">Submit</button>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="border rounded-4 card-animate">
+                                <div class="card-header border border-top-0 border-start-0 border-end-0">
+                                    <h5>Linked Bank Accounts <i class="ri-information-line me-2 float-end"></i>
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="card bg-soft-success rounded-3">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-shrink-0">
+                                                    <div class="avatar-xs">
+                                                        <div class="avatar-title bg-soft-success text-success rounded-circle fs-18">
+                                                            <i class="ri-bank-line"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex-grow-1 ms-3">
+                                                    <div class="d-flex flex-column">
+                                                        <p class="mb-0">Bank Transfer</p>
+                                                        <small class="text-muted">New Delhi Near Gas
+                                                            Station</small>
+                                                        <small class="text-muted">Jimmy Wang</small>
+                                                    </div>
+                                                </div>
+                                                <span class="badge bg-soft-success text-success ms-1 rounded-pill">ACTIVE</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-start">
+                                        <button class="btn btn-rounded btn-light"><i
+                                                class="ri-add-line align-middle"></i>
+                                            Add Bank
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="border rounded-4 card-animate mt-3"
+                                 *ngIf="!personalInfo?.email_verified">
+                                <div class="card-header border border-top-0 border-start-0 border-end-0">
+                                    <h5>Email Verification</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="alert alert-warning rounded-4">
+                                        <i class="ri-alert-line fs-24 align-middle"></i>
+                                        Your email address is unverified. If you want to verify, click to verify
+                                        button & fill OTP received on registered email id.
+                                    </div>
+                                    <input type="text" class="form-control rounded-pill  {{editMode ? '' : 'bg-light'}}"
+                                           value="{{personalInfo?.email}}"
+                                           readonly>
+                                    <div class="text-start mt-3">
+                                        <button class="btn btn-rounded btn-light">
+                                            <i class="ri-checkbox-circle-line align-middle"></i>
+                                            Verify Email
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="2">
+                <a ngbNavLink>
+                    <span class="d-sm-block">Payments</span>
+                </a>
+                <ng-template ngbNavContent>
+                    <div class="row">
+                        <div class="col-12">
+                            <h5>Showing 1 payment</h5>
+                            <div class="border card-animate rounded-4">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table align-middle table-nowrap table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-uppercase">Payment status</th>
+                                                <th class="text-uppercase">Payment Id</th>
+                                                <th class="text-uppercase">Payment Amount</th>
+                                                <th class="text-uppercase">Tax Withholding</th>
+                                                <th class="text-uppercase">Merchant Fees</th>
+                                                <th class="text-uppercase">Payment Purpose</th>
+                                                <th class="text-uppercase">Tax Form</th>
+                                                <th class="text-uppercase">Updated On</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row justify-content-md-between align-items-md-center mt-3">
+                                        <div class="col col-sm-6">
+                                            <p class="mb-2">
+                                                Showing 1 to 10 of 20 entries
+                                            </p>
+                                        </div>
+                                        <div class="col col-sm-6">
+                                            <div class="text-sm-right float-sm-end listjs-pagination">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <h5>Showing 0 Offline payments</h5>
+                            <div class="border card-animate rounded-4">
+                                <div class="card-body">
+                                    <div class="text-center bg-soft-dark p-4">
+                                        No offline payments found
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="3">
+                <a ngbNavLink>
+                    <span class="d-sm-block">Tax</span>
+                </a>
+                <ng-template ngbNavContent>
+                    <div class="row">
+                        <div class="col-12">
+                            <h5>Showing 1 tax form</h5>
+                            <div class="border card-animate rounded-4">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table align-middle table-nowrap table-hover">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-uppercase">Form status</th>
+                                                <th class="text-uppercase">Tax Form Type</th>
+                                                <th class="text-uppercase">Us Tin Status</th>
+                                                <th class="text-uppercase">Withholding Rate</th>
+                                                <th class="text-uppercase">Signed On</th>
+                                                <th class="text-uppercase">Actions</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row justify-content-md-between align-items-md-center mt-3">
+                                        <div class="col col-sm-6">
+                                            <p class="mb-2">
+                                                Showing 1 to 10 of 20 entries
+                                            </p>
+                                        </div>
+                                        <div class="col col-sm-6">
+                                            <div class="text-sm-right float-sm-end listjs-pagination">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="4">
+                <a ngbNavLink>
+                    <span class="d-sm-block">Compliance</span>
+                </a>
+                <ng-template ngbNavContent>
+                    <div class="row">
+                        <div class="col-12">
+                            <h5>Compliance Check (0)</h5>
+                            <div class="border card-animate rounded-4">
+                                <div class="card-body">
+                                    <div class="text-center bg-soft-dark p-4">
+                                        No compliance checks recorded
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </li>
+            <li [ngbNavItem]="5">
+                <a ngbNavLink>
+                    <span class="d-sm-block">Permissions</span>
+                </a>
+                <ng-template ngbNavContent>
+                    <div class="row gx-5 gy-3">
+                        <div class="col-md-3">
+                            <ngx-simplebar class="card" style="max-height: 750px;">
+                                <div class="card-header">
+                                    <p class="fs-16 fw-medium mb-0">Menu Rights</p>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex flex-column gap-3">
+                                        <button class="btn w-100 btn-primary btn-rounded">Dashboard</button>
+                                        <button class="btn w-100 btn-primary btn-rounded">Manage Customers</button>
+                                        <button class="btn w-100 btn-primary btn-rounded">Manage GPR Cards</button>
+                                        <button class="btn w-100 btn-primary btn-rounded">Manage Gift Cards</button>
+                                        <button class="btn w-100 btn-primary btn-rounded">Manage My Fund Request
+                                        </button>
+                                        <button class="btn w-100 btn-primary btn-rounded">Manage My Transactions
+                                        </button>
+                                    </div>
+                                </div>
+                            </ngx-simplebar>
+                        </div>
+                        <div class="col-md-9">
+                            <ngx-simplebar class="card" style="max-height: 750px;">
+                                <div class="card-header">
+                                    <p class="fs-16 fw-medium mb-0">Service Rights</p>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="row gy-3">
+                                                <div class="col-md-4">
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <button class="btn btn-light btn-rounded w-100"
+                                                                (click)="openMicroRights(microRights)">Add Funds
+                                                        </button>
+                                                        <div class="form-check form-switch form-switch-success form-switch-right form-switch-md">
+                                                            <input class="form-check-input" type="checkbox">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <button class="btn btn-light btn-rounded w-100"
+                                                                (click)="openMicroRights(microRights)">Profile
+                                                        </button>
+                                                        <div class="form-check form-switch form-switch-success form-switch-right form-switch-md">
+                                                            <input class="form-check-input" type="checkbox">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <button class="btn btn-light btn-rounded w-100"
+                                                                (click)="openMicroRights(microRights)">Debit Funds
+                                                        </button>
+                                                        <div class="form-check form-switch form-switch-success form-switch-right form-switch-md">
+                                                            <input class="form-check-input" type="checkbox">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="d-flex align-items-center gap-3">
+                                                        <button class="btn btn-light btn-rounded w-100"
+                                                                (click)="openMicroRights(microRights)">Notifications
+                                                        </button>
+                                                        <div class="form-check form-switch form-switch-success form-switch-right form-switch-md">
+                                                            <input class="form-check-input" type="checkbox">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-end mt-3">
+                                        <button class="btn btn-primary btn-rounded">Save</button>
+                                    </div>
+                                </div>
+                            </ngx-simplebar>
+                        </div>
+                    </div>
+                </ng-template>
+            </li>
+
+        </ul>
+        <div class="tab-content pt-3">
+            <div [ngbNavOutlet]="nav"></div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #profileScore let-offcanvas>
+    <div class="offcanvas-header pb-0">
+        <h4 class="fw-semibold mb-0">Profile Score Parameters</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ngx-simplebar class="table-responsive">
+            <table class="table table-nowrap table-bordered table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>%</th>
+                    <th>Documents</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>20%</td>
+                    <td>For Aadhaar & Pan</td>
+                </tr>
+                <tr>
+                    <td>20%</td>
+                    <td>For Mobile & Email</td>
+                </tr>
+                <tr>
+                    <td>10%</td>
+                    <td>For Bank</td>
+                </tr>
+                <tr>
+                    <td>10%</td>
+                    <td>For Business Certificate (GST , BRN & Shop Act)</td>
+                </tr>
+                <tr>
+                    <td>10%</td>
+                    <td>For Shop OutSide & Inside Photo</td>
+                </tr>
+                <tr>
+                    <td>5%</td>
+                    <td>Apptdcant Photo</td>
+                </tr>
+                <tr>
+                    <td>5%</td>
+                    <td>Apptdcant Signature</td>
+                </tr>
+                <tr>
+                    <td>70%</td>
+                    <td>At Least 70% Profile Score for Lien Wallet issue</td>
+                </tr>
+                </tbody>
+            </table>
+        </ngx-simplebar>
+    </div>
+</ng-template>
+
+<ng-template #microRights let-offcanvas>
+    <div class="offcanvas-header pb-0">
+        <h4 class="fw-semibold mb-0">Micro Rights</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <hr class="mb-0">
+    <ngx-simplebar class="offcanvas-body p-2" style="max-height: calc(100vh - 72px);">
+        <div class="card">
+            <div class="card-header">
+                <h5>Payment Gateway
+                    <div class="form-check form-switch form-switch-success form-switch-right form-switch-md float-end">
+                        <input class="form-check-input" type="checkbox">
+                    </div>
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <label class="list-group-item">
+                        <input class="form-check-input me-1" type="checkbox">
+                        View PG Order's
+                    </label>
+                </div>
+                <div class="text-end mt-3">
+                    <button class="btn btn-rounded btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h5>Fund Request's
+                    <div class="form-check form-switch form-switch-success form-switch-right form-switch-md float-end">
+                        <input class="form-check-input" type="checkbox">
+                    </div>
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <label class="list-group-item">
+                        <input class="form-check-input me-1" type="checkbox">
+                        Create Fund Request
+                    </label>
+                </div>
+                <div class="list-group">
+                    <label class="list-group-item">
+                        <input class="form-check-input me-1" type="checkbox">
+                        View Fund Request
+                    </label>
+                </div>
+                <div class="text-end mt-3">
+                    <button class="btn btn-rounded btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </ngx-simplebar>
+</ng-template>

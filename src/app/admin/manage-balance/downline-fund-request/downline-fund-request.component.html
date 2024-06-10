@@ -1,0 +1,237 @@
+<app-breadcrumbs title="Manage Balance" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="card rounded-4">
+    <div class="card-header">
+        <div class="row align-items-center g-3">
+            <div class="col-md-3">
+                <p class="fs-16 fw-medium">Down line Fund Request</p>
+            </div>
+            <div class="col-md-auto ms-auto">
+                <div class="d-flex gap-2">
+                    <div class="search-box">
+                        <input type="text" class="form-control rounded-pill" placeholder="Search..." #search
+                               (keyup)="onSearch(search.value)">
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+
+                    <button class="btn btn-success btn-rounded" (click)="export_to_excel()">
+                        Export
+                    </button>
+                    
+                    <button class="btn btn-info btn-rounded">
+                        Filter
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <ngx-simplebar class="table-responsive">
+            <table class="table align-middle table-nowrap" id="customerTable">
+                <thead>
+                <tr>
+                    <th>SR</th>
+                    <th>Customer Name</th>
+                    <th>Transaction ID</th>
+                    <th>Wallet/Product</th>
+                    <th>Date</th>
+                    <th>Admin Ope/Clo. Balance</th>
+                    <th>User Ope/Clo. Balance</th>
+                    <th>Amount & Date</th>
+                    <!--                    <th>Wallet Name</th>-->
+                    <!--                    <th>Product Name</th>-->
+                    <!--                    <th>Status</th>-->
+                    <!--                    <th>Created At</th>-->
+                    <!--                    <th>Updated At</th>-->
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="cursor-pointer card-animate"
+                    *ngFor="let transaction of transactions | slice: (page-1) * pageSize : page * pageSize; let i = index;">
+                    <td>{{ (page - 1) * pageSize + i + 1 }}</td>
+                    <td>
+                        <div class="d-flex flex-column justify-content-center align-items-start">
+                            <span class="fs-16 mb-1">{{ transaction?.name | uppercase }}</span>
+                            <span *ngIf=" transaction?.status=='Processing'"
+                                  class="badge bg-primary rounded-pill"> {{ transaction?.status | uppercase }}</span>
+                            <span *ngIf=" transaction?.status=='Accepted'"
+                                  class="badge bg-success rounded-pill"> {{ transaction?.status | uppercase }}</span>
+                            <span *ngIf=" transaction?.status=='Rejected'"
+                                  class="badge bg-danger rounded-pill"> {{ transaction?.status | uppercase }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex flex-column justify-content-center align-items-start">
+                            <span class="fs-16 mb-1">{{ transaction?.fund_request_id | uppercase }}</span>
+                            <span class="text-muted mb-0">&#64; {{ transaction?.ref_no | uppercase }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex flex-column justify-content-center align-items-start">
+                            <span class="fs-16 mb-1">{{ transaction?.wallet_name | uppercase }}</span>
+                            <span class="text-muted mb-0"> {{ transaction?.product_name | uppercase }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex flex-column justify-content-center align-items-start">
+                            <span class="fs-16 mb-1">DOC:- {{ transaction.request_date | date: 'dd MMM yyyy' }}</span>
+                            <span class="text-muted mb-0">DOR:- {{ transaction.response_at ?? transaction.request_date | date: 'dd MMM yyyy' }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex flex-column justify-content-center align-items-start">
+                            <span class="fs-16 mb-1">{{ transaction?.admin_wallet_balance |currency:'INR' }}</span>
+                            <span class="text-muted mb-0">{{transaction?.amount + transaction?.admin_wallet_balance | currency:'INR'}}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex flex-column justify-content-center align-items-start">
+                            <span class="fs-16 mb-1">{{ transaction?.current_balance |currency:'INR' }}</span>
+                            <span class="text-muted mb-0">{{transaction?.amount + transaction?.current_balance | currency:'INR'}}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex flex-column justify-content-center align-items-start">
+                            <span class="fs-16 mb-1">{{ transaction?.amount |currency:'INR' }} ({{ transaction?.payment_mode | uppercase }})</span>
+                            <span class="text-muted mb-0">Deposite:-{{ transaction.deposit_date | date: 'dd MMM yyyy' }}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <button *ngIf="transaction?.status=='Processing'" class="btn btn-primary btn-sm" (click)="onViewBalanceRequest(viewBalanceRequest,transaction)">Action</button>
+                        <span *ngIf="transaction?.status=='Accepted'" class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Accepted</span>
+                        <span *ngIf="transaction?.status=='Rejected'" class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </ngx-simplebar>
+        <div class="row justify-content-md-between align-items-md-center mt-4">
+            <div class="col col-sm-6">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    Showing {{ (page - 1) * pageSize + 1 }} to {{ transactions.length }} of {{ transactions?.length ?? 0 }} entries
+                </div>
+            </div>
+
+            <div class="col col-sm-6">
+                <div class="text-sm-right float-sm-end listjs-pagination">
+                    <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]=pageSize
+                                    [maxSize]="2">
+                    </ngb-pagination>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--Promote user | Create Wallet Start-->
+<ng-template #viewBalanceRequest let-offcanvas>
+    <ngx-simplebar class="offcanvas-body p-3" style="max-height: calc(100vh - 75px); background-color: #F2F3F4;">
+        <h4>Check Fund Request Details
+            <button type="button" class="btn btn-danger btn-sm btn-rounded btn-close float-end" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+        </h4>
+
+
+        <div class="card p-3">
+            <a class="list-group-item list-group-item-action border-0 g-3 py-1">Wallet Name: <span class="font-weight-bold">{{ temp_transactions.product_name }}</span></a>
+            <a class="list-group-item list-group-item-action border-0 g-3 py-1">Request ID: <strong>{{ temp_transactions.fund_request_id }}</strong></a>
+            <a class="list-group-item list-group-item-action border-0 g-3 py-1">Deposit Date: <strong>{{ temp_transactions.deposit_date| date: 'dd MMM yyyy' }}</strong></a>
+            <a class="list-group-item list-group-item-action border-0 g-3 py-1">Submitted On: <strong>{{ temp_transactions.request_date | date: 'dd MMM yyyy' }}</strong></a>
+            <a class="list-group-item list-group-item-action border-0 g-3 py-1">Amount: <strong>{{ temp_transactions.amount }}</strong></a>
+            <a class="list-group-item list-group-item-action border-0 g-3 py-1">Payment Mode: <strong>{{ temp_transactions.payment_mode }}</strong></a>
+            <a class="list-group-item list-group-item-action border-0 g-3 py-1">Transaction Ref/UTR: <strong>{{ temp_transactions.ref_no }}</strong> </a>
+           <br>
+            <a class="list-group-item list-group-item-action border-0 g-3 py-1">Beneficiary Name: <strong>{{ temp_transactions.name }}</strong></a>
+            <a class="list-group-item list-group-item-action border-0 g-3 py-1">Beneficiary Mobile No: <strong>{{ temp_transactions.mobile }}</strong></a>
+            <a class="list-group-item list-group-item-action border-0 g-3 py-1">Beneficiary Email: <strong>{{ temp_transactions.email }} </strong></a>
+            <a class="list-group-item list-group-item-action border-0 g-3 py-1">Beneficiary Current Balance: <strong>{{ temp_transactions.current_balance }} </strong> </a>
+            <a class="list-group-item list-group-item-action border-0 g-3 py-1">Beneficiary Remark: {{ temp_transactions.remark }}</a>
+            <a *ngIf="temp_transactions.receipt" target="_blank"  href="{{ temp_transactions.receipt }}" class="text-primary cursor-pointer fw-semibold text-center fs-5">View Receipt</a>
+        </div>
+        <div class="row">
+            <div class="col-12 mb-2 mt-2">
+                <label for="remark" class="form-label">
+                    Remark:
+                </label>
+                <textarea id="remark" class="form-control" placeholder="Please Enter Remark"></textarea>
+            </div>
+        </div>
+        <div class="row" *ngIf="temp_transactions.status == 'Processing'">
+            <div class="col-6 mb-3 mt-2">
+                <button class="btn btn-primary rounded-5 x-3 py-2" title="Submit" type="submit" (click)="onAcceptSubmit();">
+                    Accept
+                </button>
+            </div>
+            <div class="col-6 mb-3 mt-2">
+                <button class="btn btn-danger rounded-5 x-3 py-2" title="Submit" type="submit" (click)="onRejectSubmit();">
+                    Reject
+                </button>
+            </div>
+        </div>
+        <div class="row" *ngIf="temp_transactions.status == 'Accepted'">
+            <div class="list-group border-0 g-3 py-1">
+                <a class="list-group-item list-group-item-action border-0 list-group-item-success g-3 py-1">Request Accepted</a>
+            </div>
+        </div>
+        <div class="row" *ngIf="temp_transactions.status == 'Rejected'">
+            <div class="list-group border-0 g-3 py-1">
+                <a class="list-group-item list-group-item-action border-0 list-group-item-danger g-3 py-1">Request Rejected</a>
+            </div>
+        </div>
+
+
+    </ngx-simplebar>
+</ng-template>
+<!--Generate gift Card  end -->
+
+<ng-template #walletAddBalanceModal role="document" let-modal>
+    <div class="modal-content">
+        <div class="modal-header p-3">
+            <p class="fs-18 fw-medium">ADD WALLET Balance</p>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"
+                    (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+            <div class="row g-3">
+                <div class="col-6">
+                    <label for="wallet_name" class="form-label">Select Wallets</label>
+                    <select name='wallet_name' id="wallet_name" class="form-select rounded-pill fw-semibold"
+                            [(ngModel)]="addWalletFund.wallet_id"
+                            (change)="onWalletSelectionChange()">
+                        <option>Select Wallet</option>
+                        <option value="{{wallet?.id}}" *ngFor="let wallet of Wallets">{{ wallet?.name }}</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label for="name" class="form-label">Current Balance</label>
+                    <input class="form-control rounded-pill" [(ngModel)]="current_balance" readonly>
+                </div>
+                <div class="col-6">
+                    <label for="name" class="form-label">Amount</label>
+                    <input class="form-control rounded-pill" placeholder="Enter Amount" [(ngModel)]="addWalletFund.request_amount"
+                           appNumberOnly>
+                </div>
+                <div class="col-6">
+                    <label for="name" class="form-label">Transaction Ref No.</label>
+                    <input class="form-control rounded-pill" placeholder="Enter Amount" [(ngModel)]="addWalletFund.ref_no"
+                    >
+                </div>
+                <div class="col-12">
+                    <label for="name" class="form-label">Narration</label>
+                    <input id="name" class="form-control rounded-pill" placeholder="Enter Amount" [(ngModel)]="addWalletFund.remark"
+                    >
+                </div>
+                <div class="col-md-12">
+                    <div class="gap-2 justify-content-end">
+                        <button type="button" class="btn btn-light btn-rounded" data-bs-dismiss="modal"
+                                (click)="modal.close('Close click')">Close
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-rounded" (click)="onSubmitAddWalletFund()">Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

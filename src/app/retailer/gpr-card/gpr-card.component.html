@@ -1,0 +1,542 @@
+<app-breadcrumbs title="Manage GPR card" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card  rounded-4">
+            <div class="card-header border-0">
+                <div class="row g-3">
+                    <div class="col-md-6 d-flex justify-content-start align-items-center gap-2">
+                        <button class="btn btn-outline-primary btn-rounded">Export</button>
+                        <div class="search-box w-100">
+                            <input class="form-control rounded-pill search bg-light border-light"
+                                   placeholder="Search by Name, Role, Mobile & Card Type">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex justify-content-center justify-content-md-end align-items-center gap-1">
+                            <a class="btn btn-sm btn-info btn-rounded">View Card Balance Report</a>
+                            <a class="btn btn-sm btn-secondary btn-rounded"
+                               (click)="openFilter(filterDetails)">
+                                Filter</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <ngx-simplebar class="table-responsive">
+                    <table class="table table-striped  table-nowrap">
+                        <thead>
+                        <tr>
+                            <th class="text-uppercase"> #</th>
+                            <th class="text-uppercase">Card Holder</th>
+                            <th class="text-uppercase">Email</th>
+                            <th class="text-uppercase">Mobile</th>
+                            <th class="text-uppercase">Card Number</th>
+                            <th class="text-uppercase">Current Balance</th>
+                            <th class="text-uppercase">Expiry Date</th>
+                            <th class="text-uppercase">Status</th>
+                            <th class="text-uppercase">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="cursor-pointer card-animate" *ngFor="let item of GPRCardsList;let i=index;">
+                                <td>
+                                    {{i + 1 }}
+                                </td>
+                                <td>{{item?.first_name}} {{item?.last_name}} </td>
+
+                                <td>
+                                    <a class="d-flex fs-16 mb-1">
+                                        <i class="ri-mail-check-line text-muted me-1"></i>
+                                        {{item?.email}}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="d-flex fs-16 mb-1">
+                                        <i class="ri-phone-line text-muted me-1"></i>
+                                        {{item?.mobile_no}}
+                                    </a>
+                                </td>
+                                <td>
+                                    <span class="text-primary">
+                                        {{item?.card_number}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center align-items-center" >
+                                        <i class="ri-restart-line fs-16 " title="Refresh Balance" (click)="onRefreshBalanceClick(item)" *ngIf="!item.show"></i>
+                                    </div>
+                                    <span class="text-dark fw-bold d-flex justify-content-center align-items-center" *ngIf="showCurrentBalance || item.show">
+                                        {{ item?.current_balance  |currency:'INR'}}
+                                      </span>
+                                </td>
+                                <td>
+                                    <span class="text-primary">
+                                        {{item?.expiry_date | date:'dd-MM-yyyy'}}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <h5 class="badge bg-success text-uppercase mb-1" *ngIf="item.active">
+                                        ACTIVE
+                                    </h5>
+                                    <h5 class="badge bg-danger text-uppercase mb-1"  *ngIf="!item.active">
+                                        INACTIVE
+                                    </h5>
+                                </td>
+                                <td>
+                                    <div ngbDropdown container="body">
+                                        <button type="button" class="btn border-0" ngbDropdownToggle>Actions</button>
+                                        <div ngbDropdownMenu>
+                                            <button ngbDropdownItem>Change Card Details</button>
+                                            <button ngbDropdownItem
+                                                    (click)="onGenerate_gpr_preferneces( generate_gpr_card_prefernces)">
+                                                Update Preferneces
+                                            </button>
+                                            <button ngbDropdownItem (click)="openGPRSetPinModal(content)">Set Pin</button>
+                                            <button ngbDropdownItem (click)="gprCardDetailsFun(item)">View Card Details</button>
+                                            <button ngbDropdownItem (click)="openLockModal(Lockcontent)">Lock Card</button>
+                                            <button ngbDropdownItem (click)="openUnLockModal(UnLockcontent)">Unlock Card</button>
+                                            <button ngbDropdownItem (click)="openBlockModal(Blockcontent)">Block Card</button>
+                                            <button ngbDropdownItem (click)="openBlockModal(Replacecontent)">Replace Card</button>
+                                            <button ngbDropdownItem (click)="openBlockModal(CreatePhysicalCard)">Create Physical card</button>
+                                            <button ngbDropdownItem (click)="onGenerate_gpr_preferneces(topup_gpr_card)">Top Up card</button>
+<!--                                            <button ngbDropdownItem >-->
+<!--                                                <a class="" title="Assign Permission"-->
+<!--                                                   [routerLink]="['/retailer/gpr-card/gpr-card-statement', item?.kit_no, item?.mobile_no]">-->
+<!--                                                    Card Statement-->
+<!--                                                </a>-->
+<!--                                            </button>-->
+                                        </div>
+                                    </div>
+                                </td>
+
+<!--                                Offcanvas and Modals start-->
+                                <!--Generate New GPR Card | Create Wallet Start-->
+                                <ng-template #topup_gpr_card let-offcanvas>
+                                    <div class="offcanvas-header">
+                                        <p class="fs-18 fw-medium">Top Up GPR Card</p>
+                                        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+                                    </div>
+                                    <ngx-simplebar class="offcanvas-body p-3" style="max-height: calc(100vh - 75px); background-color: #F2F3F4;">
+                                        <div class="card rounded-4 card-animate">
+                                            <div class="card-body">
+                                                <div class="list-group border-0 g-3 py-1">
+                                                    <p class="fs-16 fw-medium py-1">Map User Details:</p>
+                                                    <a class="list-group-item list-group-item-action border-0 list-group-item-success g-3 py-1">Full Name: {{item.first_name | uppercase}} {{item.last_name | uppercase}}<span class="font-weight-bold"></span></a>
+                                                    <a class="list-group-item list-group-item-action border-0 g-3 py-1">Username: {{item?.username | uppercase}}</a>
+                                                    <a class="list-group-item list-group-item-action border-0 g-3 py-1">MobileNo: {{item?.mobile_no}}</a>
+                                                    <a class="list-group-item list-group-item-action border-0 g-3 py-1">Email: {{item?.email | lowercase}}</a>
+                                                    <a class="list-group-item list-group-item-action border-0 g-3 py-1">Address: {{item?.district | uppercase}}, {{item.state| uppercase}}, {{item.pincode}}</a>
+                                                    <a class="list-group-item list-group-item-action border-0 g-3 py-1">Expiry Date: {{item?.expiry_date | date: 'dd MMM yyyy'}} </a>
+                                                </div>
+                                                <div class="col-12 mb-3">
+                                                    <label for="product_name">Select Product Name</label>
+                                                    <div class="d-flex justify-content-between align-items-center gap-1">
+                                                        <select name="product_name" id="product_name" class="form-select rounded-4"
+                                                                [(ngModel)]="data.product_id" >
+                                                            <option value="" selected>Select Product</option>
+                                                            <ng-container *ngFor="let product of products">
+                                                                <ng-container
+                                                                        *ngIf="product.product_type === 'gpr' && product.product_name.trim() !== '' && product.wallet_id !== null">
+                                                                    <option value="{{ product.id }}">{{ product.product_name }}
+                                                                        | {{product.product_series}}</option>
+                                                                </ng-container>
+                                                            </ng-container>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 mb-3">
+                                                        <label for="amount">Amount<span class="text-danger mx-2">*</span></label>
+                                                        <input type="text" maxlength="10" name="amount" id="amount"
+                                                               class="form-control rounded-4 text-uppercase"
+                                                               placeholder="Enter Amount" [(ngModel)]="data.amount" appNumberOnly>
+                                                    </div>
+                                                    <div class="col-12 mb-3">
+                                                        <label for="payment_mode">Payment Mode<span class="text-danger mx-2">*</span></label>
+                                                        <select name="payment_mode" id="payment_mode" class="form-control rounded-4 text-uppercase "[(ngModel)]="data.option1">
+                                                            <option value="" selected>Select Payment Mode</option>
+                                                            <option value="CASH" >Cash</option>
+                                                            <option value="NB">Bank Transfer</option>
+                                                            <option value="CC">Credit Card</option>
+                                                            <option value="DC">Debit Card</option>
+                                                            <option value="UPI">UPI</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-12 mb-3">
+                                                        <button class="btn btn-primary btn-grad px-3 py-2"
+                                                                title="Top Up GPR Card" (click)="onSubmitTopUpGPRCard(item)">
+                                                            Submit
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </ngx-simplebar>
+                                </ng-template>
+                                <!--Generate New GPR Card  end -->
+                                <ng-template #Lockcontent role="document" let-modal>
+                                    <div class="modal-header">
+                                        <h5 class="modal-title mt-0">Lock GPR Card</h5>
+                                        <button
+                                                type="button"
+                                                class="btn-close"
+                                                aria-hidden="true"
+                                                (click)="modal.dismiss('Cross click')"
+                                        ></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5>Do You Want to Lock Gift card??</h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button
+                                                type="button"
+                                                class="btn btn-light"
+                                                (click)="modal.close('Close click')"
+                                        >
+                                            No
+                                        </button>
+                                        <button
+                                                type="button"
+                                                class="btn btn-primary"
+                                                (click)="lock(item)"
+                                        >
+                                            Yes
+                                        </button>
+                                    </div>
+                                </ng-template>
+                                <ng-template #generate_gpr_card_prefernces let-offcanvas>
+                                    <div class="offcanvas-header">
+                                        <p class="fs-18 fw-medium">GPR Card Preferences</p>
+                                        <button
+                                                type="button"
+                                                class="btn-close"
+                                                aria-label="Close"
+                                                (click)="offcanvas.dismiss()"
+                                        ></button>
+                                    </div>
+                                    <ngx-simplebar class="offcanvas-body p-3" style="
+                    max-height: calc(100vh - 75px);
+                    background-color: #f2f3f4;
+                  ">
+                                        <div class="card rounded-4 card-animate">
+                                            <div class="card-body">
+                                                <table class="table responsive-table">
+                                                    <tr>
+                                                        <th>POS</th>
+                                                        <td>
+                                                            <ui-switch (valueChange)="onValueChange($event, item,'POS')" [checked]="item.gpr_preferences_pos" ></ui-switch>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>ECOM</th>
+                                                        <td>
+                                                            <ui-switch (valueChange)="onValueChange($event, item, 'ECOM')" [checked]="item.gpr_preferences_ecom" ></ui-switch>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>CONTACTLESS</th>
+                                                        <td>
+                                                            <ui-switch (valueChange)="onValueChange($event, item, 'CONTACTLESS')" [checked]="item.gpr_preferences_contactless" ></ui-switch>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>DCC</th>
+                                                        <td>
+                                                            <ui-switch (valueChange)="onValueChange($event, item, 'DCC')" [checked]="item.gpr_preferences_dcc" ></ui-switch>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </ngx-simplebar>
+                                </ng-template>
+                                <ng-template #setGPRCardPreferencescontent role="document" let-modal>
+                                    <div class="modal-header">
+                                        <h5 class="modal-title mt-0">Set Gift Card Preferences</h5>
+                                        <button
+                                                type="button"
+                                                class="btn-close"
+                                                aria-hidden="true"
+                                                (click)="modal.dismiss('Cross click')"
+                                        ></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5>Do You Want To Change In GPR Card Preferences??</h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-light"
+                                                (click)="modal.close('Close click')">
+                                            No
+                                        </button>
+                                        <button type="button" class="btn btn-primary"
+                                                (click)="gpr_set_preferences(item)">
+                                            Yes
+                                        </button>
+                                    </div>
+                                </ng-template>
+                                <!-- Set Pin Modal -->
+                                <ng-template #content role="document" let-modal>
+                                    <div class="modal-header">
+                                        <h5 class="modal-title mt-0">Set Pin</h5>
+                                        <button
+                                                type="button"
+                                                class="btn-close"
+                                                aria-hidden="true"
+                                                (click)="modal.dismiss('Cross click')"
+                                        ></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5>Do You Want to Set Pin??</h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button
+                                                type="button"
+                                                class="btn btn-light"
+                                                (click)="modal.close('Close click')"
+                                        >
+                                            No
+                                        </button>
+                                        <button type="button" class="btn btn-primary" (click)="setGPRPin(item)" >
+                                            Yes
+                                        </button>
+                                    </div>
+                                </ng-template>
+                                <ng-template #UnLockcontent role="document" let-modal>
+                                    <div class="modal-header">
+                                        <h5 class="modal-title mt-0">Unlock Gift Card</h5>
+                                        <button
+                                                type="button"
+                                                class="btn-close"
+                                                aria-hidden="true"
+                                                (click)="modal.dismiss('Cross click')"
+                                        ></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5>Do You Want to UnLock Gift card??</h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button
+                                                type="button"
+                                                class="btn btn-light"
+                                                (click)="modal.close('Close click')"
+                                        >
+                                            No
+                                        </button>
+                                        <button
+                                                type="button"
+                                                class="btn btn-primary"
+                                                (click)="unlock(item)"
+                                        >
+                                            Yes
+                                        </button>
+                                    </div>
+                                </ng-template>
+                                <ng-template #Blockcontent role="document" let-modal>
+                                    <div class="modal-header">
+                                        <h5 class="modal-title mt-0">Unlock Gift Card</h5>
+                                        <button
+                                                type="button"
+                                                class="btn-close"
+                                                aria-hidden="true"
+                                                (click)="modal.dismiss('Cross click')"
+                                        ></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5>Do You Want to Block GPR card??</h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button
+                                                type="button"
+                                                class="btn btn-light"
+                                                (click)="modal.close('Close click')"
+                                        >
+                                            No
+                                        </button>
+                                        <button
+                                                type="button"
+                                                class="btn btn-primary"
+                                                (click)="block(item)"
+                                        >
+                                            Yes
+                                        </button>
+                                    </div>
+                                </ng-template>
+                                <ng-template #Replacecontent role="document" let-modal>
+                                    <div class="modal-header">
+                                        <h5 class="modal-title mt-0">Replace GPR Card</h5>
+                                        <button
+                                                type="button"
+                                                class="btn-close"
+                                                aria-hidden="true"
+                                                (click)="modal.dismiss('Cross click')"
+                                        ></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5>Do You Want to Replace GPR card??</h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button
+                                                type="button"
+                                                class="btn btn-light"
+                                                (click)="modal.close('Close click')"
+                                        >
+                                            No
+                                        </button>
+                                        <button
+                                                type="button"
+                                                class="btn btn-primary"
+                                                (click)="replaceCard(item)"
+                                        >
+                                            Yes
+                                        </button>
+                                    </div>
+                                </ng-template>
+                                <ng-template #CreatePhysicalCard role="document" let-modal>
+                                    <div class="modal-header">
+                                        <h5 class="modal-title mt-0">Create Physical GPR Card</h5>
+                                        <button
+                                                type="button"
+                                                class="btn-close"
+                                                aria-hidden="true"
+                                                (click)="modal.dismiss('Cross click')"
+                                        ></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <h5>Do You Want to Create Physical GPR card??</h5>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button
+                                                type="button"
+                                                class="btn btn-light"
+                                                (click)="modal.close('Close click')"
+                                        >
+                                            No
+                                        </button>
+                                        <button
+                                                type="button"
+                                                class="btn btn-primary"
+                                                (click)="createPhysicalGPRCard(item)"
+                                        >
+                                            Yes
+                                        </button>
+                                    </div>
+                                </ng-template>
+<!--                                offcanvas and Modals end-->
+                            </tr>
+                        </tbody>
+                    </table>
+                </ngx-simplebar>
+                <div class="row justify-content-md-between align-items-md-center mt-3">
+                    <div class="col col-sm-6">
+                        <p class="mb-2">
+                            Showing 1 to 10 of 20 entries
+                        </p>
+                    </div>
+                    <div class="col col-sm-6">
+                        <div class="text-sm-right float-sm-end listjs-pagination">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<ng-template #gprCardDetails let-offcanvas>
+    <div class="offcanvas-header">
+        <p class="fs-24 fw-medium">Generate GPR Card</p>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <ngx-simplebar class="offcanvas-body p-3" style="max-height: calc(100vh - 75px); background-color: #F2F3F4;">
+        <div class="card rounded-4 card-animate">
+            <div class="card-body">
+                <form>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label for="product_id" class="form-label">Product</label>
+                            <select class="form-select rounded-pill" id="product_id">
+                                <option value="1">Falcon</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="qty" class="form-label">Quantity</label>
+                            <input class="form-control rounded-pill" placeholder="Enter Quantity" id="qty">
+                        </div>
+                        <div class="col-12">
+                            <label for="pin" class="form-label">Pin</label>
+                            <input class="form-control rounded-pill" placeholder="Enter Pin" id="pin">
+                        </div>
+                        <div class="col-12">
+                            <label for="amount" class="form-label">Amount</label>
+                            <input class="form-control rounded-pill" placeholder="Enter Amount" id="amount">
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary btn-rounded w-100">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </ngx-simplebar>
+</ng-template>
+
+<ng-template #filterDetails let-offcanvas>
+    <div class="offcanvas-header">
+        <p class="fs-24 fw-medium">Filters</p>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <ngx-simplebar class="offcanvas-body p-3" style="max-height: calc(100vh - 75px); background-color: #F2F3F4;">
+        <div class="card rounded-4 card-animate">
+            <div class="card-body">
+                <form>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label for="card_digit" class="form-label">Last 4 Digit</label>
+                            <input class="form-control rounded-pill" placeholder="Last 4 Digits of Card"
+                                   id="card_digit">
+                        </div>
+                        <div class="col-12">
+                            <label for="distributor_id" class="form-label">Distributor</label>
+                            <select class="form-select rounded-pill" id="distributor_id">
+                                <option value="" selected>All Distributors</option>
+                                <option value="1">Distributor 1</option>
+                                <option value="2">Distributor 2</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="retailer_id" class="form-label">Retailer</label>
+                            <select class="form-select rounded-pill" id="retailer_id">
+                                <option value="" selected>All Retailers</option>
+                                <option value="1">Retailer 1</option>
+                                <option value="2">Retailer 2</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="customer_id" class="form-label">Customer</label>
+                            <select class="form-select rounded-pill" id="customer_id">
+                                <option value="" selected>All Customers</option>
+                                <option value="1">Customer 1</option>
+                                <option value="2">Customer 2</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="cin" class="form-label">CIN</label>
+                            <input class="form-control rounded-pill" placeholder="CIN of Card" id="cin">
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary btn-rounded w-100">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </ngx-simplebar>
+</ng-template>

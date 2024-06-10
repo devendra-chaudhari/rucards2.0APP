@@ -1,0 +1,84 @@
+<app-breadcrumbs title="Wallets" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<div class="card rounded-4">
+    <div class="card-header">
+        <div class="row align-items-center g-3">
+            <div class="col-md-3">
+                <p class="fs-16 fw-medium">Wallets 
+                </p>
+            </div>
+            <div class="col-md-auto ms-auto">
+                <div class="d-flex gap-2">
+                    <div class="search-box">
+                        <!--                        <input type="text" class="form-control rounded-pill" placeholder="Search..." #search-->
+                        <!--                               (keyup)="onSearch(search.value)"-->
+                        <!--                        >-->
+                        <!--                        <i class="ri-search-line search-icon"></i>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <ngx-simplebar>
+            <div class="table-responsive">
+                <table class="table align-middle table-nowrap" id="customerTable">
+                    <thead>
+                    <tr>
+                        <th>SR</th>
+                        <th (click)="sort('name')" class="cursor-pointer">
+                            Wallet Name
+                            <i class='bx bxs-sort-alt fs-12'></i>
+                        </th>
+                        <th>Balance</th>
+                        <th>Status</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="cursor-pointer card-animate"
+                        *ngFor="let wallet of wallets | slice: (page-1) * pageSize : page * pageSize; let i = index;">
+                        <td>{{(page-1)* pageSize + i + 1}}</td>
+                        <td>
+                            <a routerLink="/pool-transaction/daily-transactions"
+                               [queryParams]="{ wallet_id: wallet.id }">
+                                {{wallet.name | uppercase}}
+                            </a>
+                        </td>
+                        <td>
+                            {{wallet.balance}}
+                        </td>
+                        <td>
+                            <span *ngIf=" wallet?.wallet_status=='active'"
+                                  class="badge bg-success rounded-pill"> Active</span>
+                            <span *ngIf=" wallet?.wallet_status!='active'"
+                                  class="badge bg-danger rounded-pill"> Inactive</span>
+                        </td>
+                        <td>{{wallet.created_at | date: 'dd MMM yyyy'}}</td>
+                        <td>{{wallet.updated_at ?? wallet.created_at | date: 'dd MMM yyyy'}}</td>
+                        <td>
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </ngx-simplebar>
+
+        <div class="row justify-content-md-between align-items-md-center mt-2">
+            <div class="col col-sm-6">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    Showing {{ (page - 1) * pageSize + 1 }} to {{ getMax() }} of {{ total }} entries
+                </div>
+            </div>
+
+            <div class="col col-sm-6">
+                <div class="text-sm-right float-sm-end listjs-pagination">
+                    <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="pageSize" [maxSize]="2">
+                    </ngb-pagination>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

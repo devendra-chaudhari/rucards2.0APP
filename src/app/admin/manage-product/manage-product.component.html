@@ -1,0 +1,249 @@
+<app-breadcrumbs title="Manage Products" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card rounded-4">
+            <div class="card-header border-0">
+                <div class="row g-3">
+                    <div class="col-md-8 d-flex justify-content-start align-items-center gap-2">
+                        <div class="search-box w-100">
+                            <input type="text" name="searchTerm"
+                                   class="form-control search bg-light border-light rounded-pill"
+                                   placeholder="Search by Name, Code, Type, Branding" #search
+                                   (keyup)="onSearch(search.value)">
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center text-md-end">
+                            <button class="btn btn-primary btn-rounded mx-2" (click)="openAddProduct(addProduct)">Add Product
+                            </button>
+                            <button class="btn btn-success btn-rounded" (click)="onExport()">
+                                Export
+                            </button>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="card-body border border-dashed border-start-0 border-end-0">
+                <form>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <div class="input-light">
+                                <select class="form-control bg-light border-light rounded-pill" name="branding_category"
+                                        [(ngModel)]="filterData.branding_category">
+                                    <option value="">Select Branding Category</option>
+                                    <option value="all">All</option>
+                                    <option value="mono">Mono Branding</option>
+                                    <option value="co">Co-Branding</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="input-light">
+                                <select class="form-control bg-light border-light rounded-pill" name="product_type"
+                                        [(ngModel)]="filterData.product_type">
+                                    <option value="">Select Product Type</option>
+                                    <option value="all">All</option>
+                                    <option value="gpr">GPR</option>
+                                    <option value="gift">Gift</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="input-light">
+                                <select class="form-control bg-light border-light rounded-pill" name="active"
+                                        [(ngModel)]="filterData.active">
+                                    <option value=true>Active</option>
+                                    <option value=false>Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-info w-100 btn-rounded" (click)="onFilter()">
+                                <i class="ri-equalizer-fill me-1 align-bottom"></i> Filters
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table align-middle table-nowrap">
+                        <thead>
+                        <tr>
+                            <th class="text-uppercase">SR</th>
+                            <th class="text-uppercase">Name</th>
+                            <th class="text-uppercase">Code</th>
+                            <th class="text-uppercase">Type</th>
+                            <th class="text-uppercase">Branding</th>
+                            <th class="text-uppercase">Provider</th>
+                            <th class="text-uppercase">Partner</th>
+                            <th class="text-uppercase">Product Bin</th>
+                            <th class="text-uppercase">Description</th>
+                            <th class="text-uppercase">Status</th>
+                            <th class="text-uppercase">Created On</th>
+                            <th class="text-uppercase">Created By</th>
+                            <th class="text-uppercase">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="cursor-pointer card-animate"
+                            *ngFor="let product of products | slice: (page-1) * pageSize : page * pageSize; let i = index;">
+                            <td>{{i + 1}}</td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img *ngIf="product.product_image" src="{{product.product_image}}"
+                                         class="avatar-xs rounded-circle me-2"
+                                         alt="product img">
+                                    <img *ngIf="!product.product_image" src="assets/images/gift-card.png"
+                                         class="avatar-xs me-2"
+                                         alt="product img">
+                                    {{product.product_name | uppercase}}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge text-bg-light">{{product.product_code | uppercase}}</span>
+                            </td>
+                            <td>{{product.product_type | uppercase}}</td>
+                            <td>{{product.branding_category | uppercase}}</td>
+                            <td>{{product.service_provider | titlecase}}</td>
+                            <td>{{product.service_provider | titlecase}}</td>
+
+                            <td>{{product.product_series | titlecase}}</td>
+                            <td>{{product.product_description ?? 'N/a' | titlecase}}</td>
+                            <td>
+                                <ui-switch (valueChange)="onValueChange($event, product)" [checked]="product.active"></ui-switch>
+                            </td>
+                            <td>{{product.created_at | date: 'dd MMM yyyy'}}</td>
+                            <td>{{product.created_user['username']}}</td>
+                            <td>
+                                <button class="btn btn-info btn-sm btn-rounded" title="Edit"
+                                        (click)="openEditProduct(addProduct, product)">
+                                    <i class="ri-edit-line align-middle text-white me-2"></i> Edit
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row justify-content-md-between align-items-md-center mt-3">
+                    <div class="col col-sm-6">
+                        <p class="mb-2">
+                            Showing {{ (page - 1) * pageSize + 1 }} to {{ getMax() }} of {{ products?.length ?? 0 }}
+                            entries
+                        </p>
+                    </div>
+                    <div class="col col-sm-6">
+                        <div class="text-sm-right float-sm-end listjs-pagination">
+                            <ngb-pagination [collectionSize]=products?.length??0 [(page)]="page" [pageSize]=pageSize
+                                            [maxSize]="2">
+                            </ngb-pagination>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #addProduct let-offcanvas>
+    <div class="offcanvas-header pb-0">
+        <p class="fs-24 fw-medium">{{title}} Product</p>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <ngx-simplebar class="offcanvas-body p-3" style="max-height: calc(100vh - 75px); background-color: #F2F3F4;">
+        <div class="card card-animate rounded-4">
+            <div class="card-body">
+                <form [formGroup]="productForm">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label for="product_name">Product Name <span class="text-danger">*</span></label>
+                            <input type="text" id="product_name" class="form-control rounded-pill"
+                                   placeholder="Product Name" formControlName="product_name">
+                            <div *ngIf="isProductSubmit && pf['product_name'].errors" class="text-danger mt-1">
+                                <div *ngIf="pf['product_name'].errors['required']">Produc name is required</div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="product_code">Product Code <span class="text-danger">*</span></label>
+                            <input type="text" id="product_code" class="form-control rounded-pill"
+                                   placeholder="Product Code" formControlName="product_code">
+                            <div *ngIf="isProductSubmit && pf['product_code'].errors" class="text-danger mt-1">
+                                <div *ngIf="pf['product_code'].errors['required']">Produc code is required</div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="product_type">Bin Type <span class="text-danger">*</span></label>
+                            <select id="product_type" class="form-select rounded-pill" formControlName="product_type">
+                                <option value="">Select Bin Type</option>
+                                <option value="gpr">GPR</option>
+                                <option value="gift">Gift</option>
+                            </select>
+                            <div *ngIf="isProductSubmit && pf['product_type'].errors" class="text-danger mt-1">
+                                <div *ngIf="pf['product_type'].errors['required']">Produc type is required</div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="branding_category">Bin Category <span class="text-danger">*</span></label>
+                            <select id="branding_category" class="form-select rounded-pill"
+                                    formControlName="branding_category">
+                                <option value="">Select Bin Category</option>
+                                <option value="mono">Mono Branding</option>
+                                <option value="co">Co-Branding</option>
+                            </select>
+                            <div *ngIf="isProductSubmit && pf['branding_category'].errors" class="text-danger mt-1">
+                                <div *ngIf="pf['branding_category'].errors['required']">Branding category is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label for="service_provider">Service Provider <span class="text-danger">*</span></label>
+                            <select id="service_provider" class="form-select rounded-pill"
+                                    formControlName="service_provider">
+                                <ng-container *ngFor="let api_partner of api_partners">
+                                    <option value="{{ api_partner.id }}" [selected]="api_partner.name == serviceProviderName">{{api_partner.name}}</option>
+                                </ng-container>
+                            </select>
+                            <div *ngIf="isProductSubmit && pf['service_provider'].errors" class="text-danger mt-1">
+                                <div *ngIf="pf['service_provider'].errors['required']">Service Provider is required
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="product_series">Product Bin</label>
+                            <input type="text" id="product_series" name="product_series"
+                                   class="form-control rounded-pill"
+                                   maxlength="6" inputmode="numeric"
+                                   placeholder="Service Provider" formControlName="product_series">
+                            <div *ngIf="isProductSubmit && pf['product_series'].errors" class="text-danger mt-1">
+                                <div *ngIf="pf['product_series'].errors['required']">Product Bin No is required. </div>
+                                <div *ngIf="pf['product_series'].errors['pattern']">Product Bin Format not Correct. </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="desc">Description</label>
+                            <input type="text" id="desc" class="form-control rounded-pill"
+                                   placeholder="Description" formControlName="product_description">
+                        </div>
+                        <div class="col-12">
+                            <div class="text-center">
+                                <button class="btn btn-primary btn-rounded"
+                                        (click)="onSubmit()">Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </ngx-simplebar>
+</ng-template>
+

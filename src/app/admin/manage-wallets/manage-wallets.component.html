@@ -1,0 +1,235 @@
+<app-breadcrumbs title="Wallet Management" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="card rounded-4">
+    <div class="card-header">
+        <div class="row align-items-center g-3">
+            <div class="col-md-3">
+                <p class="fs-16 fw-medium">Wallets</p>
+            </div>
+            <div class="col-md-auto ms-auto">
+                <div class="d-flex gap-2">
+                    <div class="search-box">
+                        <input type="text" class="form-control rounded-pill" placeholder="Search..." #search
+                               (keyup)="onSearch(search.value)"
+                        >
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+                    <button class="btn btn-primary btn-rounded" (click)="openWalletModal(walletAddModal)">
+                        Add Wallet
+                    </button>
+                    <button class="btn btn-success btn-rounded" (click)="export_to_excel()">
+                        Export
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <ngx-simplebar>
+            <div class="table-responsive">
+                <table class="table align-middle table-nowrap">
+                    <thead>
+                    <tr>
+                        <th>SR</th>
+                        <th (click)="sort('name')" class="cursor-pointer">Wallet Name <i
+                                class='bx bxs-sort-alt fs-12'></i>
+                        </th>
+                        <th>Status</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="cursor-pointer card-animate"
+                        *ngFor="let wallet of wallets | slice: (page-1) * pageSize : page * pageSize; let i = index;">
+                        <td>{{(page - 1) * pageSize + i + 1}}</td>
+                        <td>{{wallet.name | uppercase}}</td>
+                        <td>
+                            <ui-switch (valueChange)="onValueChange($event, wallet)"
+                                       [checked]="wallet.active"></ui-switch>
+                        </td>
+                        <td>{{wallet.created_at | date: 'dd MMM yyyy'}}</td>
+                        <td>{{wallet.updated_at ?? wallet.created_at | date: 'dd MMM yyyy'}}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm me-2" title="Edit"
+                                    (click)="openEditWalletModal(walletEditModal, wallet)">
+                                <span class="me-1"><i class="ri-pencil-line"></i></span>Edit
+                            </button>
+                            <button class="btn btn-info btn-sm me-2" title="Product Mapping"
+                                    (click)="openMapProductWalletModal(walletMapProductModal, wallet)">
+                                <span class="me-1"><i class="ri-links-line"></i></span>Link Products
+                            </button>
+                            <button class="btn btn-secondary btn-sm me-2" title="View Product"
+                                    (click)="openViewProductDetailsModal(walletViewProductModal, wallet)">
+                                <span class="me-1"><i class="ri-eye-line"></i></span>View Products
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </ngx-simplebar>
+
+        <div class="row justify-content-md-between align-items-md-center mt-2">
+            <div class="col col-sm-6">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    Showing {{ (page - 1) * pageSize + 1 }} to {{ getMax() }} of {{ total }} entries
+                </div>
+            </div>
+
+            <div class="col col-sm-6">
+                <div class="text-sm-right float-sm-end listjs-pagination">
+                    <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="pageSize" [maxSize]="2">
+                    </ngb-pagination>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<ng-template #walletEditModal role="document" let-modal>
+    <div class="modal-content">
+        <div class="modal-header px-3">
+            <p class="fs-18 fw-medium">Edit</p>
+        </div>
+        <div class="modal-body">
+
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label for="name" class="form-label">Name</label>
+                            <input  class="form-control" placeholder="Enter Name"
+                                   [(ngModel)]="editWallet.wallet_name"
+                                   required>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="gap-2 justify-content-end">
+                                <button type="submit" class="btn btn-primary btn-rounded me-3" (click)="onEditSubmit();">Submit
+                                </button>
+
+                                <button type="button" class="btn btn-danger btn-rounded me-2" data-bs-dismiss="modal"
+                                        (click)="modal.close('Close click')">Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #walletAddModal role="document" let-modal>
+    <div class="modal-content">
+        <div class="modal-body">
+            <div class="row g-3">
+                <div class="col-12">
+                    <h5>ADD WALLET </h5>
+                </div>
+
+                <div class="col-12">
+                    <label for="name" class="form-label">Name</label>
+                    <input id="name" name="name" class="form-control" placeholder="Enter Name"
+                           [(ngModel)]="addWallet.wallet_name"
+                           required>
+                </div>
+                <div class="col-md-12">
+                    <div class="gap-2 justify-content-end">
+                        <button type="button" class="btn btn-light btn-rounded" data-bs-dismiss="modal"
+                                (click)="modal.close('Close click')">Close
+                        </button>
+                        <button type="submit" class="btn btn-primary btn-rounded" (click)="onAddSubmit();">Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #walletMapProductModal role="document" let-modal>
+    <div class="modal-content rounded-4">
+        <div class="modal-header px-3">
+            <p class="fs-18 fw-medium">Map Product To {{mapWallet_name}}</p>
+
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-12">
+                    <label>Select Product</label>
+                    <select name="wallet" id="wallet" class="form-select rounded-4" [(ngModel)]="tempProduct_id">
+                        <option value="" selected disabled>select Product</option>
+                        <ng-container *ngFor="let product of products">
+                            <ng-container *ngIf="product.active === true && product.wallet_id === null">
+                                <option value="{{ product.id }}">
+                                    {{product.product_code | uppercase}} | {{product?.product_series}}
+                                </option>
+                            </ng-container>
+                        </ng-container>
+                    </select>
+                </div>
+                <div class="col-md-12 mt-2">
+                    <div class="gap-2 justify-content-end">
+                        <button type="submit" class="btn btn-primary btn-rounded me-3" (click)="onMapProductToWalletSubmit(tempProduct_id,mapWallet_id);">Submit
+                        </button>
+                        <button type="button" class="btn btn-danger btn-rounded me-2" data-bs-dismiss="modal"
+                                (click)="modal.close('Close click')">Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #walletViewProductModal role="document" let-modal>
+    <div class="modal-content rounded-4">
+        <div class="modal-header px-3">
+            <p class="fs-18 fw-medium">View Product To Map {{mapWallet_name}}</p>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <ngx-simplebar>
+                    <ngx-simplebar class="table-responsive">
+                        <table class="table align-middle table-nowrap" id="customerTable">
+                            <thead>
+                            <tr>
+                                <th>SR</th>
+                                <th>Product Name</th>
+                                <th>CODE</th>
+                                <th>PRODUCT BIN</th>
+                                <th>PROVIDER</th>
+                                <th>STATUS</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <ng-container *ngFor="let product of products | slice: (page-1) * pageSize : page * pageSize; let i = index;">
+                                <tr class="cursor-pointer card-animate" *ngIf="product.wallet_id==mapWallet_id">
+                                    <td>{{(page - 1) * pageSize + i + 1}}</td>
+                                    <td>{{product.product_name | uppercase}}</td>
+                                    <td>{{product.product_code}}</td>
+                                    <td>{{product.product_series}}</td>
+                                    <td>{{product.service_provider}}</td>
+                                    <td>
+                                        <span *ngIf="product.active == true">ACTIVE</span>
+                                        <span *ngIf="product.active == false">ACTIVE</span>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger btn-sm rounded-5" (click)="unmapProductMapping(product.id)">Delete Mapping</button></td>
+                                </tr>
+                            </ng-container>
+                            </tbody>
+                        </table>
+                    </ngx-simplebar>
+                </ngx-simplebar>
+                <div class="col-md-12 mt-2">
+                    <button type="button" class="btn btn-danger btn-rounded me-2" data-bs-dismiss="modal"
+                            (click)="modal.close('Close click')">Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

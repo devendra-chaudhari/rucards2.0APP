@@ -1,0 +1,91 @@
+<app-breadcrumbs title="Departments Wise User" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="card rounded-4">
+    <div class="card-header">
+        <div class="row align-items-center g-3">
+            <div class="col-md-3">
+                <p class="fs-16 fw-medium">{{department?.name}} Department</p>
+            </div>
+            <div class="col-md-auto ms-auto">
+                <div class="d-flex gap-2">
+                    <div class="search-box">
+                        <input type="text" class="form-control rounded-pill" placeholder="Search..." #search>
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+                    <button class="btn btn-primary btn-rounded">
+                        Add User
+                    </button>
+                    <button class="btn btn-success btn-rounded">
+                        Export
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <ngx-simplebar>
+            <div class="table-responsive">
+                <table class="table align-middle table-nowrap" id="customerTable">
+                    <thead>
+                        <tr>
+                            <th>SR</th>
+                            <th>User</th>
+                            <th>Contact</th>
+                            <th>Role</th>
+                            <th>Department-Role</th>
+                            <th>Created_At</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="cursor-pointer card-animate" *ngFor="let user of users; let i = index;">
+                            <td>{{i + 1}}</td>
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-1">{{user?.full_name | uppercase}}</span>
+                                    <span class="text-muted mb-0">&#64; {{user?.username | uppercase}}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-0"> <i
+                                            class="ri-phone-line me-1"></i>{{user?.mobile_no}}</span>
+                                    <span class="text-muted mb-0"> <i
+                                            class="ri-mail-check-line me-1"></i>{{user?.email_id | lowercase}}</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-0"> {{user?.user_role | uppercase}}</span>
+                                    <span class="badge rounded-pill text-bg-success"
+                                          *ngIf="user.user_status">Active</span>
+                                    <span class="badge rounded-pill text-bg-danger"
+                                          *ngIf="!user.user_status">Inactive</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-0"> {{user?.department_role | uppercase}}</span>
+                                    <span class="badge rounded-pill text-bg-success"
+                                          *ngIf="user.department_status">Active</span>
+                                    <span class="badge rounded-pill text-bg-danger"
+                                          *ngIf="!user.department_status">Inactive</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column justify-content-center align-items-start">
+                                    <span class="fs-16 mb-0"> DOC: {{user?.created_at | dateago}}</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </ngx-simplebar>
+
+        <div class="row justify-content-md-between align-items-md-center mt-2">
+
+        </div>
+
+    </div>
+</div>

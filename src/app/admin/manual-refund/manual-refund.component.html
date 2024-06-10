@@ -1,0 +1,129 @@
+<app-breadcrumbs title="Manual Refund" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+
+<div class="card rounded-4">
+    <div class="card-header">
+        <div class="row align-items-center g-3">
+            <div class="col-md-3">
+                <p class="fs-16 fw-medium">Manual Fund Transfer</p>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center gap-2">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <label for="page" class="me-2">Show</label>
+                        <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1"
+                                [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <label for="page" class="ms-2">entries</label>
+                    </div>
+                    <button type="button" class="btn btn-success  btn-rounded me-2 mb-2" (click)="export_to_excel()">
+                        Export
+                    </button>
+
+                </div>
+            </div>
+        </div>
+            <ngx-simplebar class="table-responsive">
+                <table class="table align-middle table-nowrap" id="customerTable">
+                    <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Contact</th>
+                        <th>Identification</th>
+                        <th>Amount</th>
+                        <th>Transaction Ref.</th>
+                        <th>Wallet/Product</th>
+                        <th>Transaction Status</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr class="cursor-pointer card-animate" *ngFor="let transaction of transactions ; let i = index;">
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                <span class="fs-16 mb-1">{{transaction?.full_name | uppercase}}</span>
+                                <span class="text-muted mb-0">&#64; {{transaction?.username | uppercase}}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                <span class="fs-16 mb-0"> <i class="ri-phone-line me-1"></i>{{transaction?.mobile}}</span>
+                                <span class="text-muted mb-0"> <i class="ri-mail-check-line me-1"></i>{{transaction?.email | lowercase}}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                <span class="fs-16 mb-0 "> PAN: {{transaction?.pan ?? 'N/A' | uppercase}} </span>
+                                <span class="fs-16 mb-0 "> Aadhaar: {{transaction?.aadhar_no ?? 'N/A' | uppercase}} </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                <span class="fs-16 mb-0 "> AMOUNT: {{transaction?.amount ?? 'N/A' }} </span>
+                                <span class="fs-16 mb-0 "> CURRENT BAL.: {{transaction?.current_balance ?? 'N/A' }} </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                <span class="fs-16 mb-0 "> {{transaction?.fund_transaction_id ?? 'N/A' }} </span>
+                                <span class="fs-16 mb-0 "> {{transaction?.transaction_id ?? 'N/A' }} </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                <span class="fs-16 mb-0 "> {{transaction?.wallet_name ?? 'N/A' }} </span>
+                                <span class="fs-16 mb-0 "> {{transaction?.pname ?? 'N/A' }}/{{transaction?.bin_no ?? 'N/A' }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                <span class="fs-16 mb-0 "> {{transaction?.transaction_status ?? 'N/A' }} / {{transaction?.created_date | dateago}}</span>
+                                <span class="fs-16 mb-0" title="{{ transaction?.remark ?? 'N/A' }}"> <!-- Here's the change -->
+                                    {{ transaction?.remark ?? 'N/A' | slice:0:20}}
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-start">
+                                <span class="fs-16 mb-0 " *ngIf="!transaction.wallet_is_secure"> Wallet IS Not Secure </span>
+                                <span class="fs-16 mb-0 ">
+                                    <button class="btn bg-danger btn-sm me-2 btn-rounded" title="Reject Refund" (click)="reject_manual_refund(transaction)">
+                                        <i class="ri-edit-line align-middle text-white"></i>
+                                    </button>
+                                    <button class="btn bg-success btn-sm me-2 btn-rounded" title="Accept Refund" (click)="accept_manual_refund(transaction)">
+                                        <i class="ri-wallet-line align-middle text-white"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </ngx-simplebar>
+
+        <div class="row justify-content-md-between align-items-md-center mt-2">
+            <div class="col col-sm-6">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    Showing {{ (page - 1) * pageSize + 1 }} to {{ getMax() }} of {{ total }} entries
+                </div>
+            </div>
+
+            <div class="col col-sm-6">
+                <div class="text-sm-right float-sm-end listjs-pagination">
+                    <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="pageSize" [maxSize]="2"
+                                    (pageChange)="onPageChange($event)">
+                    </ngb-pagination>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,81 @@
+<app-breadcrumbs title="Gift Card TopUp" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+
+<div class="card rounded-4 p-3">
+    <div class="card-header border-0">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <h4 class="fw-medium">Gift Card TopUp</h4>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center gap-2">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <label for="page" class="me-2">Show</label>
+                        <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1" [(ngModel)]="pageSize" (change)="onPageSizeChange()">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <label for="page" class="ms-2">entries</label>
+                    </div>
+                    <button type="button" class="btn btn-success  btn-rounded me-2 mb-2" (click)="export_to_excel()">Export
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive mt-3">
+            <table class="table table-sm table-striped table-hover align-middle table-nowrap">
+                <thead>
+                <tr>
+                    <th class="text-uppercase">#</th>
+                    <th class="text-uppercase cursor-pointer">
+                        Mobile Number
+                    </th>
+                    <th class="text-uppercase">Full Name ></th>
+                    <th class="text-uppercase">Pan </th>
+                    <th class="text-uppercase">PK_ID </th>
+                    <th class="text-uppercase">GVB_ID </th>
+                    <th class="text-uppercase">KIT</th>
+                    <th class="text-uppercase">card 4 digits</th>
+                    <th class="text-uppercase">balance</th>
+                    <th class="text-uppercase">card no</th>
+                </tr>
+                </thead>
+                <tbody style="min-height: 300px;">
+                <tr *ngFor="let gc_card of gc_cards; index as i;">
+                    <td class="text-uppercase">{{ i + 1}}</td>
+                    <td>{{gc_card.MobileNumber}}</td>
+                    <td>{{ gc_card.FirstName |uppercase }} {{ gc_card.LastName |uppercase }}</td>
+                    <td>{{gc_card.PanNumber}}</td>
+                    <td>{{gc_card.Pk_Id}}</td>
+                    <td>{{gc_card.GVB_id}}</td>
+                    <td>{{gc_card.KitNumber}}</td>
+                    <td>{{gc_card.CardEndingDigits | slice:12:16}}</td>
+                    <td>{{gc_card.CardCurrentBalance}}</td>
+                    <td>{{gc_card.CardNo}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row justify-content-md-between align-items-md-center mt-2">
+            <div class="col col-sm-6">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    Showing {{ (page - 1) * pageSize + 1 }} to {{ getMax() }} of {{ total }} entries
+                </div>
+            </div>
+
+            <div class="col col-sm-6">
+                <div class="text-sm-right float-sm-end listjs-pagination">
+                    <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="pageSize" [maxSize]="2" (pageChange)="onPageChange($event)">
+                    </ngb-pagination>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
