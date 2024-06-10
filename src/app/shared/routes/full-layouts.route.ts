@@ -186,11 +186,20 @@ export const FULL_ROUTES: Routes = [
     }, {
         path: 'manage-notifications',
         data: {
-            title: 'Admin Manage notification',
+            title: 'Admin Manage Advertisements',
             roles: ['admin'],
             permission: ['manage_admin_notification']
         },
         loadChildren: () => import('../../admin/manage-notifications/manage-notifications.module').then(m => m.ManageNotificationsModule)
+    },
+    {
+        path: 'manage-transactions',
+        data: {
+            title: 'Admin Manage Transactions',
+            roles: ['admin'],
+            permission: ['manage_admin_transactions']
+        },
+        loadChildren: () => import('../../admin/manage-transactions/manage-transactions.module').then(m => m.ManageTransactionsModule)
     },
     {
         path: 'manage-gc',

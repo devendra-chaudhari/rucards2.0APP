@@ -126,7 +126,29 @@ export const MENU: MenuItem[] = [
         label: 'Manage Notifications',
         icon: 'ri-bank-card-line',
         role: [Roles.admin],
-        link: '/manage-notifications'
+        subItems: [
+            {
+                label: 'Advertisements',
+                link: '/manage-notifications/manage-advertisement'
+            }, {
+                label: 'Notifications',
+                link: '/manage-notifications/manage-notification'
+            }
+        ]
+    },
+    {
+        label: 'Manage Transactions',
+        icon: 'ri-bank-card-line',
+        role: [Roles.admin],
+        subItems: [
+            {
+                label: 'Business Report',
+                link: '/manage-transactions/business-report'
+            }, {
+                label: 'Pending Transactions',
+                link: '/manage-transactions/pending-transactions'
+            }
+        ]
     },
     {
         label: 'Support Tickets',

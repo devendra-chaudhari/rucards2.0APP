@@ -64,7 +64,6 @@ registerLocaleData(en);
         ExcelService,
         AuthGuard,
         RoleGuard,
-
         {provide: LocationStrategy, useClass: HashLocationStrategy},
         {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true},
         { provide: NZ_I18N, useValue: en_US },
