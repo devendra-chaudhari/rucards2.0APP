@@ -8,13 +8,13 @@
                     <img src="assets/images/avatar.png" alt="customer img" class="avatar-md rounded-circle">
                     <div class="d-flex flex-column justify-content-start gap-1">
                         <div class="d-flex justify-content-start align-items-center gap-2">
-                            <p class="fw-medium fs-16 mb-1">Himanshu Saini</p>
+                            <p class="fw-medium fs-16 mb-1">{{customer_data.full_name}}</p>
                             <span class="badge badge-outline-success">Active</span>
                             <small class="badge bg-soft-dark" title="Risk Score"><i
                                     class="ri-shield-fill text-black"></i></small>
                         </div>
                         <span class="text-muted d-flex align-items-center"><i
-                                class="ri-phone-line"></i> 8545454544</span>
+                                class="ri-phone-line"></i> {{customer_data?.mobile}}</span>
                         <span class="text-muted d-flex align-items-center"><i
                                 class="ri-map-pin-line"></i> Rajashthan,India</span>
                     </div>
@@ -48,15 +48,16 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label">Customer ID</label>
-                                                    <p>R-666455d2c5cz2xc1cdcds5</p>
+                                                    <label class="form-label">Customer Username</label>
+                                                    <input type="text" class="form-control rounded-pill bg-light"
+                                                           value="{{customer_data.username}}" id="customer_username" readonly>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label for="kyc_type" class="form-label">KYC Type</label>
                                                     <input type="text" class="form-control rounded-pill bg-light"
-                                                           value="Min KYC" id="kyc_type" readonly>
+                                                           value="{{customer_data.kyc_type | uppercase}}" id="kyc_type" readonly>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -65,13 +66,13 @@
                                                     <div>
                                                         <div class="form-check form-check-inline">
                                                             <input class="form-check-input" type="radio" name="type"
-                                                                   checked
+                                                                   [checked]="customer_data.user_type == 'customer'"
                                                                    disabled>
                                                             <label>Individual</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
                                                             <input class="form-check-input" type="radio" name="type"
-                                                                   disabled>
+                                                            [checked]="customer_data.user_type == 'corporate'" disabled>
                                                             <label>Business</label>
                                                         </div>
                                                     </div>
@@ -82,14 +83,17 @@
                                                 <div class="mb-3">
                                                     <label for="email" class="form-label">Email</label>
                                                     <input type="text" class="form-control rounded-pill bg-light"
-                                                           value="abc@gmail.com" id="email" readonly>
+                                                           value="{{customer_data.email}}" id="email" readonly>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label for="title" class="form-label">Title</label>
                                                     <input type="text" class="form-control rounded-pill bg-light"
-                                                           value="Mr"
+                                                           value="Mr" *ngIf="customer_data.gender == 'male'"
+                                                           id="title" readonly>
+                                                    <input type="text" class="form-control rounded-pill bg-light"
+                                                           value="Mrs" *ngIf="customer_data.gender == 'female'"
                                                            id="title" readonly>
                                                 </div>
                                             </div>
@@ -97,7 +101,7 @@
                                                 <div class="mb-3">
                                                     <label for="first_name" class="form-label">First Name</label>
                                                     <input type="text" class="form-control rounded-pill bg-light"
-                                                           value="Jimmy"
+                                                           value="{{firstName | uppercase}}"
                                                            id="first_name" readonly>
                                                 </div>
                                             </div>
@@ -105,7 +109,7 @@
                                                 <div class="mb-3">
                                                     <label for="last_name" class="form-label">Last Name</label>
                                                     <input type="text" class="form-control rounded-pill bg-light"
-                                                           value="Wang"
+                                                           value="{{lastName | uppercase}}"
                                                            id="last_name" readonly>
                                                 </div>
                                             </div>
@@ -113,7 +117,7 @@
                                                 <div class="mb-3">
                                                     <label for="father_name" class="form-label">Father Name</label>
                                                     <input type="text" class="form-control rounded-pill bg-light"
-                                                           value="John"
+                                                           value="{{customer_data.father_name}}"
                                                            id="father_name" readonly>
                                                 </div>
                                             </div>
@@ -121,7 +125,7 @@
                                                 <div class="mb-3">
                                                     <label for="dob" class="form-label">Date of Birth</label>
                                                     <input type="text" class="form-control rounded-pill bg-light"
-                                                           value="13-Mar-1997" id="dob" readonly>
+                                                           value="{{customer_data.dob | date}}" id="dob" readonly>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -130,7 +134,7 @@
                                                     <div class="form-icon">
                                                         <input type="text"
                                                                class="form-control rounded-pill form-control-icon bg-light"
-                                                               value="9845454512" id="mobile" readonly>
+                                                               value="{{customer_data.mobile}}" id="mobile" readonly>
                                                         <i class="ri-phone-line"></i>
                                                     </div>
                                                 </div>
@@ -149,21 +153,7 @@
                                                            value="GLYPS4512D" id="pan_no" readonly>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label for="voterId" class="form-label">Voter ID</label>
-                                                    <input type="text" class="form-control rounded-pill bg-light"
-                                                           value="4511211" id="voterId" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label for="dirving_licence" class="form-label">Driving Licence
-                                                        No</label>
-                                                    <input type="text" class="form-control rounded-pill bg-light"
-                                                           value="4511211" id="dirving_licence" readonly>
-                                                </div>
-                                            </div>
+                                            
                                         </div>
                                     </form>
                                     <hr>
@@ -174,14 +164,14 @@
                                                 <div class="mb-3">
                                                     <label for="street" class="form-label">Street</label>
                                                     <input type="text" class="form-control rounded-pill bg-light"
-                                                           value="465 Delhi" id="street" readonly>
+                                                           value="{{customer_data.state}}" id="street" readonly>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label for="street_2" class="form-label">Street 2</label>
                                                     <input type="text" class="form-control rounded-pill bg-light"
-                                                           value=""
+                                                           value="{{customer_data.address}}"
                                                            id="street_2" readonly>
                                                 </div>
                                             </div>
@@ -189,24 +179,16 @@
                                                 <div class="mb-3">
                                                     <label for="city" class="form-label">City</label>
                                                     <input type="text" class="form-control rounded-pill bg-light"
-                                                           value="Mumbai"
+                                                           value="{{customer_data.district}}"
                                                            id="city" readonly>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
-                                                <div class="mb-3">
-                                                    <label for="state" class="form-label">City</label>
-                                                    <select id="state" class="form-select rounded-pill bg-light"
-                                                            disabled>
-                                                        <option value="" selected>Select a State</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
+                                            
+                                            <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label for="pincode" class="form-label">Pincode</label>
                                                     <input type="text" class="form-control rounded-pill bg-light"
-                                                           value="301405"
+                                                           value="{{customer_data.pincode}}"
                                                            id="pincode" readonly>
                                                 </div>
                                             </div>
@@ -298,7 +280,7 @@
                                     </div>
                                     <div class="text-center">
                                         <input type="text" class="form-control rounded-pill bg-light"
-                                               value="abc@gmail.com"
+                                               value="{{customer_data.email}}"
                                                readonly>
                                     </div>
                                     <div class="text-start mt-3">

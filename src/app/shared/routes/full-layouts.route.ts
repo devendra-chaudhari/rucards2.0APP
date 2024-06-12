@@ -131,6 +131,33 @@ export const FULL_ROUTES: Routes = [
         loadChildren: () => import('../../admin/manage-users/manage-customer/manage-customer.module').then(m => m.ManageCustomerModule)
     },
     {
+        path: 'admin/manage-users/manage-retailer',
+        data: {
+            title: 'Admin Manage Retailer',
+            roles: ['admin'],
+            permission: ['manage_admin_retailer']
+        },
+        loadComponent: () => import('../../admin/manage-users/manage-retailer/manage-retailer.component').then(m => m.ManageRetailerComponent)
+    },
+    {
+        path: 'admin/manage-users/manage-distributor',
+        data: {
+            title: 'Admin Manage Distributor',
+            roles: ['admin'],
+            permission: ['manage_admin_distributor']
+        },
+        loadComponent: () => import('../../admin/manage-users/manage-distributor/manage-distributor.component').then(m => m.ManageDistributorComponent)
+    },
+    {
+        path: 'admin/manage-users/manage-super-distributor',
+        data: {
+            title: 'Admin Manage Super Distributor',
+            roles: ['admin'],
+            permission: ['manage_admin_super_distributor']
+        },
+        loadComponent: () => import('../../admin/manage-users/manage-super-distributor/manage-super-distributor.component').then(m => m.ManageSuperDistributorComponent)
+    },
+    {
         path: 'admin/manage-users/manage-promote-requests',
         data: {
             title: 'Admin Manage Promote Requests',

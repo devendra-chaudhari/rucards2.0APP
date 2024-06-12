@@ -1,400 +1,702 @@
-<app-breadcrumbs title="Manage Customers" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+<app-breadcrumbs
+  title="Manage Customers"
+  [breadcrumbItems]="breadCrumbItems"
+></app-breadcrumbs>
 
 <div class="row">
-    <div class="col-md-12">
-        <div class="card rounded-4">
-            <div class="card-header border-0">
-                <div class="row g-3">
-                    <div class="col-md-8 d-flex justify-content-start align-items-center gap-2">
-                        <button class="btn btn-sm btn-outline-primary btn-rounded">Export</button>
-                        <div class="search-box w-100">
-                            <input class="form-control rounded-pill search bg-light border-light"
-                                   placeholder="Search by Mobile No, Email, Customer Name, Pan No, DOB, Address">
-                            <i class="ri-search-line search-icon"></i>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="text-end">
-                            <button class="btn btn-primary btn-rounded"
-                                    routerLink="/admin/manage-users/manage-customer/create">
-                                Add Customer
-                            </button>
-                        </div>
-                    </div>
-                </div>
+  <div class="col-md-12">
+    <div class="card rounded-4">
+      <div class="card-header border-0">
+        <div class="row g-3">
+          <div
+            class="col-md-8 d-flex justify-content-start align-items-center gap-2"
+          >
+            <div class="search-box w-100">
+              <input
+                class="form-control rounded-pill search bg-light border-light"
+                placeholder="Search by Mobile No, Email, Customer Name, Pan No, DOB, Address"
+              />
+              <i class="ri-search-line search-icon"></i>
             </div>
-            <div class="card-body border border-dashed border-start-0 border-end-0">
-                <div class="row g-3">
-                    <div class="col-md-4">
-                        <div class="input-light">
-                            <select class="form-control rounded-pill bg-light border-light">
-                                <option value="" selected>All Retailer</option>
-
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="input-light">
-                            <select class="form-control rounded-pill bg-light border-light">
-                                <option value="" selected>All Status</option>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <button type="button" class="btn btn-info w-100 btn-rounded">
-                            <i class="ri-equalizer-fill me-1 align-bottom"></i> Filters
-                        </button>
-                    </div>
-                </div>
+          </div>
+          <div class="col-md-4">
+            <div class="text-end">
+              <button
+                class="btn btn-rounded me-2"
+                style="background-color: #3fa5d3; color: white"
+              >
+                Filter
+              </button>
+              <button
+                class="btn btn-primary btn-rounded"
+                routerLink="/admin/manage-users/manage-customer/create"
+              >
+                Add Customer
+              </button>
             </div>
-            <div class="card-body">
-                <ngx-simplebar class="table-responsive mt-3">
-                    <table class="table table-sm table-striped table-hover align-middle table-nowrap">
-                        <thead>
-                            <tr>
-                                <th class="text-uppercase">SR</th>
-                                <th class="text-uppercase">Name</th>
-                                <th class="text-uppercase">Contact</th>
-                                <th class="text-uppercase">Dob</th>
-                                <th class="text-uppercase">Address</th>
-                                <th class="text-uppercase">PAN NO</th>
-                                <th class="text-uppercase">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="cursor-pointer card-animate"
-                                *ngFor="let customer of customers | slice: (page-1) * pageSize : page * pageSize; let i = index;">
-                                <td>{{i + 1}}</td>
-                                <td>
-                                    <div class="d-flex flex-column justify-content-center align-items-start">
-                                        <a (click)="openDetails(customerDetails)"
-                                           class="fs-16 mb-1">{{customer?.full_name | uppercase}}</a>
-                                        <span class="text-muted mb-0">{{customer?.father_name |uppercase}}</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-flex flex-column justify-content-center align-items-start">
-                                        <span class="fs-16 mb-0"> <i
-                                                class="ri-phone-line me-1"></i>{{customer?.mobile}}</span>
-                                        <span class="text-muted mb-0"> <i
-                                                class="ri-mail-check-line me-1"></i>{{customer?.email |lowercase}}</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-flex flex-column justify-content-center align-items-start">
-                                        <span class="fs-16 mb-0"> DOB: {{customer?.dob | date:'dd-MM-yyyy'}}</span>
-                                        <span class="text-muted mb-0"> DOC: {{customer?.created_at |dateago}}</span>
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <div class="d-flex flex-column justify-content-center align-items-start">
-                                        <span class="fs-16 mb-0"> State: {{customer?.state}} </span>
-                                        <span class="text-muted mb-0"> District: {{customer?.district |dateago}}</span>
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <div class="d-flex flex-column justify-content-center align-items-start">
-                                        <span class="fs-16 mb-0 "> {{customer?.pan ?? 'N/A' |uppercase}} </span>
-                                        <span class="badge rounded-pill text-bg-success"
-                                              *ngIf="customer.active">Active</span>
-                                        <span class="badge rounded-pill text-bg-danger"
-                                              *ngIf="!customer.active">Inactive</span>
-                                    </div>
-                                </td>
-
-                                <td>
-
-
-                                    <button class="btn btn-sm btn-primary btn-rounded  me-2" title="Edit Customer" routerLink="/admin/manage-users/manage-corporates/{{customer?.id }}/edit">
-                                        <i class="ri-pencil-line"></i>
-                                    </button>
-                                    <span ngbDropdown>
-                                        <button type="button" class="btn btn-sm btn-primary rounded-4 me-2 " id="dropdownBasic1"
-                                                ngbDropdownToggle>
-                                            GPR CARD
-                                        </button>
-                                        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                                            <button ngbDropdownItem (click)="onGenerateNewGPRCard(generate_new_gpr_card,customer)"
-                                                    title="Generate New GPR Card">Assign GPR Card
-                                            </button>
-                                            <button ngbDropdownItem>
-                                                View Card Details
-                                            </button>
-                                            <button ngbDropdownItem (click)="onConvertToFullEKYC(convert_to_full_kyc,customer)"
-                                                    [disabled]="customer?.active">Create Full-KYC Wallet
-                                            </button>
-                                        </div>
-                                    </span>
-                                    <button class="btn btn-sm rounded-4 me-2"
-                                            (click)="onGenerateGiftCard(generate_gift_card,customer)" title="Generate Gift Card"
-                                            style="background-color: #3FA5D3; color: white;"><i
-                                            class="ri-gift-2-line me-2"></i>GIFT
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </ngx-simplebar>
-                <div class="row justify-content-md-between align-items-md-center mt-2">
-                    <div class="col col-sm-6">
-                        <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
-                            Showing {{ (page - 1) * pageSize + 1 }} to {{ Math.min(page * pageSize, totalCustomers) }}
-                            of {{ totalCustomers }} entries
-                        </div>
-                    </div>
-
-
-                    <div class="col col-sm-6">
-                        <div class="text-sm-right float-sm-end">
-                            <ngb-pagination [collectionSize]=totalCustomers [(page)]="page" [pageSize]=pageSize
-                                            [maxSize]="2">
-                            </ngb-pagination>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
+          </div>
         </div>
+      </div>
+      <div class="card-body border border-dashed border-start-0 border-end-0">
+        <div class="row g-3">
+          <div class="d-flex justify-content-between align-items-center gap-2">
+            <div class="d-flex align-items-center justify-content-center">
+              <label for="page" class="me-2">Show</label>
+              <select
+                name="page"
+                id="page"
+                class="form-select rounded-4 bg-light px-4 py-1"
+                [(ngModel)]="pageSize"
+                (change)="onPageSizeChange()"
+              >
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+              </select>
+              <label for="page" class="ms-2">entries</label>
+            </div>
+            <button type="button" class="btn btn-success btn-rounded me-2 mb-2">
+              Export
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive mt-3">
+          <table
+            class="table table-sm table-striped table-hover align-middle table-nowrap"
+          >
+            <thead>
+              <tr>
+                <th class="text-uppercase">SR</th>
+                <th class="text-uppercase">Name</th>
+                <th class="text-uppercase">Contact</th>
+                <th class="text-uppercase">Dob</th>
+                <th class="text-uppercase">Address</th>
+                <th class="text-uppercase">PAN NO</th>
+                <th class="text-uppercase">PARENT DETAILS</th>
+                <th class="text-uppercase">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="cursor-pointer card-animate"
+                *ngFor="
+                  let customer of customers
+                    | slice : (page - 1) * pageSize : page * pageSize;
+                  let i = index
+                "
+              >
+                <td>{{ (page - 1) * pageSize + i + 1 }}</td>
+                <td>
+                  <div
+                    class="d-flex flex-column justify-content-center align-items-start"
+                  >
+                    <a
+                      (click)="openDetails(customerDetails, customer)"
+                      class="fs-16 mb-1"
+                      >{{ customer?.full_name | uppercase }}</a
+                    >
+                    <span class="text-muted mb-0">{{
+                      customer?.father_name | uppercase
+                    }}</span>
+                  </div>
+                </td>
+                <td>
+                  <div
+                    class="d-flex flex-column justify-content-center align-items-start"
+                  >
+                    <span class="fs-16 mb-0">
+                      <i class="ri-phone-line me-1"></i
+                      >{{ customer?.mobile }}</span
+                    >
+                    <span class="text-muted mb-0">
+                      <i class="ri-mail-check-line me-1"></i
+                      >{{ customer?.email | lowercase }}</span
+                    >
+                  </div>
+                </td>
+                <td>
+                  <div
+                    class="d-flex flex-column justify-content-center align-items-start"
+                  >
+                    <span class="fs-16 mb-0">
+                      DOB: {{ customer?.dob | date : "dd-MM-yyyy" }}</span
+                    >
+                    <span class="text-muted mb-0">
+                      DOC: {{ customer?.created_at | dateago }}</span
+                    >
+                  </div>
+                </td>
+
+                <td>
+                  <div
+                    class="d-flex flex-column justify-content-center align-items-start"
+                  >
+                    <span class="fs-16 mb-0">
+                      State: {{ customer?.state }}
+                    </span>
+                    <span class="text-muted mb-0">
+                      District: {{ customer?.district | dateago }}</span
+                    >
+                  </div>
+                </td>
+                <td>
+                  <div
+                    class="d-flex flex-column justify-content-center align-items-start"
+                  >
+                    <span class="fs-16 mb-0">
+                      {{ customer?.pan ?? "N/A" | uppercase }}
+                    </span>
+                    <span
+                      class="badge rounded-pill text-bg-success"
+                      *ngIf="customer.active"
+                      >Active</span
+                    >
+                    <span
+                      class="badge rounded-pill text-bg-danger"
+                      *ngIf="!customer.active"
+                      >Inactive</span
+                    >
+                  </div>
+                </td>
+                <td>
+                  <div
+                    class="d-flex flex-column justify-content-center align-items-start"
+                  >
+                    <span class="fs-16 mb-0">
+                      {{ customer?.parent_username }}</span
+                    >
+                    <span class="text-muted mb-0">
+                      {{ customer?.parent_full_name | lowercase }}</span
+                    >
+                  </div>
+                </td>
+                <td>
+                  <button
+                    class="btn btn-sm btn-primary btn-rounded me-2"
+                    title="Edit Customer"
+                    routerLink="/admin/manage-users/manage-corporates/{{
+                      customer?.id
+                    }}/edit"
+                  >
+                    <i class="ri-pencil-line"></i>
+                  </button>
+                  <span ngbDropdown>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-primary rounded-4 me-2"
+                      id="dropdownBasic1"
+                      ngbDropdownToggle
+                    >
+                      GPR CARD
+                    </button>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                      <button
+                        ngbDropdownItem
+                        (click)="
+                          onGenerateNewGPRCard(generate_new_gpr_card, customer)
+                        "
+                        title="Generate New GPR Card"
+                      >
+                        Assign GPR Card
+                      </button>
+                      <button ngbDropdownItem>View Card Details</button>
+                      <button
+                        ngbDropdownItem
+                        (click)="
+                          onConvertToFullEKYC(convert_to_full_kyc, customer)
+                        "
+                        [disabled]="customer?.active"
+                      >
+                        Create Full-KYC Wallet
+                      </button>
+                    </div>
+                  </span>
+                  <button
+                    class="btn btn-sm rounded-4 me-2"
+                    (click)="onGenerateGiftCard(generate_gift_card, customer)"
+                    title="Generate Gift Card"
+                    style="background-color: #3fa5d3; color: white"
+                  >
+                    <i class="ri-gift-2-line me-2"></i>GIFT
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row justify-content-md-between align-items-md-center mt-2">
+          <div class="col col-sm-6">
+            <div
+              class="dataTables_info mb-2"
+              id="tickets-table_info"
+              role="status"
+              aria-live="polite"
+            >
+              Showing {{ (page - 1) * pageSize + 1 }} to
+              {{ Math.min(page * pageSize, totalCustomers) }} of
+              {{ totalCustomers }} entries
+            </div>
+          </div>
+
+          <div class="col col-sm-6">
+            <div class="text-sm-right float-sm-end">
+              <ngb-pagination
+                [collectionSize]="totalCustomers"
+                [(page)]="page"
+                [pageSize]="pageSize"
+                [maxSize]="2"
+              >
+              </ngb-pagination>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 
 <ng-template #customerDetails let-offcanvas>
-    <div class="offcanvas-header pb-0">
-        <div class="d-flex justify-content-start gap-3">
-            <img src="assets/images/avatar.png" alt="customer img" class="avatar-md rounded-circle">
-            <div class="d-flex flex-column justify-content-start gap-1">
-                <div class="d-flex justify-content-start align-items-center gap-2">
-                    <p class="fw-medium fs-16 mb-1">Himanshu Saini</p>
-                    <span class="badge badge-outline-success">Active</span>
-                    <small class="badge bg-soft-dark" title="Risk Score"><i
-                            class="ri-shield-fill text-black"></i></small>
-                </div>
-                <span class="text-muted d-flex align-items-center"><i class="ri-phone-line"></i> 8565654521</span>
-                <span class="text-muted d-flex align-items-center"><i
-                        class="ri-map-pin-line"></i> Rajasthan,India</span>
-            </div>
+  <div class="offcanvas-header pb-0">
+    <div class="d-flex justify-content-start gap-3">
+      <img
+        src="assets/images/avatar.png"
+        alt="customer img"
+        class="avatar-md rounded-circle"
+      />
+      <div class="d-flex flex-column justify-content-start gap-1">
+        <div class="d-flex justify-content-start align-items-center gap-2">
+          <p class="fw-medium fs-16 mb-1">{{ customer_data?.full_name }}</p>
+          <span class="badge badge-outline-success" *ngIf="customer_data.active"
+            >Active</span
+          >
+          <span class="badge badge-outline-danger" *ngIf="!customer_data.active"
+            >Inactive</span
+          >
+          <small class="badge bg-soft-dark" title="Risk Score"
+            ><i class="ri-shield-fill text-black"></i
+          ></small>
         </div>
-        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+        <span class="text-muted d-flex align-items-center"
+          ><i class="ri-phone-line"></i> {{ customer_data?.mobile }}</span
+        >
+        <span class="text-muted d-flex align-items-center"
+          ><i class="ri-map-pin-line"></i>
+          {{ customer_data?.state }},India</span
+        >
+      </div>
     </div>
-    <div class="row mt-3">
-        <div class="col-12 px-4">
-            <button class="btn btn-info w-100 btn-rounded" routerLink="/admin/manage-users/manage-customer/details">
-                View Details
-            </button>
-        </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="offcanvas.dismiss()"
+    ></button>
+  </div>
+  <div class="row mt-3">
+    <div class="col-12 px-4">
+      <button 
+      (click)="offcanvas.dismiss()"
+        class="btn btn-info w-100 btn-rounded"
+        routerLink="/admin/manage-users/manage-customer/details"
+        [queryParams]="{
+          id: customer_data.id,
+          username: customer_data.username,
+          full_name: customer_data.full_name,
+          father_name: customer_data.father_name,
+          gender: customer_data.gender,
+          mobile: customer_data.mobile,
+          pincode: customer_data.pincode,
+          email: customer_data.email,
+          dob: customer_data.dob,
+          pan: customer_data.pan,
+          state: customer_data.state,
+          district: customer_data.district,
+          balance: customer_data.balance,
+          retailer: customer_data.retailer,
+          distributor: customer_data.distributor,
+          super_distributor: customer_data.super_distributor,
+          active: customer_data.active,
+          created_at: customer_data.created_at,
+          role: customer_data.role,
+          parent_username: customer_data.parent_username,
+          parent_full_name: customer_data.full_name,
+          kyc_type: customer_data.kyc_type,
+          address: customer_data.address,
+          user_type: customer_data.user_type,
+        }" 
+      >
+        View Details
+      </button>
     </div>
-    <hr class="mb-0">
-    <ngx-simplebar class="offcanvas-body p-2" style="max-height: calc(100vh - 165px); background-color: #F2F3F4;">
-        <div class="card shadow mb-2" style="border-radius: 4%; border-color: white">
-            <div class="card-header d-flex justify-content-between align-items-center border border-start-0 border-end-0 border-top-0 pb-1">
-                <span class="card-title">Primary Card</span>
-                <i [ngClass]="{'ri-eye-off-line': showDetails, 'ri-eye-line':!showDetails}" class="cursor-pointer fs-18"
-                   (click)="showDetails = !showDetails"></i>
-            </div>
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <label class="form-label mb-0 text-muted">Mask Card No</label>
-                    <i class="cursor-pointer ri-list-settings-line fs-18" title="Settings"></i>
-                </div>
-                <p class="fs-8"><span *ngIf="showDetails">{{cardNo}}</span><span *ngIf="!showDetails">xxxx xxxx xxxx xxxx</span>
-                    <i class="ri-file-copy-line ms-1 cursor-pointer text-info" (click)="copyCardNo()"
-                       *ngIf="showDetails"></i>
-                </p>
-
-                <label class="form-label mb-0 text-muted">Expire</label>
-                <p class="fs-8"><span *ngIf="showDetails">21/27</span><span *ngIf="!showDetails">../..</span></p>
-
-                <label class="form-label mb-0 text-muted">CVV</label>
-                <p class="fs-8"><span *ngIf="showDetails">356</span><span *ngIf="!showDetails">...</span></p>
-
-
-                <label class="form-label mb-0 text-muted">Email</label>
-                <p class="fs-8">abc&#64;gmail.com</p>
-
-                <label class="form-label mb-0 text-muted">Address</label>
-                <p class="fs-8">Near gas agency, alwar road, kotputli</p>
-            </div>
+  </div>
+  <hr class="mb-0" />
+  <ngx-simplebar
+    class="offcanvas-body p-2"
+    style="max-height: calc(100vh - 165px); background-color: #f2f3f4"
+  >
+    <div
+      class="card shadow mb-2"
+      style="border-radius: 4%; border-color: white"
+    >
+      <div
+        class="card-header d-flex justify-content-between align-items-center border border-start-0 border-end-0 border-top-0 pb-1"
+      >
+        <span class="card-title">Primary Card</span>
+        <i
+          [ngClass]="{
+            'ri-eye-off-line': showDetails,
+            'ri-eye-line': !showDetails
+          }"
+          class="cursor-pointer fs-18"
+          (click)="showDetails = !showDetails"
+        ></i>
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <label class="form-label mb-0 text-muted">Mask Card No</label>
+          <i
+            class="cursor-pointer ri-list-settings-line fs-18"
+            title="Settings"
+          ></i>
         </div>
+        <p class="fs-8">
+          <span *ngIf="showDetails">{{ cardNo }}</span
+          ><span *ngIf="!showDetails">xxxx xxxx xxxx xxxx</span>
+          <i
+            class="ri-file-copy-line ms-1 cursor-pointer text-info"
+            (click)="copyCardNo()"
+            *ngIf="showDetails"
+          ></i>
+        </p>
 
-        <div class="card" style="border-radius: 4%;">
-            <div class="card-header d-flex justify-content-start align-items-center gap-3">
-                <span class="fs-16">Secondary Cards</span>
-                <div class="d-flex align-items-center gap-3">
-                    <button type="button" class="btn btn-light bg-gradient waves-effect waves-light btn-rounded">
-                        GPR Card
-                    </button>
-                    <button type="button" class="btn btn-light bg-gradient waves-effect waves-light btn-rounded">
-                        Gift Card
-                    </button>
-                </div>
-            </div>
+        <label class="form-label mb-0 text-muted">Expire</label>
+        <p class="fs-8">
+          <span *ngIf="showDetails">21/27</span
+          ><span *ngIf="!showDetails">../..</span>
+        </p>
+
+        <label class="form-label mb-0 text-muted">CVV</label>
+        <p class="fs-8">
+          <span *ngIf="showDetails">356</span
+          ><span *ngIf="!showDetails">...</span>
+        </p>
+
+        <label class="form-label mb-0 text-muted">Email</label>
+        <p class="fs-8">{{ customer_data?.email }}</p>
+
+        <label class="form-label mb-0 text-muted">Address</label>
+        <p class="fs-8">
+          {{ customer_data?.district }} {{ customer_data?.state }}
+          {{ customer_data?.pincode }}
+        </p>
+      </div>
+    </div>
+
+    <div class="card" style="border-radius: 4%">
+      <div
+        class="card-header d-flex justify-content-start align-items-center gap-3"
+      >
+        <span class="fs-16">Secondary Cards</span>
+        <div class="d-flex align-items-center gap-3">
+          <button
+            type="button"
+            class="btn btn-light bg-gradient waves-effect waves-light btn-rounded"
+          >
+            GPR Card
+          </button>
+          <button
+            type="button"
+            class="btn btn-light bg-gradient waves-effect waves-light btn-rounded"
+          >
+            Gift Card
+          </button>
         </div>
-    </ngx-simplebar>
+      </div>
+    </div>
+  </ngx-simplebar>
 </ng-template>
 
 <ng-template #generate_new_gpr_card let-offcanvas>
-    <div class="offcanvas-header">
-        <p class="fs-18 fw-medium">Generate GPR Card</p>
-        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
-    </div>
-    <ngx-simplebar class="offcanvas-body p-3" style="max-height: calc(100vh - 75px); background-color: #F2F3F4;">
-        <div class="card rounded-4 card-animate">
-            <div class="card-body">
-                <div class="col-12 mb-3">
-                    <label for="product_name">Select Product Name</label>
-                    <div class="d-flex justify-content-between align-items-center gap-1">
-                        <select name="product_name"  class="form-select rounded-4"
-                                [(ngModel)]="data.product_id" (change)="onProductSelectionChange()">
-                            <option value="">Select Product</option>
-                            <ng-container *ngFor="let product of products">
-                                <ng-container
-                                        *ngIf="product.product_type === 'gift' && product.product_name.trim() !== '' && product.wallet_id !== null">
-                                    <option value="{{ product.id }}">{{ product.product_name }}
-                                        | {{product.product_series}}</option>
-                                </ng-container>
-                            </ng-container>
-                        </select>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 mb-2 p-3 bg-">
-                        <label> Choose Card Type</label> <br>
-                        <select class="form-select rounded-4" [(ngModel)]="data.card_category" name="card_category"
-                                id="card_category">
-                            <option value="physical" disabled>Physical</option>
-                            <option value="virtual" selected>Virtual</option>
-                        </select>
-
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12 mb-3" *ngIf="data.card_category=='physical'">
-                        <label for="kit_no">Kit No <span class="text-danger mx-2">*</span></label>
-                        <input type="text" maxlength="20" name="kit_no" id="kit_no" class="form-control rounded-4"
-                               placeholder="Enter Kit No" [(ngModel)]="data.kit_no">
-                    </div>
-                    <div class="col-12 mb-3">
-                        <label for="pan_no">Pan Card No <span class="text-danger mx-2">*</span></label>
-                        <input type="text" maxlength="10" name="pan_no" id="pan_no"
-                               class="form-control rounded-4 text-uppercase"
-                               placeholder="Enter Pan Card No" [(ngModel)]="data.pan_no">
-                    </div>
-
-                    <div class="col-12 mb-3" *ngIf="wallet_otp_received">
-                        <label for="otp">OTP <span class="text-danger mx-2">*</span></label>
-                        <input type="text" maxlength="6" name="otp" id="otp" class="form-control rounded-4"
-                               placeholder="Enter OTP" [(ngModel)]="data.otp">
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <button *ngIf="!wallet_found && !wallet_otp_received" class="btn btn-primary btn-grad px-3 py-2"
-                                title="Validate Details before Submit" [disabled]="!data.product_bin || !data.pan_no"
-                                (click)="validateWalletDetails()">Validate
-                        </button>
-                        <button *ngIf="wallet_otp_received" class="btn btn-primary btn-grad px-3 py-2"
-                                title="Create New GPR Card"
-                                (click)="CreateNewWallet()">Submit
-                        </button>
-                    </div>
-                </div>
-
-            </div>
+  <div class="offcanvas-header">
+    <p class="fs-18 fw-medium">Generate GPR Card</p>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="offcanvas.dismiss()"
+    ></button>
+  </div>
+  <ngx-simplebar
+    class="offcanvas-body p-3"
+    style="max-height: calc(100vh - 75px); background-color: #f2f3f4"
+  >
+    <div class="card rounded-4 card-animate">
+      <div class="card-body">
+        <div class="col-12 mb-3">
+          <label for="product_name">Select Product Name</label>
+          <div class="d-flex justify-content-between align-items-center gap-1">
+            <select
+              name="product_name"
+              class="form-select rounded-4"
+              [(ngModel)]="data.product_id"
+              (change)="onProductSelectionChange()"
+            >
+              <option value="">Select Product</option>
+              <ng-container *ngFor="let product of products">
+                <ng-container
+                  *ngIf="
+                    product.product_type === 'gift' &&
+                    product.product_name.trim() !== '' &&
+                    product.wallet_id !== null
+                  "
+                >
+                  <option value="{{ product.id }}">
+                    {{ product.product_name }} | {{ product.product_series }}
+                  </option>
+                </ng-container>
+              </ng-container>
+            </select>
+          </div>
         </div>
-    </ngx-simplebar>
+        <div class="row">
+          <div class="col-12 mb-2 p-3 bg-">
+            <label> Choose Card Type</label> <br />
+            <select
+              class="form-select rounded-4"
+              [(ngModel)]="data.card_category"
+              name="card_category"
+              id="card_category"
+            >
+              <option value="physical" disabled>Physical</option>
+              <option value="virtual" selected>Virtual</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 mb-3" *ngIf="data.card_category == 'physical'">
+            <label for="kit_no"
+              >Kit No <span class="text-danger mx-2">*</span></label
+            >
+            <input
+              type="text"
+              maxlength="20"
+              name="kit_no"
+              id="kit_no"
+              class="form-control rounded-4"
+              placeholder="Enter Kit No"
+              [(ngModel)]="data.kit_no"
+            />
+          </div>
+          <div class="col-12 mb-3">
+            <label for="pan_no"
+              >Pan Card No <span class="text-danger mx-2">*</span></label
+            >
+            <input
+              type="text"
+              maxlength="10"
+              name="pan_no"
+              id="pan_no"
+              class="form-control rounded-4 text-uppercase"
+              placeholder="Enter Pan Card No"
+              [(ngModel)]="data.pan_no"
+            />
+          </div>
+
+          <div class="col-12 mb-3" *ngIf="wallet_otp_received">
+            <label for="otp">OTP <span class="text-danger mx-2">*</span></label>
+            <input
+              type="text"
+              maxlength="6"
+              name="otp"
+              id="otp"
+              class="form-control rounded-4"
+              placeholder="Enter OTP"
+              [(ngModel)]="data.otp"
+            />
+          </div>
+
+          <div class="col-12 mb-3">
+            <button
+              *ngIf="!wallet_found && !wallet_otp_received"
+              class="btn btn-primary btn-grad px-3 py-2"
+              title="Validate Details before Submit"
+              [disabled]="!data.product_bin || !data.pan_no"
+              (click)="validateWalletDetails()"
+            >
+              Validate
+            </button>
+            <button
+              *ngIf="wallet_otp_received"
+              class="btn btn-primary btn-grad px-3 py-2"
+              title="Create New GPR Card"
+              (click)="CreateNewWallet()"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ngx-simplebar>
 </ng-template>
 <!--Generate New GPR Card  end -->
 
 <!--Generate gift Card | Create Wallet Start-->
 <ng-template #generate_gift_card let-offcanvas>
-    <div class="offcanvas-header">
-        <p class="fs-18 fw-medium">Generate Gift Card</p>
-        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
-    </div>
-    <ngx-simplebar class="offcanvas-body p-3" style="max-height: calc(100vh - 75px); background-color: #F2F3F4;">
-        <div class="card rounded-4 card-animate">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-12 mb-3">
-                        <label for="product_name">Select Product Name</label>
-                        <div class="d-flex justify-content-between align-items-center gap-1">
-                            <select name="product_name" id="product_name" class="form-select rounded-4"
-                                    [(ngModel)]="data.product_id" (change)="onProductSelectionChange()">
-                                <option value="">Select Product</option>
-                                <ng-container *ngFor="let product of products">
-                                    <ng-container
-                                            *ngIf="product.product_type === 'gift' && product.product_name.trim() !== '' && product.wallet_id !== null">
-                                        <option value="{{ product.id }}">{{ product.product_name }}
-                                            | {{product.product_series}}</option>
-                                    </ng-container>
-                                </ng-container>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-12 mb-2 p-3">
-                        <label for="virtualCard">Choose Card Type</label> <br>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" id="virtualCard" name="cardType"
-                                   [(ngModel)]="gc_data.card_category" value="virtual" checked required>
-                            <label class="form-check-label" for="virtualCard">Virtual Card</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" id="physicalCard" name="cardType"
-                                   [(ngModel)]="gc_data.card_category" value="physical" disabled>
-                            <label class="form-check-label" for="physicalCard">Physical Card</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12">
-                    <label for="amount" class="form-label mt-2">Amount</label>
-                    <input class="form-control rounded-pill" placeholder="0" id="amount" name="amount"
-                           [(ngModel)]="gc_data.amount" appNumberOnly required>
-                    <div class="text-danger small">{{ amountError }}</div> <!-- Display amountError here -->
-                </div>
-
-                <div class="col-12">
-                    <label for="quantity" class="form-label mt-2">Quantity</label>
-                    <input class="form-control rounded-pill" placeholder="Enter Quantity" id="quantity" name="quantity"
-                           [(ngModel)]="gc_data.quantity" maxlength="4" appNumberOnly required>
-                    <div class="text-danger small">{{ quantityError }}</div> <!-- Display quantityError here -->
-                </div>
-
-
-                <div class="row">
-                    <div class="col-12 mb-3 mt-2">
-                        <button class="btn btn-primary btn-grad px-3 py-2" title="Validate Details before Submit"
-                                type="submit" [disabled]=" gc_data.amount == '0' || gc_data.quantity == 0  == null "
-                                (click)="validateGiftCardDetails()">Generate
-                        </button>
-                    </div>
-                </div>
+  <div class="offcanvas-header">
+    <p class="fs-18 fw-medium">Generate Gift Card</p>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="offcanvas.dismiss()"
+    ></button>
+  </div>
+  <ngx-simplebar
+    class="offcanvas-body p-3"
+    style="max-height: calc(100vh - 75px); background-color: #f2f3f4"
+  >
+    <div class="card rounded-4 card-animate">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12 mb-3">
+            <label for="product_name">Select Product Name</label>
+            <div
+              class="d-flex justify-content-between align-items-center gap-1"
+            >
+              <select
+                name="product_name"
+                id="product_name"
+                class="form-select rounded-4"
+                [(ngModel)]="data.product_id"
+                (change)="onProductSelectionChange()"
+              >
+                <option value="">Select Product</option>
+                <ng-container *ngFor="let product of products">
+                  <ng-container
+                    *ngIf="
+                      product.product_type === 'gift' &&
+                      product.product_name.trim() !== '' &&
+                      product.wallet_id !== null
+                    "
+                  >
+                    <option value="{{ product.id }}">
+                      {{ product.product_name }} | {{ product.product_series }}
+                    </option>
+                  </ng-container>
+                </ng-container>
+              </select>
             </div>
-
+          </div>
+          <div class="col-12 mb-2 p-3">
+            <label for="virtualCard">Choose Card Type</label> <br />
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                id="virtualCard"
+                name="cardType"
+                [(ngModel)]="gc_data.card_category"
+                value="virtual"
+                checked
+                required
+              />
+              <label class="form-check-label" for="virtualCard"
+                >Virtual Card</label
+              >
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                id="physicalCard"
+                name="cardType"
+                [(ngModel)]="gc_data.card_category"
+                value="physical"
+                disabled
+              />
+              <label class="form-check-label" for="physicalCard"
+                >Physical Card</label
+              >
+            </div>
+          </div>
         </div>
 
-    </ngx-simplebar>
+        <div class="col-12">
+          <label for="amount" class="form-label mt-2">Amount</label>
+          <input
+            class="form-control rounded-pill"
+            placeholder="0"
+            id="amount"
+            name="amount"
+            [(ngModel)]="gc_data.amount"
+            appNumberOnly
+            required
+          />
+          <div class="text-danger small">{{ amountError }}</div>
+          <!-- Display amountError here -->
+        </div>
+
+        <div class="col-12">
+          <label for="quantity" class="form-label mt-2">Quantity</label>
+          <input
+            class="form-control rounded-pill"
+            placeholder="Enter Quantity"
+            id="quantity"
+            name="quantity"
+            [(ngModel)]="gc_data.quantity"
+            maxlength="4"
+            appNumberOnly
+            required
+          />
+          <div class="text-danger small">{{ quantityError }}</div>
+          <!-- Display quantityError here -->
+        </div>
+
+        <div class="row">
+          <div class="col-12 mb-3 mt-2">
+            <button
+              class="btn btn-primary btn-grad px-3 py-2"
+              title="Validate Details before Submit"
+              type="submit"
+              [disabled]="
+                gc_data.amount == '0' || (gc_data.quantity == 0) == null
+              "
+              (click)="validateGiftCardDetails()"
+            >
+              Generate
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ngx-simplebar>
 </ng-template>
 <!--Generate gift Card  end -->
 
 <!--full kyc start-->
 <ng-template #convert_to_full_kyc let-offcanvas>
-    <div class="offcanvas-header">
-        <p class="fs-18 fw-medium">Wallet EKYC</p>
-        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+  <div class="offcanvas-header">
+    <p class="fs-18 fw-medium">Wallet EKYC</p>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="offcanvas.dismiss()"
+    ></button>
+  </div>
+  <ngx-simplebar
+    class="offcanvas-body p-3"
+    style="max-height: calc(100vh - 75px); background-color: #f2f3f4"
+  >
+    <div class="card rounded-4 card-animate">
+      <div class="card-body"></div>
     </div>
-    <ngx-simplebar class="offcanvas-body p-3" style="max-height: calc(100vh - 75px); background-color: #F2F3F4;">
-        <div class="card rounded-4 card-animate">
-            <div class="card-body">
-
-            </div>
-        </div>
-    </ngx-simplebar>
+  </ngx-simplebar>
 </ng-template>
 <!--full kyc end -->

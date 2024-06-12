@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit {
         touchDrag: true,
         pullDrag: true,
         dots: true,
-        navSpeed: 2100,
+        navSpeed: 100,
         autoplay: true,
         navText: ['', ''],
         responsive: {

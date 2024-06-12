@@ -71,6 +71,18 @@ export const MENU: MenuItem[] = [
                 link: '/admin/manage-users/manage-customer'
             },
             {
+                label: 'Manage Retailers',
+                link: '/admin/manage-users/manage-retailer'
+            },
+            {
+                label: 'Manage Distributor',
+                link: '/admin/manage-users/manage-distributor'
+            },
+            {
+                label: 'Manage Super Distributor',
+                link: '/admin/manage-users/manage-super-distributor'
+            },
+            {
                 label: 'Manage Promote Request',
                 link: 'admin/manage-users/manage-promote-requests'
             },

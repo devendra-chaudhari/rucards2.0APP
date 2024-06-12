@@ -19,11 +19,13 @@ export interface SubAdminUsers{
   father_name:string;
   gender:string
 }
+
 @Component({
   selector: 'app-manage-sub-admin',
   templateUrl: './manage-sub-admin.component.html',
   styleUrls: ['./manage-sub-admin.component.scss']
 })
+
 export class ManageSubAdminComponent {
   breadCrumbItems!: Array<{}>;
   sub_admin_users: SubAdminUsers[] = [];
@@ -56,6 +58,7 @@ export class ManageSubAdminComponent {
     password: new FormControl('', [Validators.required]),
     confirm_password: new FormControl('', [Validators.required])
   })
+
   constructor(
       private offCanvas: NgbOffcanvas,
       private copyToClipboard: Clipboard,
@@ -111,6 +114,7 @@ export class ManageSubAdminComponent {
   }
 
   centerEditModal(centerDataModal: any, user: SubAdminUsers) {
+    console.log(user)
     this.user_id=user.id;
     this.EditSubAdminForm.setValue({
       name: user.name,
@@ -121,6 +125,7 @@ export class ManageSubAdminComponent {
     });
     this.modalService.open(centerDataModal, {centered: true});
   }
+
   centerResetPasswordModal(centerDataModal: any, user: SubAdminUsers) {
     this.user_id=user.id;
     this.modalService.open(centerDataModal, {centered: true});
@@ -161,6 +166,7 @@ export class ManageSubAdminComponent {
   get ef() {
     return this.EditSubAdminForm.controls;
   }
+
   get rpf() {
     return this.ResetPasswordSubAdminForm.controls;
   }

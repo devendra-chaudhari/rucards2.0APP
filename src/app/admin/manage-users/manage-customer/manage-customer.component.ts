@@ -10,6 +10,7 @@ import {DatePipe} from "@angular/common";
 
 interface CustomerList {
     id: string;
+    username: string;
     full_name: string;
     father_name: string;
     gender: string;
@@ -23,12 +24,17 @@ interface CustomerList {
     balance: string;
     retailer: string;
     distributor: string;
-    admin: string;
     super_distributor: string;
     active: boolean;
     created_at: string;
     role: string;
+    parent_username: string;
+    parent_full_name: string;
+    kyc_type: string;
+    address: string;
+    user_type:string;
 }
+
 interface ProductList {
     id: string;
     product_image: string;
@@ -43,12 +49,14 @@ interface ProductList {
     active: boolean;
     created_at: string;
     wallet_id:number;
+    address:string;
 }
 
 @Component({
     selector: 'app-manage-customer',
     templateUrl: './manage-customer.component.html'
 })
+
 export class ManageCustomerComponent implements OnInit {
     breadCrumbItems!: Array<{}>;
     page: number = 1;
@@ -66,6 +74,7 @@ export class ManageCustomerComponent implements OnInit {
     // Define error message variables
     amountError: string = '';
     quantityError: string = '';
+
     data = {
         customer_id: '',
         product_id: '',
@@ -79,6 +88,34 @@ export class ManageCustomerComponent implements OnInit {
         quantity:'',
         pin:''
     };
+
+    customer_data = {
+        id: "",
+        username: "",
+        full_name: "",
+        father_name: "",
+        gender: "",
+        mobile: "",
+        pincode: "",
+        email: "",
+        dob: "",
+        pan: "",
+        state: "",
+        district: "",
+        balance: "",
+        retailer: "",
+        distributor: "",
+        super_distributor: "",
+        active: true,
+        created_at: "",
+        role: "",
+        parent_username: "",
+        parent_full_name: "",
+        kyc_type: "",
+        address: "",
+        user_type: ""
+    }
+
     gc_data = {
         owner_id : null,
         bin_no : null,
@@ -95,6 +132,7 @@ export class ManageCustomerComponent implements OnInit {
         card_category:"virtual",
         product_id:null
     }
+
     constructor(
         private offCanvas: NgbOffcanvas,
         private toaster: ToastrService,
@@ -105,8 +143,7 @@ export class ManageCustomerComponent implements OnInit {
         private dt: DatePipe,
         private copyToClipboard: Clipboard,
         private toastr: ToastrService,
-    ) {
-    }
+    ) {}
 
     ngOnInit() {
         this.breadCrumbItems = [
@@ -116,7 +153,9 @@ export class ManageCustomerComponent implements OnInit {
         this.getAllCustomers();
     }
 
-    openDetails(customerDetails: TemplateRef<any>) {
+    openDetails(customerDetails: TemplateRef<any>, customer:CustomerList) {
+
+        this.customer_data =customer
         this.offCanvas.open(customerDetails, {position: 'end'});
     }
 
@@ -145,9 +184,11 @@ export class ManageCustomerComponent implements OnInit {
             }
         });
     }
+
     onConvertToFullEKYC(convert_to_full_kyc: TemplateRef<any>, data: any) {
         this.offCanvas.open(convert_to_full_kyc, {position: 'end', animation: true});
     }
+    
     protected readonly Math = Math;
     onGenerateNewGPRCard(generate_new_gpr_card: any, data: any) {
         this.onGetProductsList();
@@ -320,5 +361,14 @@ export class ManageCustomerComponent implements OnInit {
                 this.toaster.error(error.error.error);
             }
         );
+    }
+
+    onPageChange(event: any){
+        this.page = event
+        this.getAllCustomers()
+    }
+
+    onPageSizeChange(){
+        this.getAllCustomers()
     }
 }
