@@ -190,4 +190,8 @@ export class ManageCorporatesComponent implements OnInit {
         });
 
     }
+    onPageChange(event: any){
+        this.page = event
+        this.getUsers()
+      }
 }

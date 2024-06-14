@@ -1,72 +1,268 @@
+<app-breadcrumbs title="Manage Retailer" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
 <div class="row">
     <div class="col-md-12">
-        <div class="card card-animate rounded-4">
+        <div class="card rounded-4">
             <div class="card-header border-0">
-                <div class="row">
-                    <div class="col-md-9">
-                        <div class="search-box">
-                            <input class="form-control search bg-light border-light rounded-pill"
-                                   placeholder="Search by Company Name, Contact Name, Email, Mobile No">
+                <div class="row g-3">
+                    <div class="col-md-8 d-flex justify-content-start align-items-center gap-2">
+                        <div class="search-box w-100">
+                            <input class="form-control rounded-pill search bg-light border-light"
+                                placeholder="Search by Mobile No, Email, Customer Name, Pan No, DOB, Address" />
                             <i class="ri-search-line search-icon"></i>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <button class="btn btn-info btn-rounded me-3 float-end">
-                            <i class="ri-filter-line me-1"></i> Filters
-                        </button>
-                        <button class="btn btn-primary btn-rounded float-end me-3"
-                                routerLink="/admin/manage-users/manage-corporates/create">
-                            <i class="ri-add-circle-line me-1"></i> Add User
+                    <div class="col-md-4">
+                        <div class="text-end">
+                            <button class="btn btn-rounded me-2" style="background-color: #3fa5d3; color: white">
+                                Filter
+                            </button>
+                            <button class="btn btn-primary btn-rounded"
+                                routerLink="/admin/manage-users/manage-customer/create" [queryParams]="{
+                                    user_type:'Retailer'
+                                }">
+                                Add Retailer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body border border-dashed border-start-0 border-end-0">
+                <div class="row g-3">
+                    <div class="d-flex justify-content-between align-items-center gap-2">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <label for="page" class="me-2">Show</label>
+                            <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <label for="page" class="ms-2">entries</label>
+                        </div>
+                        <button type="button" class="btn btn-success btn-rounded me-2 mb-2">
+                            Export
                         </button>
                     </div>
                 </div>
             </div>
-
             <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center gap-2">
-                    <div class="d-flex align-items-center justify-content-center">
-                      <label for="page" class="me-2">Show</label>
-                      <select
-                        name="page"
-                        id="page"
-                        class="form-select rounded-4 bg-light px-4 py-1"
-                      >
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                      </select>
-                      <label for="page" class="ms-2">entries</label>
-                    </div>
-                    <button type="button" class="btn btn-success btn-rounded me-2 mb-2">
-                      Export
-                    </button>
-                  </div>
-                <div class="table-responsive mt-3" simplebar>
-                    <table class="table align-middle table-nowrap">
+                <div class="table-responsive mt-3">
+                    <table class="table table-sm table-striped table-hover align-middle table-nowrap">
                         <thead>
-                        <tr>
-                            <th>SR</th>
-                            <th>User</th>
-                            <th>Contact</th>
-                            <th>Role</th>
-                            <th>Parent</th>
-                            <th>Status</th>
-                            <th>Identification</th>
-                            <th>Balance</th>
-                            <th>Action</th>
-                        </tr>
+                            <tr>
+                                <th class="text-uppercase">SR</th>
+                                <th class="text-uppercase">Name</th>
+                                <th class="text-uppercase">Contact</th>
+                                <th class="text-uppercase">Dob</th>
+                                <th class="text-uppercase">Address</th>
+                                <th class="text-uppercase">PAN NO</th>
+                                <th class="text-uppercase">PARENT DETAILS</th>
+                                <th class="text-uppercase">Action</th>
+                            </tr>
                         </thead>
+                        <tbody>
+                            <tr class="cursor-pointer card-animate"
+                                *ngFor="let retailer of users| slice : (page_no - 1) * page_size : page_no * page_size; let i = index">
+                                <td>{{ (page_no - 1) * page_size + i + 1 }}</td>
+                                <td>
+                                    <div class="d-flex flex-column justify-content-center align-items-start">
+                                        <a (click)="openDetails(retailerDetails, retailer)" class="fs-16 mb-1">
+                                            {{ retailer?.full_name | uppercase }}
+                                        </a>
+                                        <span class="text-muted mb-0">
+                                            {{retailer?.father_name | uppercase}}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column justify-content-center align-items-start">
+                                        <span class="fs-16 mb-0">
+                                            <i class="ri-phone-line me-1"></i>
+                                            {{ retailer?.mobile }}
+                                        </span>
+                                        <span class="text-muted mb-0">
+                                            <i class="ri-mail-check-line me-1"></i>
+                                            {{ retailer?.email | lowercase }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column justify-content-center align-items-start">
+                                        <span class="fs-16 mb-0">
+                                            DOB: {{ retailer?.dob | date : "dd-MM-yyyy" }}
+                                        </span>
+                                        <span class="text-muted mb-0">
+                                            DOC: {{ retailer?.created_at | dateago }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column justify-content-center align-items-start">
+                                        <span class="fs-16 mb-0">
+                                            State: {{ retailer?.state }}
+                                        </span>
+                                        <span class="text-muted mb-0">
+                                            District: {{ retailer?.district | dateago }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column justify-content-center align-items-start">
+                                        <span class="fs-16 mb-0">
+                                            {{ retailer?.pan ?? "N/A" | uppercase }}
+                                        </span>
+                                        <span class="badge rounded-pill text-bg-success"
+                                            *ngIf="retailer.active">Active</span>
+                                        <span class="badge rounded-pill text-bg-danger"
+                                            *ngIf="!retailer.active">Inactive</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column justify-content-center align-items-start">
+                                        <span class="fs-16 mb-0">
+                                            {{ retailer?.parent_username }}</span>
+                                        <span class="text-muted mb-0">
+                                            {{ retailer?.parent_full_name | lowercase }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary btn-rounded me-2" title="Edit retailer" routerLink="/admin/manage-users/manage-corporates/{{
+                                        retailer?.id
+                                      }}/edit">
+                                      <i class="ri-pencil-line"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
                     </table>
-                </div>      
+                </div>
                 <div class="row justify-content-md-between align-items-md-center mt-2">
-                    
+                    <div class="col col-sm-6">
+                        <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                            Showing {{ (page_no - 1) * page_size + 1 }} to {{ Math.min(page_no * page_size, total) }} of {{ total }} entries
+                        </div>
+                    </div>
 
+                    <div class="col col-sm-6">
+                        <div class="text-sm-right float-sm-end">
+                            <ngb-pagination [collectionSize]="total" [(page)]="page_no" [pageSize]="page_size" [maxSize]="2">
+                            </ngb-pagination>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-
-
 </div>
+
+
+<ng-template #retailerDetails let-offcanvas>
+    <div class="offcanvas-header pb-0">
+      <div class="d-flex justify-content-start gap-3">
+        <img src="assets/images/avatar.png" alt="customer img" class="avatar-md rounded-circle" />
+        <div class="d-flex flex-column justify-content-start gap-1">
+          <div class="d-flex justify-content-start align-items-center gap-2">
+            <p class="fw-medium fs-16 mb-1">{{ retailer_data?.full_name }}</p>
+            <span class="badge badge-outline-success" *ngIf="retailer_data.active">Active</span>
+            <span class="badge badge-outline-danger" *ngIf="!retailer_data.active">Inactive</span>
+            <small class="badge bg-soft-dark" title="Risk Score"><i class="ri-shield-fill text-black"></i></small>
+          </div>
+          <span class="text-muted d-flex align-items-center"><i class="ri-phone-line"></i> {{ retailer_data?.mobile
+            }}</span>
+          <span class="text-muted d-flex align-items-center"><i class="ri-map-pin-line"></i>
+            {{ retailer_data?.state }},India</span>
+        </div>
+      </div>
+      <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12 px-4">
+        <a (click)="offcanvas.dismiss()" class="btn btn-info w-100 btn-rounded"
+          routerLink="/admin/manage-users/manage-customer/details" [queryParams]="{
+            id: retailer_data.id,
+            username: retailer_data.username,
+            full_name: retailer_data.full_name,
+            father_name: retailer_data.father_name,
+            gender: retailer_data.gender,
+            mobile: retailer_data.mobile,
+            pincode: retailer_data.pincode,
+            email: retailer_data.email,
+            dob: retailer_data.dob,
+            pan: retailer_data.pan,
+            state: retailer_data.state,
+            district: retailer_data.district,
+            balance: retailer_data.balance,
+            retailer: retailer_data.retailer,
+            distributor: retailer_data.distributor,
+            super_distributor: retailer_data.super_distributor,
+            active: retailer_data.active,
+            created_at: retailer_data.created_at,
+            role: retailer_data.role,
+            parent_username: retailer_data.parent_username,
+            parent_full_name: retailer_data.full_name,
+            kyc_type: retailer_data.kyc_type,
+            address: retailer_data.address,
+            user_type: retailer_data.user_type,
+          }">
+          View Details
+        </a>
+      </div>
+    </div>
+    <hr class="mb-0" />
+    <div class="offcanvas-body p-2" style="max-height: calc(100vh - 165px); background-color: #f2f3f4">
+      <div class="card shadow mb-2" style="border-radius: 4%; border-color: white">
+        <div
+          class="card-header d-flex justify-content-between align-items-center border border-start-0 border-end-0 border-top-0 pb-1">
+          <span class="card-title">Primary Card</span>
+          <i [ngClass]="{
+              'ri-eye-off-line': showDetails,
+              'ri-eye-line': !showDetails
+            }" class="cursor-pointer fs-18" (click)="showDetails = !showDetails"></i>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <label class="form-label mb-0 text-muted">Mask Card No</label>
+            <i class="cursor-pointer ri-list-settings-line fs-18" title="Settings"></i>
+          </div>
+          <p class="fs-8">
+            <span *ngIf="showDetails">{{ cardNo }}</span><span *ngIf="!showDetails">xxxx xxxx xxxx xxxx</span>
+            <i class="ri-file-copy-line ms-1 cursor-pointer text-info" (click)="copyCardNo()" *ngIf="showDetails"></i>
+          </p>
+  
+          <label class="form-label mb-0 text-muted">Expire</label>
+          <p class="fs-8">
+            <span *ngIf="showDetails">21/27</span><span *ngIf="!showDetails">../..</span>
+          </p>
+  
+          <label class="form-label mb-0 text-muted">CVV</label>
+          <p class="fs-8">
+            <span *ngIf="showDetails">356</span><span *ngIf="!showDetails">...</span>
+          </p>
+  
+          <label class="form-label mb-0 text-muted">Email</label>
+          <p class="fs-8">{{ retailer_data?.email }}</p>
+  
+          <label class="form-label mb-0 text-muted">Address</label>
+          <p class="fs-8">
+            {{ retailer_data?.district }} {{ retailer_data?.state }}
+            {{ retailer_data?.pincode }}
+          </p>
+        </div>
+      </div>
+  
+      <div class="card" style="border-radius: 4%">
+        <div class="card-header d-flex justify-content-start align-items-center gap-3">
+          <span class="fs-16">Secondary Cards</span>
+          <div class="d-flex align-items-center gap-3">
+            <button type="button" class="btn btn-light bg-gradient waves-effect waves-light btn-rounded">
+              GPR Card
+            </button>
+            <button type="button" class="btn btn-light bg-gradient waves-effect waves-light btn-rounded">
+              Gift Card
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  

@@ -36,6 +36,7 @@ export interface Cards{
   TSPName: string;
   ProgramName: string;
 }
+
 @Component({
   selector: 'app-gift-card-topup',
   templateUrl: './gift-card-topup.component.html',
@@ -84,10 +85,11 @@ export class GiftCardTopupComponent {
     this.spinner.show();
     this.apiService.post('paypoint_gift_card/cards',this.data).subscribe({
       next: (res) => {
-        this.spinner.hide();
+        console.log(res)
         this.gc_cards=res.data.TxnList;
         this.total=res.data.rowscount;
         this.totalRecords=res.data.rowscount;
+        this.spinner.hide();
       },
       error: (error) => {
         this.toastr.error(error.error.error);

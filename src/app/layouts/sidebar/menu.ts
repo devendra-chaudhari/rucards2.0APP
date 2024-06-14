@@ -179,7 +179,7 @@ export const MENU: MenuItem[] = [
         role: [Roles.admin],
         subItems: [
             {
-                label: 'Gift Card TopUp',
+                label: 'Paypoint Gift Card TopUp Transactions',
                 link: 'card-transaction/gift-card-topup'
             },
             {

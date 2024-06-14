@@ -179,7 +179,7 @@
                     <div class="col col-sm-6">
                         <div class="text-sm-right float-sm-end">
                             <ngb-pagination [collectionSize]=totalUsers [(page)]="page" [pageSize]=pageSize
-                                            [maxSize]="2">
+                                            [maxSize]="2" (pageChange)="onPageChange($event)">
                             </ngb-pagination>
                         </div>
                     </div>

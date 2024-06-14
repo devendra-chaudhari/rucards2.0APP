@@ -6,7 +6,7 @@ import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
 import {UidaiService} from "../../../../shared/services/uidai.service";
 import {CountdownComponent, CountdownEvent} from "ngx-countdown";
 import * as moment from "moment/moment";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {NgbOffcanvas} from "@ng-bootstrap/ng-bootstrap";
 import {DatePipe} from "@angular/common";
 
@@ -19,9 +19,9 @@ export class CreateCustomerComponent implements OnInit {
     breadCrumbItems!: Array<{}>;
     year: number = new Date().getFullYear();
     maxDate = moment().subtract(18, 'years').toDate();
-
+    navigate_url = ''
+    title = ''
     showPassword: boolean = false;
-
 
     //customer registration
     showConfirmPassword: boolean = false;
@@ -59,11 +59,14 @@ export class CreateCustomerComponent implements OnInit {
         private toastr: ToastrService,
         private spinner: NgxSpinnerService,
         private apiService: ApiService,
-) {
-    }
+        private route: ActivatedRoute,
+    ) {}
 
     ngOnInit() {
-
+        this.route.queryParams.subscribe(params => {
+            console.log(params['user_type'])
+            this.title = params['user_type'];
+          })
     }
 
     get sf() {
@@ -157,10 +160,17 @@ export class CreateCustomerComponent implements OnInit {
             city: this.sf['city'].value,
             pincode: this.sf['pincode'].value,
             address: this.sf['address'].value,
-            role: 'customer',
+            role: this.title,
             password: this.customer_password,
             confirm_password: this.customer_confirm_password,
         }
+        if (this.title === 'Customer'){
+            this.navigate_url = '/admin/manage-users/manage-customer'
+        }
+        if (this.title === 'Retailer'){
+            this.navigate_url = '/admin/manage-users/manage-retailer'
+        }
+        
         if (data.password == '' || data.password == null) {
             this.toastr.warning('Enter Password')
             return;
@@ -175,12 +185,12 @@ export class CreateCustomerComponent implements OnInit {
             return;
         } else {
             this.spinner.show();
-            this.apiService.post('user/create_customer_user', data).subscribe({
+            this.apiService.post('user/create_user_by_admin', data).subscribe({
                 next: (res) => {
                     this.customerForm.reset();
-                    this.router.navigateByUrl('/admin/manage-users/manage-customer')
                     this.isCustomerSubmit = false;
                     this.toastr.success(res.message);
+                    this.router.navigateByUrl(this.navigate_url)
                     this.spinner.hide();
 
                 }, error: (error) => {

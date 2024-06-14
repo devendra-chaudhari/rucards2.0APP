@@ -154,7 +154,6 @@ export class ManageCustomerComponent implements OnInit {
     }
 
     openDetails(customerDetails: TemplateRef<any>, customer:CustomerList) {
-
         this.customer_data =customer
         this.offCanvas.open(customerDetails, {position: 'end'});
     }

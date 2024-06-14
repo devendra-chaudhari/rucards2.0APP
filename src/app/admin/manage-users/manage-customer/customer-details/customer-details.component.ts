@@ -36,7 +36,7 @@ interface CustomerData{
 })
 export class CustomerDetailsComponent implements OnInit {
     breadCrumbItems!: Array<{}>;
-
+    title = ""
     customer_data:CustomerData = {
         id: '',
         username:'',
@@ -69,13 +69,7 @@ export class CustomerDetailsComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
-    ){}
-
-    ngOnInit(): void {
-        this.breadCrumbItems = [
-            {label: 'Manage Users'},
-            {label: 'Customer Details', active: true}
-        ];
+    ){
         this.route.queryParams.subscribe(params => {
             console.log(params['kyc_type'])
             this.customer_data.id = params['id'];
@@ -103,6 +97,14 @@ export class CustomerDetailsComponent implements OnInit {
             this.customer_data.address = params['address'];
             this.customer_data.user_type = params['user_type'];
           })
+    }
+
+    ngOnInit(): void {
+        this.breadCrumbItems = [
+            {label: 'Manage Users'},
+            {label: this.customer_data.user_type + ' Details', active: true}
+        ];
+            this.title =this.customer_data.user_type +  " Details"
           this.updateFirstName()
         }
 

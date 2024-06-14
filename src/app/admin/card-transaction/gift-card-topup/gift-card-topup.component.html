@@ -33,31 +33,29 @@
                 <thead>
                 <tr>
                     <th class="text-uppercase">#</th>
+                    <th class="text-uppercase">Created Date</th>
                     <th class="text-uppercase cursor-pointer">
                         Mobile Number
                     </th>
                     <th class="text-uppercase">Full Name ></th>
                     <th class="text-uppercase">Pan </th>
                     <th class="text-uppercase">PK_ID </th>
-                    <th class="text-uppercase">GVB_ID </th>
                     <th class="text-uppercase">KIT</th>
                     <th class="text-uppercase">card 4 digits</th>
                     <th class="text-uppercase">balance</th>
-                    <th class="text-uppercase">card no</th>
                 </tr>
                 </thead>
                 <tbody style="min-height: 300px;">
                 <tr *ngFor="let gc_card of gc_cards; index as i;">
-                    <td class="text-uppercase">{{ i + 1}}</td>
+                    <td class="text-uppercase">{{ (page - 1) * pageSize +i + 1}}</td>
+                    <td>{{gc_card.ActivatedOn | date}}</td>
                     <td>{{gc_card.MobileNumber}}</td>
                     <td>{{ gc_card.FirstName |uppercase }} {{ gc_card.LastName |uppercase }}</td>
                     <td>{{gc_card.PanNumber}}</td>
                     <td>{{gc_card.Pk_Id}}</td>
-                    <td>{{gc_card.GVB_id}}</td>
                     <td>{{gc_card.KitNumber}}</td>
                     <td>{{gc_card.CardEndingDigits | slice:12:16}}</td>
                     <td>{{gc_card.CardCurrentBalance}}</td>
-                    <td>{{gc_card.CardNo}}</td>
                 </tr>
                 </tbody>
             </table>
