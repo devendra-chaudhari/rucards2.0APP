@@ -460,6 +460,21 @@ export const MENU: MenuItem[] = [
         link: '/bill-payments'
     },
     {
+        label: 'Vouchers',
+        icon: 'ri-bill-line',
+        role: [Roles.customer],
+        subItems: [
+            {
+                label: 'Ru Gaming Voucher',
+                link: '/ru-gaming-vouchers'
+            },
+            {
+                label: 'Ru Subscription',
+                link: '/ru-subscriptions',
+            }
+        ]
+    },
+    {
         label: 'Card Transaction',
         icon: 'ri-bank-card-line',
         role: [Roles.customer],

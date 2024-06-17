@@ -1,0 +1,444 @@
+<!-- <app-breadcrumbs title="Ru Gaming Vouchers" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs> -->
+
+<div class="w-100 mb-4">
+  <div class="col-md-12">
+    <owl-carousel-o [options]="customOptions">
+      <ng-template carouselSlide class="h-20">
+        <img src="assets/images/ps-3.jpeg" alt="first slide">
+        <div class="carousel-caption d-none "></div>
+      </ng-template>
+      <ng-template carouselSlide class="h-20">
+        <img src="assets/images/ps-2.jpeg" alt="second slide">
+        <div class="carousel-caption d-none "></div>
+      </ng-template>
+      <ng-template carouselSlide class="h-20">
+        <img src="assets/images/ps-1.jpeg" alt="third slide">
+        <div class="carousel-caption d-none "></div>
+      </ng-template>
+    </owl-carousel-o>
+  </div>
+</div>
+
+
+<div class="container-fluid mt-8">
+  <div class="row justify-content-center align-items-center">
+    <div class="col-md-2 px-3 custom-card">
+      <div class="card card-animate rounded-left gradient-bg custom-rounded-card-ps h-100 d-flex flex-column justify-content-center align-items-center px-3 py-3">
+        <div class="position-relative ">
+          <img src=" assets/images/output-2.png" alt="Xbox logo" class="img-fluid custom-rounded-card-ps " style="max-width: 200px;">
+        </div>
+        <div class="d-flex flex-column align-items-center text-center ">
+          <div class="text-white mt-4">
+            <p>Boost productivity with <br>Microsoft Office vouchers <br>for essential software tools.</p>
+          </div>
+          <button type="button" class="btn btn-outline-secondari-ps offcanvas-btn btn-rounded text-white mb-1 mt-2" (click)="openVoucherDetails(buyNowOffice, 'MS-Office')">Buy Now</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 px-3 custom-card">
+      <div class="card card-animate rounded-left gradient-bg custom-rounded-card-ps h-100 d-flex flex-column justify-content-center align-items-center px-3 py-3">
+        <div class="position-relative ">
+          <img src="assets/images/output-3.png" alt="Xbox logo" class="img-fluid custom-rounded-card-ps mb-3" style="max-width: 130px;">
+        </div>
+        <div class="d-flex flex-column align-items-center text-center ">
+          <div class="text-white  mt-4">
+            <p>Gift access to <br> Disney+ Hotstar for endless <br>entertainment and enjoyment!</p>
+          </div>
+          <button type="button" class="btn btn-outline-secondari-ps offcanvas-btn btn-rounded text-white mb-1 mt-2" (click)="openVoucherDetails(buyNowDH, 'Disney-Hotstar')">Buy Now</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 px-3 custom-card">
+      <div class="card card-animate rounded-left gradient-bg custom-rounded-card-ps h-100 d-flex flex-column justify-content-center align-items-center px-3 py-3">
+        <div class="position-relative ">
+          <img src="assets/images/output-4.png" alt="Xbox logo" class="img-fluid custom-rounded-card-ps"style="max-width: 200px;">
+        </div>
+        <div class="d-flex flex-column align-items-center text-center ">
+          <div class="text-white mt-4">
+            <p>
+              Secure your digital life <br> with Norton gift vouchers for  <br>comprehensive protection.</p>
+          </div>
+          <button type="button" class="btn btn-outline-secondari-ps offcanvas-btn btn-rounded text-white mb-1 mt-2" (click)="openVoucherDetails(buyNowNorton, 'Norton')">Buy Now</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-2 px-3 custom-card">
+      <div class="card card-animate rounded-left gradient-bg custom-rounded-card-ps h-100 d-flex flex-column justify-content-center align-items-center px-3 py-3">
+        <div class="position-relative  ">
+          <img src="assets/images/output-1.png" alt="Xbox logo" class="img-fluid custom-rounded-card-ps mb-5 mt-4" style="max-width: 200px;">
+        </div>
+        <div class="d-flex flex-column align-items-center text-center ">
+          <div class="text-white mt-3">
+            <p>
+              Gift Tinder vouchers <br> for meeting new people and <br>sparking connections effortlessly!</p>
+          </div>
+          <button type="button" class="btn btn-outline-secondari-ps offcanvas-btn btn-rounded text-white mb-1 mt-2" (click)="openVoucherDetails(buyNowTinder, 'Tinder')">Buy Now</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<ng-template #buyNowOffice let-offcanvas>
+  <div class="offcanvas-header gradient-bg-tp ">
+    <h4 class="offcanvas-title text-white">Buy Vouchers</h4>
+    <button type="button" class="btn-3 btn-rounded ms-auto text-white" (click)="offcanvas.dismiss('Cross click')"></button>
+  </div>
+  <div class="offcanvas-body gradient-bg-cv">
+    <form class="notificationForm">
+      <div class="col-md-12 d-flex align-items-center justify-content-center">
+        <div class="mb-3">
+          <img src="assets/images/output-3.png" alt="PlayStation logo" class="img-fluid mt-3 mb-3" style="max-width: 100px;">               
+        </div>
+      </div>          
+      <div class="mb-3">
+        <div class="col-12">
+          <label for="productSelect" class="form-label text-white">Product</label>
+          <select id="productSelect" (change)="onProductChange($event)" [disabled]="!selectedBrand"
+            class="form-select rounded-pill">
+            <option value="" class="text-white">--Select Product--</option>
+            <option *ngFor="let product of productList" [value]="product.name">{{ product.name }}: {{ product.price }} &#8377; </option>
+          </select>
+        </div>
+      </div>
+      <div class="mb-3" *ngIf="selectedProduct">
+        <label for="priceDisplay" class="form-label text-white">Quantity</label>
+        <div class="input-group col-12">
+          <input type="number" class="form-control rounded-pill" placeholder="Quantities" value="1">
+        </div> 
+      </div> 
+      <div class="mb-3" *ngIf="selectedProduct">
+        <div class="col-12">
+          <label for="priceDisplay" class="form-label text-white">Denomination</label>
+          <textarea class="form-control single-line-textarea rounded-4 " id="priceDisplay" rows="1" readonly>{{ selectedPrice }}</textarea>
+        </div>
+      </div>
+      <div class="mb-3" *ngIf="purchaseNow">
+        <div class="card">
+          <div class="card-body position-relative">
+            <h5 class="mb-3">Select Bank</h5>
+            <form [formGroup]="cardForm" class="needs-validation" (ngSubmit)="confirmcard()">
+              <div class="vstack gap-2">
+                <div *ngFor="let card of bankcards" class="form-check card-radio">
+                  <input id="listGroupRadioGrid{{card.id}}" type="radio" class="form-check-input"
+                         [value]="card.amount" formControlName="selectedCard">
+                  <label class="form-check-label" for="listGroupRadioGrid{{card.id}}">
+                    <div class="d-flex align-items-center">
+                      <div class="flex-shrink-0">
+                        <div class="avatar-xs">
+                          <div class="avatar-title bg-success-subtle text-success fs-18 rounded">
+                            <i class="ri-{{card.icon}}"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="flex-grow-1 ms-3">
+                        <h6 class="mb-1">{{card.card}}</h6>
+                        <!-- <b class="pay-amount">&#8377; {{card.amount}}</b> -->
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+          
+              <button type="submit" class="btn btn-outline-secondari-ps btn-rounded text-white w-100 mt-3" id="confirm-btn">Procceed To Payment</button>
+          
+              <div id="notification-warn" class="position-absolute top-0 start-0 end-0 d-none">
+                <div class="alert alert-warning" role="alert">
+                  Select at least one item
+                </div>
+              </div>
+              <!-- notification-warning -->
+            </form>
+          </div>
+          <!-- end card body -->
+        </div>
+        <!-- end card -->
+      </div>
+      
+      
+      <div class="text-center px-3 py-2 mt-4" *ngIf="selectedProduct">
+        <button type="button" 
+          class="btn btn-outline-secondari-ps btn-rounded text-white" 
+          (click)="onPurchaseNow()" 
+          *ngIf="showPurchaseButton">
+    Purchase Now
+  </button>
+      </div>
+      
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #buyNowDH let-offcanvas>
+    <div class="offcanvas-header gradient-bg-cv">
+      <h4 class="offcanvas-title text-white">Buy Vouchers</h4>
+      <button type="button" class="btn-3 offcanvas-btn btn-rounded ms-auto text-white" (click)="offcanvas.dismiss('Cross click')"></button>
+    </div>
+    <div class="offcanvas-body gradient-bg-cv">
+      <form class="notificationForm">
+        <div class="col-md-12 d-flex align-items-center justify-content-center">
+          <div class="mb-3">
+            <img src="assets/images/output-3.png" alt="Xbox logo" class="img-fluid mt-3 mb-3" style="max-width: 200px;">
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="col-12">
+            <label for="productSelect" class="form-label text-white">Product</label>
+            <select id="productSelect" (change)="onProductChange($event)" [disabled]="!selectedBrand"
+              class="form-select rounded-pill">
+              <option value="" class="text-white">--Select Product--</option>
+              <option *ngFor="let product of productList" [value]="product.name">{{ product.name }}: {{ product.price }}&#8377; </option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3" *ngIf="selectedProduct">
+          <label for="priceDisplay" class="form-label text-white">Quantity</label>
+          <div class="input-group col-12">
+            <input type="number" class="form-control rounded-pill" placeholder="Quantities" value="1">
+          </div> 
+        </div> 
+        <div class="mb-3" *ngIf="selectedProduct">
+          <div class="col-12">
+            <label for="priceDisplay" class="form-label text-white">Denomination</label>
+            <textarea class="form-control single-line-textarea rounded-4 " id="priceDisplay" rows="1" readonly>{{ selectedPrice }}</textarea>
+          </div>
+        </div>
+              
+        <div class="mb-3" *ngIf="purchaseNow">
+          <div class="card">
+            <div class="card-body position-relative">
+              <h5 class="mb-3">Select Bank</h5>
+              <form [formGroup]="cardForm" class="needs-validation" (ngSubmit)="confirmcard()">
+                <div class="vstack gap-2">
+                  <div *ngFor="let card of bankcards" class="form-check card-radio">
+                    <input id="listGroupRadioGrid{{card.id}}" type="radio" class="form-check-input"
+                           [value]="card.amount" formControlName="selectedCard">
+                    <label class="form-check-label" for="listGroupRadioGrid{{card.id}}">
+                      <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                          <div class="avatar-xs">
+                            <div class="avatar-title bg-success-subtle text-success fs-18 rounded">
+                              <i class="ri-{{card.icon}}"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                          <h6 class="mb-1">{{card.card}}</h6>
+                          <!-- <b class="pay-amount">&#8377; {{card.amount}}</b> -->
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+            
+                <button type="submit" class="btn btn-outline-secondari-ps btn-rounded text-white w-100 mt-3" id="confirm-btn">Procceed To Payment</button>
+            
+                <div id="notification-warn" class="position-absolute top-0 start-0 end-0 d-none">
+                  <div class="alert alert-warning" role="alert">
+                    Select at least one item
+                  </div>
+                </div>
+                <!-- notification-warning -->
+              </form>
+            </div>
+            <!-- end card body -->
+          </div>
+          <!-- end card -->
+        </div>
+        
+        
+        <div class="text-center px-3 py-2 mt-4" *ngIf="selectedProduct">
+          <button type="button" 
+            class="btn btn-outline-secondari-ps btn-rounded text-white" 
+            (click)="onPurchaseNow()" 
+            *ngIf="showPurchaseButton">
+      Purchase Now
+    </button>
+        </div>
+      </form>
+    </div>
+</ng-template>
+
+<ng-template #buyNowNorton let-offcanvas>
+    <div class="offcanvas-header gradient-bg-cv">
+      <h4 class="offcanvas-title text-white">Buy Vouchers</h4>
+      <button type="button" class="btn-3 offcanvas-btn btn-rounded ms-auto text-white" (click)="offcanvas.dismiss('Cross click')"></button>
+    </div>
+    <div class="offcanvas-body gradient-bg-cv">
+      <form class="notificationForm">
+        <div class="col-md-12 d-flex align-items-center justify-content-center">
+          <div class="mb-3">
+            <img src="assets/images/output-4.png" alt="Xbox logo" class="img-fluid mt-3 mb-3" style="max-width: 250px;">
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="col-12">
+            <label for="productSelect" class="form-label text-white">Product</label>
+            <select id="productSelect" (change)="onProductChange($event)" [disabled]="!selectedBrand"
+              class="form-select rounded-pill">
+              <option value="" class="text-white">--Select Product--</option>
+              <option *ngFor="let product of productList" [value]="product.name">{{ product.name }}: {{ product.price }} &#8377; </option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3" *ngIf="selectedProduct">
+          <label for="priceDisplay" class="form-label text-white">Quantity</label>
+          <div class="input-group col-12">
+            <input type="number" class="form-control rounded-pill" placeholder="Quantities" value="1">
+          </div> 
+        </div> 
+        <div class="mb-3" *ngIf="selectedProduct">
+          <div class="col-12">
+            <label for="priceDisplay" class="form-label text-white">Denomination</label>
+            <textarea class="form-control single-line-textarea rounded-4 " id="priceDisplay" rows="1" readonly>{{ selectedPrice }}</textarea>
+          </div>
+        </div>
+              
+        <div class="mb-3" *ngIf="purchaseNow">
+          <div class="card">
+            <div class="card-body position-relative">
+              <h5 class="mb-3">Select Bank</h5>
+              <form [formGroup]="cardForm" class="needs-validation" (ngSubmit)="confirmcard()">
+                <div class="vstack gap-2">
+                  <div *ngFor="let card of bankcards" class="form-check card-radio">
+                    <input id="listGroupRadioGrid{{card.id}}" type="radio" class="form-check-input"
+                           [value]="card.amount" formControlName="selectedCard">
+                    <label class="form-check-label" for="listGroupRadioGrid{{card.id}}">
+                      <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                          <div class="avatar-xs">
+                            <div class="avatar-title bg-success-subtle text-success fs-18 rounded">
+                              <i class="ri-{{card.icon}}"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                          <h6 class="mb-1">{{card.card}}</h6>
+                          <!-- <b class="pay-amount">&#8377; {{card.amount}}</b> -->
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+            
+                <button type="submit" class="btn btn-outline-secondari-ps btn-rounded text-white w-100 mt-3" id="confirm-btn">Procceed To Payment</button>
+            
+                <div id="notification-warn" class="position-absolute top-0 start-0 end-0 d-none">
+                  <div class="alert alert-warning" role="alert">
+                    Select at least one item
+                  </div>
+                </div>
+                <!-- notification-warning -->
+              </form>
+            </div>
+            <!-- end card body -->
+          </div>
+          <!-- end card -->
+        </div>
+        
+        
+        <div class="text-center px-3 py-2 mt-4" *ngIf="selectedProduct">
+          <button type="button" 
+            class="btn btn-outline-secondari-ps btn-rounded text-white" 
+            (click)="onPurchaseNow()" 
+            *ngIf="showPurchaseButton">
+      Purchase Now
+    </button>
+        </div>
+      </form>
+    </div>
+</ng-template>
+
+<ng-template #buyNowTinder let-offcanvas>
+    <div class="offcanvas-header gradient-bg-cv">
+      <h4 class="offcanvas-title text-white">Buy Vouchers</h4>
+      <button type="button" class="btn-3 offcanvas-btn btn-rounded ms-auto text-white" (click)="offcanvas.dismiss('Cross click')"></button>
+    </div>
+    <div class="offcanvas-body gradient-bg-cv">
+      <form class="notificationForm">
+        <div class="col-md-12 d-flex align-items-center justify-content-center">
+          <div class="mb-3">
+            <img src="assets/images/output-1.png" alt="Xbox logo" class="img-fluid mt-3 mb-4 mt-5" style="max-width: 350px;">
+          </div>
+        </div>
+        <div class="mb-3">
+          <div class="col-12">
+            <label for="productSelect" class="form-label text-white">Product</label>
+            <select id="productSelect" (change)="onProductChange($event)" [disabled]="!selectedBrand"
+              class="form-select rounded-pill">
+              <option value="" class="text-white">--Select Product--</option>
+              <option *ngFor="let product of productList" [value]="product.name">{{ product.name }}: {{ product.price }} &#8377; </option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3" *ngIf="selectedProduct">
+          <label for="priceDisplay" class="form-label text-white">Quantity</label>
+          <div class="input-group col-12">
+            <input type="number" class="form-control rounded-pill" placeholder="Quantities" value="1">
+          </div> 
+        </div> 
+        <div class="mb-3" *ngIf="selectedProduct">
+          <div class="col-12">
+            <label for="priceDisplay" class="form-label text-white">Denomination</label>
+            <textarea class="form-control single-line-textarea rounded-4 " id="priceDisplay" rows="1" readonly>{{ selectedPrice }}</textarea>
+          </div>
+        </div>
+              
+        <div class="mb-3" *ngIf="purchaseNow">
+          <div class="card">
+            <div class="card-body position-relative">
+              <h5 class="mb-3">Select Bank</h5>
+              <form [formGroup]="cardForm" class="needs-validation" (ngSubmit)="confirmcard()">
+                <div class="vstack gap-2">
+                  <div *ngFor="let card of bankcards" class="form-check card-radio">
+                    <input id="listGroupRadioGrid{{card.id}}" type="radio" class="form-check-input"
+                           [value]="card.amount" formControlName="selectedCard">
+                    <label class="form-check-label" for="listGroupRadioGrid{{card.id}}">
+                      <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                          <div class="avatar-xs">
+                            <div class="avatar-title bg-success-subtle text-success fs-18 rounded">
+                              <i class="ri-{{card.icon}}"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                          <h6 class="mb-1">{{card.card}}</h6>
+                          <!-- <b class="pay-amount">&#8377; {{card.amount}}</b> -->
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+            
+                <button type="submit" class="btn btn-outline-secondari-ps btn-rounded text-white w-100 mt-3" id="confirm-btn">Procceed To Payment</button>
+            
+                <div id="notification-warn" class="position-absolute top-0 start-0 end-0 d-none">
+                  <div class="alert alert-warning" role="alert">
+                    Select at least one item
+                  </div>
+                </div>
+                <!-- notification-warning -->
+              </form>
+            </div>
+            <!-- end card body -->
+          </div>
+          <!-- end card -->
+        </div>
+        
+        
+        <div class="text-center px-3 py-2 mt-4" *ngIf="selectedProduct">
+          <button type="button" 
+            class="btn btn-outline-secondari-ps btn-rounded text-white" 
+            (click)="onPurchaseNow()" 
+            *ngIf="showPurchaseButton">
+      Purchase Now
+    </button>
+        </div>
+      </form>
+    </div>
+</ng-template>
+
+

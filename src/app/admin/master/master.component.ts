@@ -97,7 +97,7 @@ export class MasterComponent implements OnInit {
     }
 
     getMaster() {
-        this.apiService.get('misc/list').subscribe(res => {
+        this.apiService.post('misc/list',{'page_size':10,'page_no':1}).subscribe(res => {
             this.miscs = res.data.misc_list;
             this.total=res.data.total;
             this.tempMiscs = res.data.misc_list;
