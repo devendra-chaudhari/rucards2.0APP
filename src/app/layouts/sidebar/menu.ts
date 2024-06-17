@@ -465,11 +465,11 @@ export const MENU: MenuItem[] = [
         role: [Roles.customer],
         subItems: [
             {
-                label: 'Ru Gaming Voucher',
+                label: 'Gaming Voucher',
                 link: '/ru-gaming-vouchers'
             },
             {
-                label: 'Ru Subscription',
+                label: 'Subscription',
                 link: '/ru-subscriptions',
             }
         ]

@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, UntypedFormControl } from '@angular/forms'; // Import FormsModule
 import { ReactiveFormsModule } from '@angular/forms';
 import { UntypedFormBuilder, Validators, UntypedFormGroup, UntypedFormArray, AbstractControl } from '@angular/forms';
+
 interface Product {
   name: string;
   price: number;
@@ -45,7 +46,7 @@ export class RuGamingVouchersComponent {
   totalRecords: number = 0;
   selectedBrand: string = '';
   selectedProduct: string = '';
-  selectedPrice: string = '';
+  selectedPrice: number;
   brandList: string[] = [];
   productList: Product[] = [];
   private offcanvasRef!: NgbOffcanvasRef;
@@ -57,7 +58,8 @@ export class RuGamingVouchersComponent {
   submitted = false;
   purchaseNow: boolean = false;
   showPurchaseButton: boolean = true;
-
+  totalPrice: number = 0;
+  quantity: number = 1;
 
   customOptions: OwlOptions = {
     loop: true,
@@ -85,29 +87,35 @@ export class RuGamingVouchersComponent {
     nav: true
   };
 
+  buyNowForm = new UntypedFormGroup({
+    product: new UntypedFormControl('', [Validators.required]),
+    quantity: new UntypedFormControl('', [Validators.required]),
+    paymentOption : new UntypedFormControl('', [Validators.required])
+  });
+
   brandProducts: BrandProducts = {
     "MS-Xbox": [
-      { name: "MS-Xbox GC : 549 Rs ", price: 549 },
-      { name: "MS-Xbox GC : 1049 Rs", price: 1049 },
-      { name: "MS-Xbox GC : 1649 Rs ", price: 1649 },
-      { name: "MS-Xbox GC : 349 Rs", price: 349 },
-      { name: "MS-Xbox GC : 749 Rs", price: 749 },
-      { name: "MS-Xbox GC : 1999 Rs", price: 1999 },
+      { name: "MS-Xbox GC ", price: 549 },
+      { name: "MS-Xbox GC", price: 1049 },
+      { name: "MS-Xbox GC ", price: 1649 },
+      { name: "MS-Xbox GC", price: 349 },
+      { name: "MS-Xbox GC", price: 749 },
+      { name: "MS-Xbox GC", price: 1999 },
     ],
     "Sony-PSN": [
-      { name: "Sony PSN GC: 500 Rs", price: 500 },
-      { name: "Sony PSN GC : 1000 Rs", price: 1000 },
-      { name: "Sony PSN GC : 1200 Rs", price: 1200 },
-      { name: "Sony PSN GC : 1500 Rs", price: 1500 },
-      { name: "Sony PSN GC : 2000 Rs", price: 2000 },
-      { name: "Sony PSN GC : 2300 Rs", price: 2300 },
-      { name: "Sony PSN GC : 2500 Rs", price: 2500 },
-      { name: "Sony PSN GC : 3000 Rs", price: 3000 },
-      { name: "Sony PSN GC : 3500 Rs", price: 3500 },
-      { name: "Sony PSN GC : 4000 Rs", price: 4000 },
-      { name: "Sony PSN GC : 4500 Rs", price: 4500 },
-      { name: "Sony PSN GC : 5000 Rs", price: 5000 },
-      { name: "Sony PSN GC : 5800 Rs", price: 5800 },
+      { name: "Sony PSN GC", price: 500 },
+      { name: "Sony PSN GC", price: 1000 },
+      { name: "Sony PSN GC", price: 1200 },
+      { name: "Sony PSN GC", price: 1500 },
+      { name: "Sony PSN GC", price: 2000 },
+      { name: "Sony PSN GC", price: 2300 },
+      { name: "Sony PSN GC", price: 2500 },
+      { name: "Sony PSN GC", price: 3000 },
+      { name: "Sony PSN GC", price: 3500 },
+      { name: "Sony PSN GC", price: 4000 },
+      { name: "Sony PSN GC", price: 4500 },
+      { name: "Sony PSN GC", price: 5000 },
+      { name: "Sony PSN GC", price: 5800 },
     ],
   };
 
@@ -143,18 +151,12 @@ export class RuGamingVouchersComponent {
   ) {}
 
   ngOnInit(): void {
-    this.cardForm = this.formBuilder.group({
-      ids: [''],
-      amount: ['', [Validators.required]],
-    });
 
-    this.customcardData = this.formBuilder.group({
-      card_no: ['', [Validators.required]],
-      cardholder: ['', [Validators.required]],
-      month: ['', [Validators.required]],
-      year: ['', [Validators.required]],
-      cvc: ['', [Validators.required]]
-    });
+    this.buyNowForm = this.formBuilder.group({
+      product: ['', Validators.required],
+      quantity: [this.quantity],
+      paymentOption: ['', Validators.required]
+    })
 
   }
   ngAfterViewInit() {
@@ -164,7 +166,7 @@ export class RuGamingVouchersComponent {
   openVoucherDetails(content: any, brand: string) {
     this.selectedBrand = brand;
     this.populateProducts(brand);
-    this.displayPrice('');
+    // this.displayPrice('');
     this.offcanvasRef = this.offcanvasService.open(content, { position: 'end', keyboard: false });
   }
 
@@ -176,31 +178,11 @@ export class RuGamingVouchersComponent {
     this.productList = this.brandProducts[brand] || [];
   }
 
-  displayPrice(productName: string) {
-    if (this.selectedBrand && productName) {
-      const product = this.productList.find(p => p.name === productName);
-      if (product) {
-        this.selectedPrice = `Price: ${product.price} Rs`;
-      } else {
-        this.selectedPrice = '';
-      }
-    } else {
-      this.selectedPrice = '';
-    }
-  }
-
-  onBrandChange(event: Event) {
-    const brand = (event.target as HTMLSelectElement).value;
-    this.selectedBrand = brand;
-    this.populateProducts(brand);
-    this.displayPrice('');
-    this.selectedProduct = ''; // Reset selected product when brand changes
-  }
-
   onProductChange(event: Event) {
-    const productName = (event.target as HTMLSelectElement).value;
-    this.selectedProduct = productName;
-    this.displayPrice(productName);
+    const product = JSON.parse((event.target as HTMLSelectElement).value);
+    this.selectedProduct = product['name'];
+    this.selectedPrice = product['price'];
+    this.totalPrice = product['price'];
   }
 
   onPurchaseNow() {
@@ -208,18 +190,14 @@ export class RuGamingVouchersComponent {
     this.showPurchaseButton = false;
   }
 
-  confirmcard(): void {
-    if (this.cardForm.valid) {
-      const selectedCard = this.cardForm.value.selectedCard;
-      // handle the card confirmation logic
-      console.log('Selected Card:', selectedCard);
-    } else {
-      // Show warning message if no card is selected
-      const warnElement = document.getElementById('notification-warn');
-      if (warnElement) {
-        warnElement.classList.remove('d-none');
-      }
-    }
+  onSubmit(): void {
+    console.log(this.buyNowForm.value)
   }
+
+  updateTotalPrice(): void {
+    const quantity = this.buyNowForm.get('quantity')?.value || 1;
+    this.totalPrice = quantity * (this.selectedPrice);
+  }
+
   
 }
