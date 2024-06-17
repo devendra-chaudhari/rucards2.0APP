@@ -1,0 +1,57 @@
+
+// Color palette variables
+$dark-blue: #03133d;
+$medium-blue: #2552c2;
+$light-blue: #3567e6;
+$ps-hover-bg: #00A0DD;
+$xbox-hover-bg: #117D10;
+$hover-border-color: #F1F1E6;
+$hover-text-color: #ffffff;
+
+// Gradient backgrounds
+.gradient-bg {
+  background: linear-gradient(180deg, $dark-blue, $medium-blue);
+}
+
+.gradient-bg-cv {
+  background: linear-gradient(180deg, $dark-blue, $light-blue);
+}
+
+.gradient-bg-tp {
+  background: linear-gradient(180deg, $light-blue, $dark-blue);
+}
+
+// Custom rounded cards
+.custom-rounded-card {
+  border-radius: 1rem; // Apply the same border-radius for all corners
+}
+
+// Custom classes for PlayStation and Xbox
+.custom-rounded-card-ps {
+  @extend .custom-rounded-card;
+}
+
+.custom-rounded-card-xbox {
+  @extend .custom-rounded-card;
+}
+
+// Button hover effects
+.btn-outline-secondari-ps {
+  background-color: $ps-hover-bg; 
+  border-color: $hover-border-color; 
+  color: $hover-text-color;
+}
+
+.btn-outline-secondari {
+    background-color: $xbox-hover-bg; 
+    border-color: $hover-border-color; 
+    color: $hover-text-color; 
+}
+
+.custom-card {
+  width: 300px; // fixed width
+  height: 350px; // fixed height
+  display: flex;
+  flex-direction: column;
+
+}
