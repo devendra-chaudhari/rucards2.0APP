@@ -63,6 +63,14 @@ export const MENU: MenuItem[] = [
         role: [Roles.admin, Roles.sub_admin],
         subItems: [
             {
+                label: 'Manage Promote User',
+                link: 'admin/manage-users/manage-promote-requests'
+            },
+            {
+                label: 'Manage Map User',
+                link: '/admin/manage-users/manage-map-user'
+            },
+            {
                 label: 'Manage Corporates',
                 link: '/admin/manage-users/manage-corporates'
             },
@@ -81,14 +89,6 @@ export const MENU: MenuItem[] = [
             {
                 label: 'Manage Super Distributor',
                 link: '/admin/manage-users/manage-super-distributor'
-            },
-            {
-                label: 'Manage Promote Request',
-                link: 'admin/manage-users/manage-promote-requests'
-            },
-            {
-                label: 'Manage Map User',
-                link: '/admin/manage-users/manage-map-user'
             },
             {
                 label: 'Manage Sub-Admin User',

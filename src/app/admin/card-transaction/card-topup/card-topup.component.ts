@@ -8,7 +8,6 @@ import {WalletService} from "../../../shared/services/wallet.service";
 import {SortService} from "../../../shared/services/sort.service";
 import {ExcelService} from "../../../shared/services/excel.service";
 
-
 export interface Cards{
   id :string;
   first_name :string;
@@ -42,6 +41,7 @@ export interface Cards{
   creator:string;
   creator_name:string;
 }
+
 @Component({
   selector: 'app-card-topup',
   templateUrl: './card-topup.component.html',
@@ -62,6 +62,7 @@ export class CardTopupComponent {
     "page_no": 1,
     "page_size":10
   }
+
   constructor(
       private router: Router,
       private route: ActivatedRoute,
@@ -96,6 +97,7 @@ export class CardTopupComponent {
       }
     });
   }
+  
   onPageSizeChange() {
     this.data.page_size=+this.pageSize;
     this.get_gc_list()

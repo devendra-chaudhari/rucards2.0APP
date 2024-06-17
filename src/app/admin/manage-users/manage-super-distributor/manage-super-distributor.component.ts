@@ -99,7 +99,7 @@ ngOnInit() {
 }
 
 getUsers(page_size:number, page_no:number) {
-  this.apiService.post('user/distributors_list',{'page_size':page_size, 'page_no':page_no}).subscribe(
+  this.apiService.post('user/super_distributors_list',{'page_size':page_size, 'page_no':page_no}).subscribe(
       (res) => {
         console.log(res)
           this.users = res.data.result;

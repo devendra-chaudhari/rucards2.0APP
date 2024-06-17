@@ -1,1 +1,272 @@
 <app-breadcrumbs title="Manage Super Distributor" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card rounded-4">
+            <div class="card-header border-0">
+                <div class="row g-3">
+                    <div class="col-md-8 d-flex justify-content-start align-items-center gap-2">
+                        <div class="search-box w-100">
+                            <input class="form-control rounded-pill search bg-light border-light"
+                                placeholder="Search by Mobile No, Email, Customer Name, Pan No, DOB, Address" />
+                            <i class="ri-search-line search-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-end">
+                            <button class="btn btn-rounded me-2" style="background-color: #3fa5d3; color: white">
+                                Filter
+                            </button>
+                            <!-- <button class="btn btn-primary btn-rounded"
+                                routerLink="/admin/manage-users/manage-customer/create" [queryParams]="{
+                                    user_type:'Distributor'
+                                }">
+                                Add Distributor
+                            </button> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body border border-dashed border-start-0 border-end-0">
+                <div class="row g-3">
+                    <div class="d-flex justify-content-between align-items-center gap-2">
+                        <div class="d-flex align-items-center justify-content-center">
+                            <label for="page" class="me-2">Show</label>
+                            <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1" [(ngModel)]="page_size"
+                            (change)="onPageSizeChange()">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <label for="page" class="ms-2">entries</label>
+                        </div>
+                        <button type="button" class="btn btn-success btn-rounded me-2 mb-2">
+                            Export
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive mt-3">
+                    <table class="table table-sm table-striped table-hover align-middle table-nowrap">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase">SR</th>
+                                <th class="text-uppercase">Name</th>
+                                <th class="text-uppercase">Contact</th>
+                                <th class="text-uppercase">Dob</th>
+                                <th class="text-uppercase">Address</th>
+                                <th class="text-uppercase">PAN NO</th>
+                                <th class="text-uppercase">PARENT DETAILS</th>
+                                <th class="text-uppercase">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="cursor-pointer card-animate"
+                                *ngFor="let super_distributor of users| slice : (page_no - 1) * page_size : page_no * page_size; let i = index">
+                                <td>{{ (page_no - 1) * page_size + i + 1 }}</td>
+                                <td>
+                                    <div class="d-flex flex-column justify-content-center align-items-start">
+                                        <a (click)="openDetails(superDistributorDetails, super_distributor)" class="fs-16 mb-1">
+                                            {{ super_distributor?.full_name | uppercase }}
+                                        </a>
+                                        <span class="text-muted mb-0">
+                                            {{super_distributor?.father_name | uppercase}}
+                                        </span> 
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column justify-content-center align-items-start">
+                                        <span class="fs-16 mb-0">
+                                            <i class="ri-phone-line me-1"></i>
+                                            {{ super_distributor?.mobile }}
+                                        </span>
+                                        <span class="text-muted mb-0">
+                                            <i class="ri-mail-check-line me-1"></i>
+                                            {{ super_distributor?.email | lowercase }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column justify-content-center align-items-start">
+                                        <span class="fs-16 mb-0">
+                                            DOB: {{ super_distributor?.dob | date : "dd-MM-yyyy" }}
+                                        </span>
+                                        <span class="text-muted mb-0">
+                                            DOC: {{ super_distributor?.created_at | dateago }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column justify-content-center align-items-start">
+                                        <span class="fs-16 mb-0">
+                                            State: {{ super_distributor?.state }}
+                                        </span>
+                                        <span class="text-muted mb-0">
+                                            District: {{ super_distributor?.district | dateago }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column justify-content-center align-items-start">
+                                        <span class="fs-16 mb-0">
+                                            {{ super_distributor?.pan ?? "N/A" | uppercase }}
+                                        </span>
+                                        <span class="badge rounded-pill text-bg-success"
+                                            *ngIf="super_distributor.active">Active</span>
+                                        <span class="badge rounded-pill text-bg-danger"
+                                            *ngIf="!super_distributor.active">Inactive</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex flex-column justify-content-center align-items-start">
+                                        <span class="fs-16 mb-0">
+                                            {{ super_distributor?.parent_username }}</span>
+                                        <span class="text-muted mb-0">
+                                            {{ super_distributor?.parent_full_name | lowercase }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary btn-rounded me-2" title="Edit super_distributor" routerLink="/admin/manage-users/manage-corporates/{{
+                                        super_distributor?.id
+                                      }}/edit">
+                                      <i class="ri-pencil-line"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row justify-content-md-between align-items-md-center mt-2">
+                    <div class="col col-sm-6">
+                        <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                            Showing {{ (page_no - 1) * page_size + 1 }} to {{ Math.min(page_no * page_size, total) }} of {{ total }} entries
+                        </div>
+                    </div>
+
+                    <div class="col col-sm-6">
+                        <div class="text-sm-right float-sm-end">
+                            <ngb-pagination [collectionSize]="total" [(page)]="page_no" [pageSize]="page_size" [maxSize]="2" (pageChange)="onPageChange($event)">
+                            </ngb-pagination>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<ng-template #superDistributorDetails let-offcanvas>
+    <div class="offcanvas-header pb-0">
+      <div class="d-flex justify-content-start gap-3">
+        <img src="assets/images/avatar.png" alt="customer img" class="avatar-md rounded-circle" />
+        <div class="d-flex flex-column justify-content-start gap-1">
+          <div class="d-flex justify-content-start align-items-center gap-2">
+            <p class="fw-medium fs-16 mb-1">{{ super_distributor_data?.full_name }}</p>
+            <span class="badge badge-outline-success" *ngIf="super_distributor_data.active">Active</span>
+            <span class="badge badge-outline-danger" *ngIf="!super_distributor_data.active">Inactive</span>
+            <small class="badge bg-soft-dark" title="Risk Score"><i class="ri-shield-fill text-black"></i></small>
+          </div>
+          <span class="text-muted d-flex align-items-center"><i class="ri-phone-line"></i> {{ super_distributor_data?.mobile
+            }}</span>
+          <span class="text-muted d-flex align-items-center"><i class="ri-map-pin-line"></i>
+            {{ super_distributor_data?.state }},India</span>
+        </div>
+      </div>
+      <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <div class="row mt-3">
+      <div class="col-12 px-4">
+        <a (click)="offcanvas.dismiss()" class="btn btn-info w-100 btn-rounded"
+          routerLink="/admin/manage-users/manage-customer/details" [queryParams]="{
+            id: super_distributor_data.id,
+            username: super_distributor_data.username,
+            full_name: super_distributor_data.full_name,
+            father_name: super_distributor_data.father_name,
+            gender: super_distributor_data.gender,
+            mobile: super_distributor_data.mobile,
+            pincode: super_distributor_data.pincode,
+            email: super_distributor_data.email,
+            dob: super_distributor_data.dob,
+            pan: super_distributor_data.pan,
+            state: super_distributor_data.state,
+            district: super_distributor_data.district,
+            balance: super_distributor_data.balance,
+            retailer: super_distributor_data.retailer,
+            distributor: super_distributor_data.distributor,
+            super_distributor: super_distributor_data.super_distributor,
+            active: super_distributor_data.active,
+            created_at: super_distributor_data.created_at,
+            role: super_distributor_data.role,
+            parent_username: super_distributor_data.parent_username,
+            parent_full_name: super_distributor_data.full_name,
+            kyc_type: super_distributor_data.kyc_type,
+            address: super_distributor_data.address,
+            user_type: super_distributor_data.user_type,
+          }">
+          View Details
+        </a>
+      </div>
+    </div>
+    <hr class="mb-0" />
+    <div class="offcanvas-body p-2" style="max-height: calc(100vh - 165px); background-color: #f2f3f4">
+      <div class="card shadow mb-2" style="border-radius: 4%; border-color: white">
+        <div
+          class="card-header d-flex justify-content-between align-items-center border border-start-0 border-end-0 border-top-0 pb-1">
+          <span class="card-title">Primary Card</span>
+          <i [ngClass]="{
+              'ri-eye-off-line': showDetails,
+              'ri-eye-line': !showDetails
+            }" class="cursor-pointer fs-18" (click)="showDetails = !showDetails"></i>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center">
+            <label class="form-label mb-0 text-muted">Mask Card No</label>
+            <i class="cursor-pointer ri-list-settings-line fs-18" title="Settings"></i>
+          </div>
+          <p class="fs-8">
+            <span *ngIf="showDetails">{{ cardNo }}</span><span *ngIf="!showDetails">xxxx xxxx xxxx xxxx</span>
+            <i class="ri-file-copy-line ms-1 cursor-pointer text-info" (click)="copyCardNo()" *ngIf="showDetails"></i>
+          </p>
+  
+          <label class="form-label mb-0 text-muted">Expire</label>
+          <p class="fs-8">
+            <span *ngIf="showDetails">21/27</span><span *ngIf="!showDetails">../..</span>
+          </p>
+  
+          <label class="form-label mb-0 text-muted">CVV</label>
+          <p class="fs-8">
+            <span *ngIf="showDetails">356</span><span *ngIf="!showDetails">...</span>
+          </p>
+  
+          <label class="form-label mb-0 text-muted">Email</label>
+          <p class="fs-8">{{ super_distributor_data?.email }}</p>
+  
+          <label class="form-label mb-0 text-muted">Address</label>
+          <p class="fs-8">
+            {{ super_distributor_data?.district }} {{ super_distributor_data?.state }}
+            {{ super_distributor_data?.pincode }}
+          </p>
+        </div>
+      </div>
+  
+      <div class="card" style="border-radius: 4%">
+        <div class="card-header d-flex justify-content-start align-items-center gap-3">
+          <span class="fs-16">Secondary Cards</span>
+          <div class="d-flex align-items-center gap-3">
+            <button type="button" class="btn btn-light bg-gradient waves-effect waves-light btn-rounded">
+              GPR Card
+            </button>
+            <button type="button" class="btn btn-light bg-gradient waves-effect waves-light btn-rounded">
+              Gift Card
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  
