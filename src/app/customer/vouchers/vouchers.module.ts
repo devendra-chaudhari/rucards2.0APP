@@ -9,10 +9,7 @@ import { RuSubscriptionsComponent } from './ru-subscriptions/ru-subscriptions.co
 
 
 @NgModule({
-  declarations: [
-    RuGamingVouchersComponent,
-    RuSubscriptionsComponent
-  ],
+  declarations: [],
   imports: [
     CommonModule,
     SharedModule,
