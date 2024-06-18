@@ -9,8 +9,11 @@
             </div>
             <div class="col-md-6">
                 <div class="float-end">
-                    <button class="btn btn-rounded  mb-2"  style="background-color: #3FA5D3; color: white;"  (click)="centerAddModal(AddEmployee)">
+                    <button class="btn btn-rounded mb-2"  style="background-color: #3FA5D3; color: white;"  (click)="centerAddModal(AddEmployee)">
                         Add Employee
+                    </button>
+                    <button class="btn btn-rounded mb-2 ms-2" style="background-color: #3fa5d3; color: white" (click)="onFilterUser(filter_user)">
+                        Filter
                     </button>
                 </div>
             </div>
@@ -483,3 +486,40 @@
 
 </ng-template>
 
+<ng-template #filter_user let-offcanvas>
+    <div class="offcanvas-header">
+        <p class="fs-18 fw-medium">Filter User By Date</p>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <div  >
+        <div class="offcanvas-body">
+          <form class="advertisementForm" [formGroup]="filterUserForm">
+            
+            
+            <div class="mb-3">
+              <label for="start_date">Start Date <small class="text-muted">(dd-mm-yyyy)</small><span
+                  class="text-danger">*</span></label>
+              <div class="input-group btn-block btn-rounded me-5 w-100">
+                <input type="text" id="start_date" mwlFlatpickr class="form-control rounded-pill" placeholder="dd/MM/yyyy"
+                  formControlName="start_date" />
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="end_date">End Date <small class="text-muted">(dd-mm-yyyy)</small><span
+                  class="text-danger">*</span></label>
+              <div class="input-group btn-block btn-rounded me-5 w-100">
+                <input type="text" id="end_date" mwlFlatpickr class="form-control rounded-pill" placeholder="dd/MM/yyyy"
+                  formControlName="end_date" />
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="text-end">
+                <button type="button" class="btn btn-primary btn-rounded" (click)="onSubmitFilterUser()">
+                  Filter
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+    </div>
+  </ng-template>

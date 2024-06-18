@@ -5,7 +5,7 @@ import {ToastrService} from "ngx-toastr";
 import {ApiService} from "../../../shared/services/api.service";
 import {SortService} from "../../../shared/services/sort.service";
 import {NgxSpinnerService} from "ngx-spinner";
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
 
 export interface SubAdminUsers{
   active: boolean;
@@ -59,6 +59,11 @@ export class ManageSubAdminComponent {
     confirm_password: new FormControl('', [Validators.required])
   })
 
+  filterUserForm = new UntypedFormGroup({
+    start_date: new UntypedFormControl('', [Validators.required]),
+    end_date: new UntypedFormControl('', [Validators.required]),
+  });
+
   constructor(
       private offCanvas: NgbOffcanvas,
       private copyToClipboard: Clipboard,
@@ -76,20 +81,7 @@ export class ManageSubAdminComponent {
       {label: 'Manage Users'},
       {label: 'Manage Sub-Admin', active: true}
     ];
-    this.getAllSubAdminUser();
-  }
-
-  getAllSubAdminUser() {
-    this.apiService.post('user/get_all_sub_admin_details', {
-      'page_no': +this.page,
-      'page_size': +this.page_size,
-      'from_date': '',
-      'to_date': ''
-    }).subscribe(res => {
-      this.sub_admin_users = res.data.result;
-      this.total = res.data.total;
-      this.totalRecords = res.data.total;
-    });
+    this.getAllSubAdminUser(this.page_size, this.page);
   }
 
   getMax() {
@@ -97,12 +89,12 @@ export class ManageSubAdminComponent {
   }
 
   onChange() {
-    this.getAllSubAdminUser();
+    this.getAllSubAdminUser(this.page_size, this.page);
   }
 
   onPageChange(event: any) {
     this.page = event
-    this.getAllSubAdminUser()
+    this.getAllSubAdminUser(this.page_size, this.page)
   }
 
   centerModal(centerDataModal: any) {
@@ -153,7 +145,7 @@ export class ManageSubAdminComponent {
       }, complete: () => {
         this.offCanvas.dismiss();
         this.modalService.dismissAll();
-        this.getAllSubAdminUser();
+        this.getAllSubAdminUser(this.page_size, this.page);
       }
 
     });
@@ -193,7 +185,7 @@ export class ManageSubAdminComponent {
         }, complete: () => {
           this.spinner.hide();
           this.AddSubAdminForm.reset();
-          this.getAllSubAdminUser();
+          this.getAllSubAdminUser(this.page_size, this.page);
           this.modalService.dismissAll();
         }
       })
@@ -225,7 +217,7 @@ export class ManageSubAdminComponent {
           this.user_id=null;
           this.spinner.hide();
           this.EditSubAdminForm.reset();
-          this.getAllSubAdminUser();
+          this.getAllSubAdminUser(this.page_size, this.page);
           this.modalService.dismissAll();
         }
       })
@@ -260,4 +252,28 @@ export class ManageSubAdminComponent {
     }
   }
 
+  onSubmitFilterUser(){
+    const {start_date, end_date} = this.filterUserForm.value
+    console.log(start_date, end_date)
+    this.getAllSubAdminUser(this.page_size,this.page, start_date, end_date);
+    this.offCanvas.dismiss();
+  }
+  
+  onFilterUser(filter_user: any) {
+    this.offCanvas.open(filter_user, {position: 'end', animation: true});
+  }
+
+  getAllSubAdminUser(page_size:number, page_no:number, start_date:Date=null, end_date:Date=null) {
+    const data={
+      'page_no': page_no,
+      'page_size': page_size,
+      'start_date': start_date,
+      'end_date': end_date
+    }
+    this.apiService.post('user/get_all_sub_admin_details', data).subscribe(res => {
+      this.sub_admin_users = res.data.result;
+      this.total = res.data.total;
+      this.totalRecords = res.data.total;
+    });
+  }
 }

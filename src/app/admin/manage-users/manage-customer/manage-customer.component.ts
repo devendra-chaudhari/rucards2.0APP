@@ -7,6 +7,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {ExcelService} from "../../../shared/services/excel.service";
 import {SortService} from "../../../shared/services/sort.service";
 import {DatePipe} from "@angular/common";
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 interface CustomerList {
     id: string;
@@ -133,6 +134,11 @@ export class ManageCustomerComponent implements OnInit {
         product_id:null
     }
 
+    filterUserForm = new UntypedFormGroup({
+        start_date: new UntypedFormControl('', [Validators.required]),
+        end_date: new UntypedFormControl('', [Validators.required]),
+    });
+
     constructor(
         private offCanvas: NgbOffcanvas,
         private toaster: ToastrService,
@@ -150,8 +156,12 @@ export class ManageCustomerComponent implements OnInit {
             {label: 'Manage Users'},
             {label: 'Customers', active: true}
         ];
-        this.getAllCustomers();
+        this.getAllCustomers(this.page, this.pageSize);
     }
+
+    onFilterUser(filter_user: any) {
+        this.offCanvas.open(filter_user, {position: 'end', animation: true});
+      }
 
     openDetails(customerDetails: TemplateRef<any>, customer:CustomerList) {
         this.customer_data =customer
@@ -163,12 +173,7 @@ export class ManageCustomerComponent implements OnInit {
         this.toastr.success('Copied to Clipboard');
     }
 
-    getAllCustomers() {
-        this.apiService.post('user/customers_list',{'page_no':+this.page, 'page_size':+this.pageSize}).subscribe(res => {
-            this.customers = res.data.result;
-            this.totalCustomers=res.data.total;
-        });
-    }
+    
     onGetProductsList() {
         this.spinner.show();
         this.apiService.get('product/list').subscribe({
@@ -364,10 +369,36 @@ export class ManageCustomerComponent implements OnInit {
 
     onPageChange(event: any){
         this.page = event
-        this.getAllCustomers()
+        this.getAllCustomers(this.page, this.pageSize)
     }
 
     onPageSizeChange(){
-        this.getAllCustomers()
+        this.getAllCustomers(this.page, this.pageSize)
     }
+
+    onSubmitFilterUser(){
+        const {start_date, end_date} = this.filterUserForm.value
+        console.log(start_date, end_date)
+        this.getAllCustomers(this.page, this.pageSize, start_date, end_date);
+        this.offCanvas.dismiss();
+    }
+
+    getAllCustomers(page:number, page_size:number, start_date:Date=null, end_date:Date=null) {
+        const data ={
+            'page_no': page, 
+            'page_size': page_size, 
+            'start_date': start_date,
+            'end_date': end_date
+        }
+        console.log("in getAllCustomer", data)
+        this.apiService.post('user/customers_list',data).subscribe(res => {
+            this.customers = res.data.result;
+            this.totalCustomers=res.data.total;
+            this.filterUserForm.reset();
+        },(error) => {
+            this.toaster.error(error.error.error);
+        }
+    );
+    }
+
 }

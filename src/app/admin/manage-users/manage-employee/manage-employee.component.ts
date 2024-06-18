@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
 import {NgbModal, NgbOffcanvas} from "@ng-bootstrap/ng-bootstrap";
 import {Clipboard} from "@angular/cdk/clipboard";
 import {ToastrService} from "ngx-toastr";
@@ -79,6 +79,12 @@ export class ManageEmployeeComponent {
     department_name: new FormControl('', [Validators.required]),
     role_name: new FormControl('', [Validators.required])
   })
+
+  filterUserForm = new UntypedFormGroup({
+    start_date: new UntypedFormControl('', [Validators.required]),
+    end_date: new UntypedFormControl('', [Validators.required]),
+  });
+
   constructor(
       private offCanvas: NgbOffcanvas,
       private toastr: ToastrService,
@@ -94,37 +100,27 @@ export class ManageEmployeeComponent {
       {label: 'Manage Users'},
       {label: 'Manage Employee User', active: true}
     ];
-    this.getAllEmployee();
+    this.getAllEmployee(this.page_size,this.page);
     this.getAllDepartment();
   }
   getMax() {
     return Math.min(this.page * this.page_size, this.totalRecords);
   }
   onChange() {
-    this.getAllEmployee();
+    this.getAllEmployee(this.page_size,this.page);
   }
   onPageChange(event: any) {
     this.page = event
-    this.getAllEmployee()
+    this.getAllEmployee(this.page_size,this.page)
   }
-  getAllEmployee(){
-    this.apiService.post('user/get_all_employee_details', {
-      'page_no': +this.page,
-      'page_size': +this.page_size,
-      'from_date': '',
-      'to_date': ''
-    }).subscribe(res => {
-      this.employees = res.data.result;
-      this.total = res.data.total;
-      this.totalRecords = res.data.total;
-    });
-  }
+  
   centerModal(centerDataModal: any) {
     this.modalService.open(centerDataModal, {centered: true});
   }
   centerAddModal(centerDataModal: any) {
     this.modalService.open(centerDataModal, {centered: true});
   }
+  
   centerEditModal(centerDataModal: any, user: Employees) {
     this.user_id=user.id;
     this.EditEmployeeForm.setValue({
@@ -140,6 +136,7 @@ export class ManageEmployeeComponent {
     this.user_id=user.id;
     this.modalService.open(centerDataModal, {centered: true});
   }
+
   deleteEmployee(user: Employees) {
     this.spinner.show(undefined,
         {
@@ -162,7 +159,7 @@ export class ManageEmployeeComponent {
       }, complete: () => {
         this.offCanvas.dismiss();
         this.modalService.dismissAll();
-        this.getAllEmployee();
+        this.getAllEmployee(this.page_size,this.page);
       }
 
     });
@@ -203,7 +200,7 @@ export class ManageEmployeeComponent {
         }, complete: () => {
           this.spinner.hide();
           this.AddEmployeeForm.reset();
-          this.getAllEmployee();
+          this.getAllEmployee(this.page_size,this.page);
           this.modalService.dismissAll();
         }
       })
@@ -234,7 +231,7 @@ export class ManageEmployeeComponent {
           this.user_id=null;
           this.spinner.hide();
           this.EditEmployeeForm.reset();
-          this.getAllEmployee();
+          this.getAllEmployee(this.page_size,this.page);
           this.modalService.dismissAll();
         }
       })
@@ -310,6 +307,28 @@ export class ManageEmployeeComponent {
     this.getAllDepartmentWiseRoles(data.department_id);
   }
 
+  onSubmitFilterUser(){
+    const {start_date, end_date} = this.filterUserForm.value
+    console.log(start_date, end_date)
+    this.getAllEmployee( this.page_size,this.page, start_date, end_date);
+    this.offCanvas.dismiss();
+  }
+  
+  onFilterUser(filter_user: any) {
+    this.offCanvas.open(filter_user, {position: 'end', animation: true});
+  }
 
-
+  getAllEmployee(page_size:number, page_no:number, start_date:Date=null, end_date:Date=null){
+    const data={
+      'page_no': page_no,
+      'page_size': page_size,
+      'start_date': start_date,
+      'end_date': end_date
+    }
+    this.apiService.post('user/get_all_employee_details', data).subscribe(res => {
+      this.employees = res.data.result;
+      this.total = res.data.total;
+      this.totalRecords = res.data.total;
+    });
+  }
 }

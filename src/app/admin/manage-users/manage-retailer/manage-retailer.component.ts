@@ -7,6 +7,10 @@ import { SharedModule } from "../../../shared/shared.module";
 import { CommonModule } from '@angular/common';
 import { Clipboard } from "@angular/cdk/clipboard";
 import {RouterModule} from '@angular/router';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { NgbDatepickerModule, NgbDateStruct, NgbOffcanvasConfig } from '@ng-bootstrap/ng-bootstrap';
+import { DatePipe } from '@angular/common';
 
 interface RetailerList {
   id: string;
@@ -40,8 +44,11 @@ interface RetailerList {
     standalone: true,
     templateUrl: './manage-retailer.component.html',
     styleUrl: './manage-retailer.component.scss',
-    imports: [SharedModule, CommonModule, NgbModule, RouterModule]
+    providers: [NgbDatepickerModule],
+    imports: [SharedModule, CommonModule, NgbModule, RouterModule, FormsModule, ReactiveFormsModule, DatePipe]
 })
+
+
 export class ManageRetailerComponent {
   breadCrumbItems!: Array<{}>;
   users:RetailerList[] = [];
@@ -78,6 +85,11 @@ export class ManageRetailerComponent {
     user_type: ""
 }
 
+filterUserForm = new UntypedFormGroup({
+  start_date: new UntypedFormControl('', [Validators.required]),
+  end_date: new UntypedFormControl('', [Validators.required]),
+});
+
   constructor(
     private offCanvas: NgbOffcanvas,
     private apiService: ApiService,
@@ -96,8 +108,14 @@ ngOnInit() {
     this.getUsers(this.page_size, this.page_no)
 }
 
-getUsers(page_size:number, page_no:number) {
-  this.apiService.post('user/retailers_list',{'page_size':page_size, 'page_no':page_no}).subscribe(
+getUsers(page_size:number, page_no:number, start_date:Date=null, end_date:Date=null) {
+  const data ={
+    'page_no': page_no, 
+    'page_size': page_size, 
+    'start_date': start_date,
+    'end_date': end_date
+}
+  this.apiService.post('user/retailers_list',data).subscribe(
       (res) => {
         console.log(res)
           this.users = res.data.result;
@@ -124,4 +142,16 @@ openDetails(retailerDetails: TemplateRef<any>, retailer:RetailerList) {
   this.retailer_data =retailer
   this.offCanvas.open(retailerDetails, {position: 'end'});
 }
+
+onSubmitFilterUser(){
+  const {start_date, end_date} = this.filterUserForm.value
+  console.log(start_date, end_date)
+  this.getUsers( this.page_size,this.page_no, start_date, end_date);
+  this.offCanvas.dismiss();
+}
+
+onFilterUser(filter_user: any) {
+  this.offCanvas.open(filter_user, {position: 'end', animation: true});
+}
+
 }

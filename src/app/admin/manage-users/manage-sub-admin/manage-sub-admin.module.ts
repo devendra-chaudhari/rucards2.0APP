@@ -7,7 +7,6 @@ import {SharedModule} from "../../../shared/shared.module";
 import {NgbPagination} from "@ng-bootstrap/ng-bootstrap";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {SimplebarAngularModule} from "simplebar-angular";
-import {FlatpickrModule} from "angularx-flatpickr";
 
 
 @NgModule({
@@ -22,7 +21,6 @@ import {FlatpickrModule} from "angularx-flatpickr";
         ReactiveFormsModule,
         SimplebarAngularModule,
         FormsModule,
-        FlatpickrModule
     ]
 })
 export class ManageSubAdminModule { }

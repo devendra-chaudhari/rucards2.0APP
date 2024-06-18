@@ -7,7 +7,7 @@ import { SharedModule } from "../../../shared/shared.module";
 import { CommonModule } from '@angular/common';
 import { Clipboard } from "@angular/cdk/clipboard";
 import {RouterModule} from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, UntypedFormControl, UntypedFormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 
 interface DistributorList {
   id: string;
@@ -39,7 +39,7 @@ interface DistributorList {
 @Component({
   selector: 'app-manage-distributor',
   standalone: true,
-  imports: [SharedModule, CommonModule, NgbModule, RouterModule, FormsModule],
+  imports: [SharedModule, CommonModule, NgbModule, RouterModule, FormsModule, ReactiveFormsModule],
   templateUrl: './manage-distributor.component.html',
   styleUrl: './manage-distributor.component.scss'
 })
@@ -79,6 +79,11 @@ export class ManageDistributorComponent {
     user_type: ""
 }
 
+filterUserForm = new UntypedFormGroup({
+  start_date: new UntypedFormControl('', [Validators.required]),
+  end_date: new UntypedFormControl('', [Validators.required]),
+});
+
   constructor(
     private offCanvas: NgbOffcanvas,
     private apiService: ApiService,
@@ -97,8 +102,14 @@ ngOnInit() {
     this.getUsers(this.page_size, this.page_no)
 }
 
-getUsers(page_size:number, page_no:number) {
-  this.apiService.post('user/distributors_list',{'page_size':page_size, 'page_no':page_no}).subscribe(
+getUsers(page_size:number, page_no:number, start_date:Date=null, end_date:Date=null) {
+  const data ={
+    'page_no': page_no, 
+    'page_size': page_size, 
+    'start_date': start_date,
+    'end_date': end_date
+}
+  this.apiService.post('user/distributors_list',data).subscribe(
       (res) => {
         console.log(res)
           this.users = res.data.result;
@@ -124,5 +135,18 @@ copyCardNo() {
 openDetails(distributorDetails: TemplateRef<any>, distributor:DistributorList) {
   this.distributor_data =distributor
   this.offCanvas.open(distributorDetails, {position: 'end'});
+}
+
+
+onSubmitFilterUser(){
+  const {start_date, end_date} = this.filterUserForm.value
+  console.log(start_date, end_date)
+  this.getUsers(this.page_size, this.page_no, start_date, end_date);
+  this.offCanvas.dismiss();
+}
+
+
+onFilterUser(filter_user: any) {
+  this.offCanvas.open(filter_user, {position: 'end', animation: true});
 }
 }

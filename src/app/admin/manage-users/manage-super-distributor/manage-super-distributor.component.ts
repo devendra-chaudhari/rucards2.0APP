@@ -7,7 +7,7 @@ import { SharedModule } from "../../../shared/shared.module";
 import { CommonModule } from '@angular/common';
 import { Clipboard } from "@angular/cdk/clipboard";
 import {RouterModule} from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 
 
 interface SuperDistributorList {
@@ -40,7 +40,7 @@ interface SuperDistributorList {
 @Component({
   selector: 'app-manage-super-distributor',
   standalone: true,
-  imports: [SharedModule, CommonModule, NgbModule, RouterModule, FormsModule],
+  imports: [SharedModule, CommonModule, NgbModule, RouterModule, FormsModule, ReactiveFormsModule],
   templateUrl: './manage-super-distributor.component.html',
   styleUrl: './manage-super-distributor.component.scss'
 })
@@ -80,6 +80,11 @@ export class ManageSuperDistributorComponent {
     user_type: ""
 }
 
+filterUserForm = new UntypedFormGroup({
+  start_date: new UntypedFormControl('', [Validators.required]),
+  end_date: new UntypedFormControl('', [Validators.required]),
+});
+
   constructor(
     private offCanvas: NgbOffcanvas,
     private apiService: ApiService,
@@ -98,8 +103,14 @@ ngOnInit() {
     this.getUsers(this.page_size, this.page_no)
 }
 
-getUsers(page_size:number, page_no:number) {
-  this.apiService.post('user/super_distributors_list',{'page_size':page_size, 'page_no':page_no}).subscribe(
+getUsers(page_size:number, page_no:number, start_date:Date=null, end_date:Date=null) {
+  const data ={
+    'page_no': page_no, 
+    'page_size': page_size, 
+    'start_date': start_date,
+    'end_date': end_date
+}
+  this.apiService.post('user/super_distributors_list',data).subscribe(
       (res) => {
         console.log(res)
           this.users = res.data.result;
@@ -125,5 +136,16 @@ copyCardNo() {
 openDetails(superDistributorDetails: TemplateRef<any>, super_distributor:SuperDistributorList) {
   this.super_distributor_data =super_distributor
   this.offCanvas.open(superDistributorDetails, {position: 'end'});
+}
+
+onFilterUser(filter_user: any) {
+  this.offCanvas.open(filter_user, {position: 'end', animation: true});
+}
+
+onSubmitFilterUser(){
+  const {start_date, end_date} = this.filterUserForm.value
+  console.log(start_date, end_date)
+  this.getUsers(this.page_size, this.page_no, start_date, end_date);
+  this.offCanvas.dismiss();
 }
 }

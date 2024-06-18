@@ -7,6 +7,8 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {WalletService} from "../../../shared/services/wallet.service";
 import {SortService} from "../../../shared/services/sort.service";
 import {ExcelService} from "../../../shared/services/excel.service";
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import {NgbModal, NgbOffcanvas} from "@ng-bootstrap/ng-bootstrap";
 
 
 export interface Cards{
@@ -63,6 +65,11 @@ export class GiftCardTopupComponent {
     "pagesize":10
   }
 
+  filterCardForm = new UntypedFormGroup({
+    start_date: new UntypedFormControl('', [Validators.required]),
+    end_date: new UntypedFormControl('', [Validators.required]),
+  });
+  
   constructor(
       private router: Router,
       private route: ActivatedRoute,
@@ -73,30 +80,16 @@ export class GiftCardTopupComponent {
       private wallet:WalletService,
       private sortService: SortService,
       private excelService: ExcelService,
+      private offCanvas: NgbOffcanvas,
   ) {
-    this.get_gc_topup();
+    this.get_gc_topup(this.pageSize, this.page_no);
   }
 
   ngOnInit(): void {
 
   }
 
-  get_gc_topup(){
-    this.spinner.show();
-    this.apiService.post('paypoint_gift_card/cards',this.data).subscribe({
-      next: (res) => {
-        console.log(res)
-        this.gc_cards=res.data.TxnList;
-        this.total=res.data.rowscount;
-        this.totalRecords=res.data.rowscount;
-        this.spinner.hide();
-      },
-      error: (error) => {
-        this.toastr.error(error.error.error);
-        this.spinner.hide();
-      }
-    });
-  }
+  
 
   export_to_excel() {
     this.excelFields();
@@ -176,18 +169,47 @@ export class GiftCardTopupComponent {
   // for table page-size and pagination
   onPageSizeChange() {
     this.data.pagesize=this.pageSize;
-    this.get_gc_topup()
+    this.get_gc_topup(this.pageSize, this.page_no)
   }
 
   onPageChange(event: any){
     this.page_no = event
-    this.get_gc_topup()
+    this.get_gc_topup(this.pageSize, this.page_no)
   }
 
   getMax() {
     return Math.min(this.page * this.pageSize, this.totalRecords);
   }
 
+  onSubmitFilterCard(){
+    const {start_date, end_date} = this.filterCardForm.value
+    this.get_gc_topup(this.pageSize,this.page, start_date, end_date);
+    this.offCanvas.dismiss();
+  }
+  
+  onFilterCard(filter_card: any) {
+    this.offCanvas.open(filter_card, {position: 'end', animation: true});
+  }
 
+  get_gc_topup(page_size:number, page:number, start_date:Date=null, end_date:Date=null){
+    this.data.page_no = page
+    this.data.pagesize = page_size
+    this.data.from_date = start_date
+    this.data.to_date = end_date
+    this.spinner.show();
+    this.apiService.post('paypoint_gift_card/cards',this.data).subscribe({
+      next: (res) => {
+        console.log(res)
+        this.gc_cards=res.data.TxnList;
+        this.total=res.data.rowscount;
+        this.totalRecords=res.data.rowscount;
+        this.spinner.hide();
+      },
+      error: (error) => {
+        this.toastr.error(error.error.error);
+        this.spinner.hide();
+      }
+    });
+  }
 
 }
