@@ -1,4 +1,4 @@
 export const environment = {
     production: false,
-    api_url: "http://127.0.0.1:5000/v1/"
+    api_url: "https://gar-popular-mistakenly.ngrok-free.app/v1/"
 };

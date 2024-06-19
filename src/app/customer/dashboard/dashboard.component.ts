@@ -66,6 +66,55 @@ export class DashboardComponent implements OnInit {
         quantity:'',
         pin:''
     };
+
+    bbpsServices = [
+        {
+            category: 'recharges',
+            services: [
+                {
+                    id: 1,
+                    img: 'assets/images/bbps/C00.svg',
+                    title: 'Mobile Recharge'
+                },
+                {
+                    id: 2,
+                    img: 'assets/images/bbps/C03.svg',
+                    title: 'DTH'
+                },
+                {
+                    id: 3,
+                    img: 'assets/images/bbps/C10.svg',
+                    title: 'FASTag'
+                },
+                {
+                    id: 4,
+                    img: 'assets/images/bbps/C06.svg',
+                    title: 'Cable TV'
+                }
+            ]
+        },
+    ]
+    trnasactions = [
+        {
+          sr:1,
+            date: '12/06/2024',
+          transactionId: 4553267428,
+          amount: 1996
+        },
+        {
+          sr:2,
+            date: '12/06/2024',
+          transactionId: 2445235,
+          amount: 2000
+        },
+        {
+          sr:3,
+            date: '12/06/2024',
+          transactionId: 3635921,
+          amount: 2003
+        }
+      ];
+
     constructor(
         private modalService: NgbModal,
         private apiService: ApiService,

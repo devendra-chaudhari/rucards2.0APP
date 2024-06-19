@@ -1,4 +1,4 @@
 export const environment = {
     production: true,
-    api_url: "https://api.rucards.in/v1/"
+    api_url: "https://gar-popular-mistakenly.ngrok-free.app//v1/"
 };

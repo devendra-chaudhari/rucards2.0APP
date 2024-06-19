@@ -1,0 +1,127 @@
+<!-- contact-form.component.html -->
+<div class="container mt-5 mb-5 ">
+  <span class="big-circle"></span>
+  <div class="form row w-100">
+    <div class="contact-info ">
+      <h3 class="title">Let's get in touch</h3>
+      <p class="text">
+        Want to get in touch? We'd love to hear from you. Here's how you can reach us...
+      </p>
+
+      <div class="info">
+        <div class="information mb-3">
+          <i class="ri-building-2-fill px-3"></i>
+          <span>
+            306,Crescent Business Solutions Pvt Ltd, Sigma IT Park, Navi Mumbai, Maharashtra 400701
+          </span>
+        </div>
+        <div class="information mb-3">
+          <i class="ri-phone-fill px-3"></i>
+          <span> +91 2249647700</span>
+        </div>
+        <div class="information mb-3">
+          <i class="ri-whatsapp-fill px-3"></i>
+          <span> +91 9867055060</span>
+        </div>
+      </div>
+
+      <div class="social-media">
+        <p>Connect with us :</p>
+        <div class="social-icons">
+          <a href="#">
+            <i class="ri-facebook-fill fs-3"></i>
+          </a>
+          <a href="#">
+            <i class="ri-instagram-fill fs-3"></i>
+          </a>
+          <a href="#">
+            <i class="ri-linkedin-box-fill fs-3"></i>
+          </a>
+          <a href="#">
+            <i class="ri-youtube-fill fs-3"></i>
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="contact-form ">
+      <span class="circle one"></span>
+      <span class="circle two"></span>
+
+      <form class="contactUsForm" [formGroup]="contactUsForm">
+        <h3 class="title">Contact us</h3>
+        <div class="input-container ic-username mb-3">
+          <input type="text" name="name" class="input form-control" (focus)="focusFunc($event)"
+            formControlName="username" />
+          <label for="">Username</label>
+          <span>Username</span>
+        </div>
+        <div class="input-container ic-email mb-3">
+          <input type="email" name="email" class="input form-control" (focus)="focusFunc($event)"
+            formControlName="email" />
+          <label for="">Email</label>
+          <span>Email</span>
+        </div>
+        <div class="input-container ic-phone mb-3">
+          <input type="tel" name="phone" class="input form-control" (focus)="focusFunc($event)"
+            formControlName="phone" />
+          <label for="">Phone</label>
+          <span>Phone</span>
+        </div>
+        <div class="input-container ic-message textarea mb-3">
+          <textarea name="message" class="input form-control" (focus)="focusFunc($event)"
+            formControlName="message"></textarea>
+          <label for="">Message</label>
+          <span>Message</span>
+        </div>
+        <input type="submit" class="btn btn-primary" (click)="onSubmit()" />
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row ">
+    <div class="col-md-4 mb-3 py-3 px-5">
+      <div class="card-bg">
+        <div class="card__border">
+          <img src="assets/images/customer-service_img.png" alt="vector img" class="card__img">
+        </div>
+        <h3 class="card__name">Customer Care</h3>
+        <span class="card__profession">Interpreter</span>
+        <div class="card__social" id="card-social">
+          <div class="card__social-control">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3 py-3 px-5">
+      <div class="card-bg">
+        <div class="card__border">
+          <img src="assets/images/technical_support_img.png" alt="vector img" class="card__img">
+        </div>
+        <h3 class="card__name">Technical Support</h3>
+        <span class="card__profession">Interpreter</span>
+        <div class="card__social" id="card-social">
+          <div class="card__social-control">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-3 py-3 px-5">
+      <div class="card-bg">
+        <div class="card__border">
+          <img src="assets/images/Vector-PNG.png" alt="vector img" class="card__img">
+        </div>
+        <h3 class="card__name">Sales Team</h3>
+        <span class="card__profession">Interpreter</span>
+        <div class="card__social" id="card-social">
+          <div class="card__social-control">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

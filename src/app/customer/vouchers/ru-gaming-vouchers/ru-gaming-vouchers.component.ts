@@ -68,7 +68,7 @@ export class RuGamingVouchersComponent {
     pullDrag: false,
     dots: false,
     autoplay: true,
-    autoplayTimeout: 1500,
+    autoplayTimeout: 3000,
     navText: ['', ''],
     responsive: {
       0: {
@@ -164,8 +164,10 @@ export class RuGamingVouchersComponent {
   }
 
   openVoucherDetails(content: any, brand: string) {
+    this.buyNowForm.reset;
     this.selectedBrand = brand;
     this.populateProducts(brand);
+    this.selectedProduct = "";
     // this.displayPrice('');
     this.offcanvasRef = this.offcanvasService.open(content, { position: 'end', keyboard: false });
   }
@@ -192,6 +194,8 @@ export class RuGamingVouchersComponent {
 
   onSubmit(): void {
     console.log(this.buyNowForm.value)
+    this.buyNowForm.reset();
+    this.selectedProduct = "";
   }
 
   updateTotalPrice(): void {

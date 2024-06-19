@@ -180,8 +180,10 @@ export class RuSubscriptionsComponent {
   }
 
   openVoucherDetails(content: any, brand: string) {
+    this.buyNowForm.reset();
     this.selectedBrand = brand;
     this.populateProducts(brand);
+    this.selectedProduct = "";
     // this.displayPrice('');
     this.offcanvasRef = this.offcanvasService.open(content, { position: 'end', keyboard: false });
   }
@@ -208,6 +210,8 @@ export class RuSubscriptionsComponent {
 
   onSubmit(): void {
     console.log(this.buyNowForm.value)
+    this.buyNowForm.reset();
+    this.selectedProduct = "";
   }
 
   updateTotalPrice(): void {
