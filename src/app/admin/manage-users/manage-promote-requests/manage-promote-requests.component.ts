@@ -6,7 +6,17 @@ import { ApiService } from 'src/app/shared/services/api.service';
 import { SortService } from 'src/app/shared/services/sort.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { CommonModule } from '@angular/common';
+import { FormsModule, NgModel } from '@angular/forms';
 
+interface UserData{
+  username: string;
+  previous_role?: string;
+  request_new_role?: string;
+  current_role?: string;
+  full_name: string;
+  email: string;
+  mobile: string;
+}
 
 interface PromoteRequests{
   id: string;
@@ -29,7 +39,7 @@ interface PromoteRequests{
     standalone: true,
     templateUrl: './manage-promote-requests.component.html',
     styleUrl: './manage-promote-requests.component.scss',
-    imports: [SharedModule, CommonModule]
+    imports: [SharedModule, CommonModule, FormsModule]
 })
 export class ManagePromoteRequestsComponent {
   breadCrumbItems!: Array<{}>;
@@ -37,6 +47,9 @@ export class ManagePromoteRequestsComponent {
   page_size:number = 10
   promoteRequests:PromoteRequests[]=[]
   total:number=0
+  userid: string = '';
+  userData:UserData;
+  isSearch:boolean=false;
 
   constructor(
     private offCanvas: NgbOffcanvas,
@@ -45,7 +58,8 @@ export class ManagePromoteRequestsComponent {
     private sortService: SortService,
     private spinner: NgxSpinnerService,
     private toaster: ToastrService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    // private offcanvasService: NgbOffcanvas,
 ) {
 }
 
@@ -118,4 +132,63 @@ export class ManagePromoteRequestsComponent {
   }
 
 
+  getMax() {
+    return Math.min(this.page * this.page_size, this.total);
+  }
+
+  onChange() {
+    this.getPromoteRequests(this.page, this.page_size)
+  }
+
+  onPageChange(event: any){
+    this.page = event
+    this.getPromoteRequests(this.page, this.page_size)
+  }
+  
+  openPromoteUser(content: any) {
+    this.offCanvas.open(content, { position: "end", keyboard: false });
+  }
+
+  onShow(): void {
+    
+    const payload = {
+      "userid": this.userid
+    }
+    console.log(this.userid)
+    this.apiService.post('user/get_user_by_userid',payload).subscribe({
+      next: (res) => {
+        this.isSearch = true
+        console.log(res)
+        this.toaster.success(res.message);
+        this.userData = res.data;
+        this.spinner.hide();
+      },
+      error: (error) => {
+        this.toaster.error(error.error.error);
+        this.spinner.hide();
+      }
+    });
+  }
+  manualPromote(previous_username:string){
+    this.spinner.show(undefined,{
+      type: 'ball-scale-multiple',
+      size: 'medium',
+      bdColor: 'rgba(0, 0, 0, 0.8)',
+      color: '#fff',
+      fullScreen: true
+              });
+  const payload = {
+    "previous_username":previous_username
+  }
+  this.apiService.post('user/manually_promote_user',payload).subscribe({
+    next: (res) => {
+      this.toaster.success(res.message);
+      this.spinner.hide();
+    },
+    error: (error) => {
+      this.toaster.error(error.error.error);
+      this.spinner.hide();
+    }
+  });
+  }
 }

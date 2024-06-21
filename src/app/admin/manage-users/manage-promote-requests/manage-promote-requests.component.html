@@ -40,7 +40,7 @@
                   </div>
                   <div class="col-md-4">
                     <div class="text-end">
-                        <button type="button" class="btn btn-primary  btn-rounded me-2 mb-2">Promote User</button>
+                        <button type="button" class="btn btn-primary  btn-rounded me-2 mb-2" (click)="openPromoteUser(promoteuser)">Promote User</button>
                         <button type="button" class="btn btn-primary  btn-rounded me-2 mb-2">Search</button>
                         <button type="button" class="btn btn-primary  btn-rounded me-2 mb-2">Filters</button>
                     </div>
@@ -146,7 +146,7 @@
         <div class="row justify-content-md-between align-items-md-center mt-2">
             <div class="col col-sm-4">
                 <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
-                    
+                    Showing {{ (page - 1) * page_size + 1 }} to {{ getMax() }} of {{ total }} entries
                 </div>
             </div>
 
@@ -160,3 +160,46 @@
     </div>
 </div>
 
+
+
+<ng-template #promoteuser let-offcanvas>
+    <div class="offcanvas-header">
+      <h4 class="offcanvas-title">Promote User</h4>
+      <button type="button" class="btn btn-primary btn-rounded ms-auto" (click)="offcanvas.close('Close click')">
+        Close
+      </button>
+    </div>
+    <div class="offcanvas-body">
+      <form  class="editNotificationForm">
+        <div class="mb-3">
+            <label for="username" class="form-label mt-2">Username</label>
+                <input class="form-control rounded-pill" placeholder="eg:-R00123456" id="username" name="userid" [(ngModel)]="userid" >                         
+        </div>
+        
+        <div class="text-center  mb-3">
+          <button type="button" class="btn btn-primary btn-rounded" (click)="onShow()" >
+            Show
+          </button>
+        </div>
+      </form>
+      <div class="card rounded-4 card-animate" *ngIf="isSearch">
+        <div class="card-body" >
+            <div class="list-group border-0 g-3 py-1">
+                <p class="fs-16 fw-medium py-1">Promote User Details:</p>
+                <a class="list-group-item list-group-item-action border-0 g-3 py-1">Username: {{userData?.username | uppercase}}</a>
+                <a class="list-group-item list-group-item-action border-0 g-3 py-1">Full Name: {{userData?.full_name}}</a>
+                <a class="list-group-item list-group-item-action border-0 g-3 py-1">Mobile: {{userData?.mobile | lowercase}}</a>
+                <a class="list-group-item list-group-item-action border-0 g-3 py-1">Email: {{userData?.email | lowercase}}</a>
+                <a class="list-group-item list-group-item-action border-0 g-3 py-1" *ngIf="userData?.current_role">Current Role: {{userData?.current_role ?? 'N/A' | uppercase}}</a>
+                <a class="list-group-item list-group-item-action border-0 g-3 py-1" *ngIf="userData?.previous_role">Previous Role: {{userData?.previous_role ?? 'N/A' | uppercase}}</a>
+                <a class="list-group-item list-group-item-action border-0 g-3 py-1" *ngIf="userData?.request_new_role">Request Role: {{userData?.request_new_role ?? 'N/A' | uppercase}}</a>
+                <a class="list-group-item list-group-item-action py-2 bg-danger" *ngIf="userData?.current_role">User Is already Promoted</a>
+                <a class="list-group-item list-group-item-action py-2 bg-success" *ngIf="userData?.request_new_role">User Can Be Promoted</a>
+
+                <button class="btn btn-primary  btn-rounded me-2 mt-4 mb-2" *ngIf="userData?.request_new_role" (click)="manualPromote(userData.username)">Promote</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+  </ng-template>
