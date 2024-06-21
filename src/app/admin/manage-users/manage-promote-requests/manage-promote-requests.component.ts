@@ -182,6 +182,8 @@ export class ManagePromoteRequestsComponent {
   }
   this.apiService.post('user/manually_promote_user',payload).subscribe({
     next: (res) => {
+      this.isSearch = false
+      this.userData = null;
       this.toaster.success(res.message);
       this.spinner.hide();
     },
