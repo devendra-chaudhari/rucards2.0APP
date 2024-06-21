@@ -471,16 +471,16 @@ export const MENU: MenuItem[] = [
         link: '/bill-payments'
     },
     {
-        label: 'Vouchers',
+        label: 'Brand Vouchers',
         icon: 'ri-bill-line',
         role: [Roles.customer],
         subItems: [
             {
-                label: 'Ru Gaming Voucher',
+                label: 'Gaming Vouchers',
                 link: '/ru-gaming-vouchers'
             },
             {
-                label: 'Ru Subscription',
+                label: 'Subscription Vouchers',
                 link: '/ru-subscriptions',
             }
         ]
@@ -507,39 +507,6 @@ export const MENU: MenuItem[] = [
             text: 'coming soon',
         },
     },
-
-    {
-        label: 'Comming Soon',
-        role: [Roles.customer],
-        isTitle: true
-    },
-    {
-        label: 'Ru-Investments',
-        icon: 'ri-star-smile-line',
-        role: [Roles.customer],
-        badge: {
-            variant: 'bg-success',
-            text: 'coming soon',
-        },
-    },
-    {
-        label: 'Ru-Credits',
-        icon: 'ri-star-smile-line',
-        role: [Roles.customer],
-        badge: {
-            variant: 'bg-success',
-            text: 'coming soon',
-        },
-    },
-    {
-        label: 'Ru-Forex',
-        icon: 'ri-star-smile-line',
-        role: [Roles.customer],
-        badge: {
-            variant: 'bg-success',
-            text: 'coming soon',
-        },
-    },
     {
         label: 'Help',
         isTitle: true
@@ -559,11 +526,7 @@ export const MENU: MenuItem[] = [
         label: 'Contact Us',
         icon: 'ri-contacts-book-line',
         role: [Roles.customer],
-        link: '/manage-support-ticket',
-        badge: {
-            variant: 'bg-success',
-            text: 'coming soon',
-        },
+        link: '/contact-us',
     },
 
 

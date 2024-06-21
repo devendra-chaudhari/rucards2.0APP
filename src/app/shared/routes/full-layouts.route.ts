@@ -397,6 +397,15 @@ export const FULL_ROUTES: Routes = [
         },
         loadChildren: () => import('../../customer/order-history/order-history.module').then(m => m.OrderHistoryModule)
     },
+    {
+        path: 'contact-us',
+        data: {
+            title: 'Customer Support',
+            roles: ['customer'],
+            permission: ['contact-us']
+        },
+        loadComponent: () => import('../../customer/contact-us/contact-us.component').then(m => m.ContactUsComponent)
+    },
 
 
 ];

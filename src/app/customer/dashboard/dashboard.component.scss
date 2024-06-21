@@ -7,4 +7,12 @@
   margin-bottom: 0 !important;
   padding-bottom: 0 !important;
 }
+.services {
+  transition: all 0.3s ease-out;
+}
 
+.services:hover {
+  background: rgb(180, 188, 234);
+  transform: scale(1.1);
+  box-shadow: 0 1rem 3rem rgb(206, 218, 246);
+}

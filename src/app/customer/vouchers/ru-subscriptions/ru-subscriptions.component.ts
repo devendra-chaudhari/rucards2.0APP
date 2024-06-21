@@ -44,7 +44,7 @@ export class RuSubscriptionsComponent {
   totalRecords: number = 0;
   selectedBrand: string = '';
   selectedProduct: string = '';
-  selectedPrice: string = '';
+  selectedPrice: number;
   brandList: string[] = [];
   productList: Product[] = [];
   private offcanvasRef!: NgbOffcanvasRef;
@@ -56,14 +56,15 @@ export class RuSubscriptionsComponent {
   submitted = false;
   purchaseNow: boolean = false;
   showPurchaseButton: boolean = true;
+  totalPrice: number = 0;
+  quantity: number = 1;
 
-  purchaseForm = new UntypedFormGroup({
-    visible_at: new UntypedFormControl('', [Validators.required]),
-    start_date: new UntypedFormControl('', [Validators.required]),
-    end_date: new UntypedFormControl('', [Validators.required]),
-    message: new UntypedFormControl('', [Validators.required])
+  buyNowForm = new UntypedFormGroup({
+    product: new UntypedFormControl('', [Validators.required]),
+    quantity: new UntypedFormControl('', [Validators.required]),
+    paymentOption : new UntypedFormControl('', [Validators.required])
   });
-  
+
   customOptions: OwlOptions = {
     loop: true,
     mouseDrag: false,
@@ -166,18 +167,12 @@ export class RuSubscriptionsComponent {
   ) {}
 
   ngOnInit(): void {
-    this.cardForm = this.formBuilder.group({
-      ids: [''],
-      amount: ['', [Validators.required]],
-    });
 
-    this.customcardData = this.formBuilder.group({
-      card_no: ['', [Validators.required]],
-      cardholder: ['', [Validators.required]],
-      month: ['', [Validators.required]],
-      year: ['', [Validators.required]],
-      cvc: ['', [Validators.required]]
-    });
+    this.buyNowForm = this.formBuilder.group({
+      product: ['', Validators.required],
+      quantity: [this.quantity],
+      paymentOption: ['', Validators.required]
+    })
 
   }
   ngAfterViewInit() {
@@ -185,9 +180,11 @@ export class RuSubscriptionsComponent {
   }
 
   openVoucherDetails(content: any, brand: string) {
+    this.buyNowForm.reset();
     this.selectedBrand = brand;
     this.populateProducts(brand);
-    this.displayPrice('');
+    this.selectedProduct = "";
+    // this.displayPrice('');
     this.offcanvasRef = this.offcanvasService.open(content, { position: 'end', keyboard: false });
   }
 
@@ -199,31 +196,11 @@ export class RuSubscriptionsComponent {
     this.productList = this.brandProducts[brand] || [];
   }
 
-  displayPrice(productName: string) {
-    if (this.selectedBrand && productName) {
-      const product = this.productList.find(p => p.name === productName);
-      if (product) {
-        this.selectedPrice = `Price: ${product.price} Rs`;
-      } else {
-        this.selectedPrice = '';
-      }
-    } else {
-      this.selectedPrice = '';
-    }
-  }
-
-  onBrandChange(event: Event) {
-    const brand = (event.target as HTMLSelectElement).value;
-    this.selectedBrand = brand;
-    this.populateProducts(brand);
-    this.displayPrice('');
-    this.selectedProduct = ''; // Reset selected product when brand changes
-  }
-
   onProductChange(event: Event) {
-    const productName = (event.target as HTMLSelectElement).value;
-    this.selectedProduct = productName;
-    this.displayPrice(productName);
+    const product = JSON.parse((event.target as HTMLSelectElement).value);
+    this.selectedProduct = product['name'];
+    this.selectedPrice = product['price'];
+    this.totalPrice = product['price'];
   }
 
   onPurchaseNow() {
@@ -231,18 +208,15 @@ export class RuSubscriptionsComponent {
     this.showPurchaseButton = false;
   }
 
-  confirmcard(): void {
-    if (this.cardForm.valid) {
-      const selectedCard = this.cardForm.value.selectedCard;
-      // handle the card confirmation logic
-      console.log('Selected Card:', selectedCard);
-    } else {
-      // Show warning message if no card is selected
-      const warnElement = document.getElementById('notification-warn');
-      if (warnElement) {
-        warnElement.classList.remove('d-none');
-      }
-    }
+  onSubmit(): void {
+    console.log(this.buyNowForm.value)
+    this.buyNowForm.reset();
+    this.selectedProduct = "";
+  }
+
+  updateTotalPrice(): void {
+    const quantity = this.buyNowForm.get('quantity')?.value || 1;
+    this.totalPrice = quantity * (this.selectedPrice);
   }
 
 }
