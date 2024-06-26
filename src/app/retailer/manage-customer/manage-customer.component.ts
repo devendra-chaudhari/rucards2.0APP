@@ -115,7 +115,7 @@ export class ManageCustomerComponent implements OnInit, AfterContentInit {
     assignGprCard() {
         this.isAssignGPRProcessing = true;
         // Checking Already Assigned or Not
-        .0
+        console.log("result")
     }
 
 
