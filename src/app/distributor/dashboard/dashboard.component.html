@@ -1,0 +1,138 @@
+
+<app-breadcrumbs title="Dashboard" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+
+    <div class="row dash-nft">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-xl-6">
+                    <div class="card overflow-hidden card-animate rounded-4">
+                        <div class="card-body bg-marketplace d-flex">
+                            <div class="flex-grow-1">
+                                <h4 class="txt  text-uppercase fs-18 lh-base mb-0">Welcome Back <span
+                                        class="txt  text-uppercase">Vaibhav</span>
+                                </h4>
+                                <p class="mb-0 mt-2 pt-1 text-muted">There's no shortage of remarkable ideas, what's missing
+                                    is the will to execute them</p>
+                                <div class="d-flex gap-3 mt-4">
+                                    <a routerLink="/users/profile" class="btn btn-rounded btn-primary">Manage Profile </a>
+                                    <a routerLink="/users/manage-account" class="btn btn-rounded btn-soft-primary">Change Password</a>
+                                </div>
+                            </div>
+                        <i class="ri ri-record-circle-line"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6">
+                    <div class="card card-height-100 card-animate rounded-4">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-sm flex-shrink-0">
+                                    <span class="avatar-title bg-soft-primary rounded fs-4"> <!-- Adjust the size here -->
+                                        <i class="ri-user-2-line text-primary fs-1"></i> <!-- Adjust the size here -->
+                                    </span>
+                                </div>
+                                <div class="flex-grow-1 ps-3">
+                                    <h4 class="txt text-uppercase fs-5 mb-0">Total Retailer</h4> <!-- Adjust the size here -->
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-1">
+                                <h4 class="fs-22 fw-semibold ff-secondary mb-0">
+                                    <span class="counter-value">50</span>
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-md-6">
+                    <div class="card card-height-100 card-animate rounded-4 cursor-pointer">
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-sm flex-shrink-0">
+                                    <span class="avatar-title bg-soft-primary rounded fs-4">
+                                        <i class="bx bx-wallet text-primary fs-1"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-grow-1 ps-3">
+                                    <h5 class="txt text-uppercase fs-5 mb-0">Total Wallet Balance</h5>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-1">
+                                <h4 class="fs-22 fw-semibold ff-secondary mb-0">
+                                    &#8377; <span class="counter-value" >4000</span>
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card crm-widget rounded-4">
+                        <div class="card-body p-0">
+                            <div class="row row-cols-md-3 row-cols-1">
+                                <div class="col col-lg">
+                                    <owl-carousel-o [options]="customOptions">
+                                        <ng-template carouselSlide *ngFor="let item of mySeries">
+                                            <div class="py-4 px-3 border-end">
+                                                <h5 class="txt text-uppercase fs-6">{{ item.title }}</h5>
+                                                <div class="d-flex align-items-center">
+                                                    <div class="flex-shrink-0 fs-1">
+                                                        <i [class]="item.icon"></i>
+                                                    </div>
+                                                    <div class="flex-grow-1 ms-3">
+                                                        <h2 class="mb-0 fw-semibold">{{ item.count }}</h2>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </owl-carousel-o>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+            
+            <div class="col-12">
+                <div class="row">
+                    <div id="chart" class="col-md-6">
+                        <div class="card-header align-items-center d-flex">
+                            <h4 class="card-title mb-0 flex-grow-1">Fund Loaded & Spend</h4>
+                        </div><!-- end card header -->
+                        <apx-chart
+                        [series]="chartOptions.series"
+                        [chart]="chartOptions.chart"
+                        [plotOptions]="chartOptions.plotOptions"
+                        [colors]="chartOptions.colors"
+                        [dataLabels]="chartOptions.dataLabels"
+                        [legend]="chartOptions.legend">
+                        </apx-chart>
+                    </div>
+                    
+                    <div class="col-md-6">
+                            <div class="card-header align-items-center d-flex">
+                                <h4 class="card-title mb-0 flex-grow-1">GPR & GIFT Card Overview</h4>
+                                <div class="flex-shrink-0">
+                                </div>
+                            </div><!-- end card header -->
+                            <div class="card-body px-0">
+                                <div class="mb-n3">
+                                    <apx-chart [series]="splineAreaChart.series" [chart]="splineAreaChart.chart"
+                                        [dataLabels]="splineAreaChart.dataLabels" [stroke]="splineAreaChart.stroke"
+                                        [xaxis]="splineAreaChart.xaxis" [yaxis]="splineAreaChart.yaxis"
+                                        [colors]="splineAreaChart.colors" [fill]="splineAreaChart.fill" dir="ltr"></apx-chart>
+                                </div>
+                            </div>
+                    </div><!-- end col -->
+            </div>
+            
+            
+            
+
+    </div>

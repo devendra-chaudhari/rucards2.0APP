@@ -498,6 +498,12 @@ export const MENU: MenuItem[] = [
         link: '/order-service'
     },
     {
+        label: 'Contact Us',
+        icon: 'ri-wallet-line',
+        role: [Roles.customer],
+        link: '/contact-us'
+    },
+    {
         label: 'Offers & Rewards',
         icon: 'ri-star-smile-line',
         role: [Roles.customer],
@@ -507,27 +513,80 @@ export const MENU: MenuItem[] = [
             text: 'coming soon',
         },
     },
+    
+    // distributor
+    {
+        label: 'Distributor',
+        isTitle: true,
+        role: [Roles.distributor]
+    },
+    {
+        label: 'Dashboard',
+        icon: 'ri-dashboard-2-line',
+        role: [Roles.distributor],
+        link: '/distributor/dashboard',
+    },
+    {
+        label: 'Manage Retailer',
+        icon: 'ri-user-line',
+        role: [Roles.distributor],
+        link: '/distributor/manage-retailer',
+
+    },
+
+    {
+        label: 'Manage Balances',
+        icon: 'ri-money-dollar-circle-line',
+        role: [Roles.distributor],
+        subItems: [
+            {
+                label: 'Down Line Fund Request',
+                link: '/distributor/downline-fund-request'
+            },
+            {
+                label: 'My Fund Request',
+                link: '/distributor/my-fund-request',
+            },
+            {
+                label: 'Transfer Balance',
+                link: '/distributor/tranfer-balance',
+            },
+            {
+                label: 'Revoke Balance',
+                link: '/distributor/revoke-balance',
+            }
+        ]
+        
+    },
+    {
+        label: 'Retailer Fund Request',
+        icon: 'ri-bank-card-2-line',
+        role: [Roles.distributor],
+        link: '/distributor/retailer-fund-request'
+    },
+    {
+        label: 'Transaction Report',
+        icon: 'mdi mdi-bank-transfer',
+        role: [Roles.distributor],
+        subItems: [
+            {
+                label: 'Wallet Statement',
+                link: '/distributor/wallet-statement'
+            },
+            {
+                label: 'Transaction History',
+                link: '/distributor/transaction-history',
+            },
+        ]
+    },
     {
         label: 'Help',
         isTitle: true
-    },
-    {
-        label: 'Raise Tickets',
-        icon: 'ri-bank-card-line',
-        role: [Roles.customer],
-        link: '/manage-support-ticket'
     },
     {
         label: 'FAQ',
         icon: 'ri-question-answer-line',
         link: '/faq'
     },
-    {
-        label: 'Contact Us',
-        icon: 'ri-contacts-book-line',
-        role: [Roles.customer],
-        link: '/contact-us',
-    },
-
-
+    
 ];

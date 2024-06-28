@@ -1,0 +1,11 @@
+/* your-component.component.css or your-component.component.scss */
+::ng-deep .ng-select .ng-dropdown-panel .ng-option {
+    background-color: #ffffff !important;
+    color: #000000;
+  }
+  
+  ::ng-deep .ng-select .ng-dropdown-panel .ng-option:hover {
+    background-color: #d6d4d4 !important;
+    color: #000000;
+  }
+  
