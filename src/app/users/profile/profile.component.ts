@@ -76,6 +76,7 @@ interface BusinessInfo {
     selector: 'app-profile',
     templateUrl: './profile.component.html'
 })
+
 export class ProfileComponent implements OnInit {
     breadCrumbItems!: Array<{}>;
     user: User | undefined;
@@ -422,34 +423,32 @@ export class ProfileComponent implements OnInit {
         );
     }
 
-    updateUpi() {
-        // this.spinner.show();
-    }
+    updateUpi() {}
 
 
-onFileSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.uploadImage(file).then(() => {
-        this.apiService.post('user/upload_profile_photo', { "profile_photo": this.image_value }).subscribe({
-          next: (res) => {
-            this.toastr.success(res.message);
-            this.spinner.hide();
-            const reader = new FileReader();
-            reader.onload = (e: any) => {
-              this.profilePhoto = e.target.result;
-            };
-            reader.readAsDataURL(file);
-            this.sessionStorage.changeUserDetails('photo', res.data.profile_photo)
-          },
-          error: (error) => {
-            this.toastr.error(error.error.error);
-            this.spinner.hide();
-          }
+    onFileSelected(event: any): void {
+        const file = event.target.files[0];
+        if (file) {
+        this.uploadImage(file).then(() => {
+            this.apiService.post('user/upload_profile_photo', { "profile_photo": this.image_value }).subscribe({
+            next: (res) => {
+                this.toastr.success(res.message);
+                this.spinner.hide();
+                const reader = new FileReader();
+                reader.onload = (e: any) => {
+                this.profilePhoto = e.target.result;
+                };
+                reader.readAsDataURL(file);
+                this.sessionStorage.changeUserDetails('photo', res.data.profile_photo)
+            },
+            error: (error) => {
+                this.toastr.error(error.error.error);
+                this.spinner.hide();
+            }
+            });
         });
-      });
+        }
     }
-  }
   
 
     uploadImage(file): Promise<void> {

@@ -1,0 +1,139 @@
+<app-breadcrumbs title="Revoke Balance" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div>
+    <div class="card rounded-4 ">
+        <div class="card-header">
+            <div class="row align-items-center g-3">
+                <div class="col-md-3">
+                    <p class="fs-16 fw-medium">Revoke Balance Request</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-body mt-3">
+            <div class="row g-4">
+                <form class="transferBalanceForm" [formGroup]="transferBalanceForm" (ngSubmit)="onSubmit()">
+                    <div class="row mb-3 form-group">
+                        <label class="col-md-4 col-form-label" for="transfer_to">Revoke From :</label>
+                        <div class="col-md-8">
+                            <ng-select [items]="retailers" [searchFn]="customSearchFn" bindLabel="full_name"
+                                placeholder="Select retailer" formControlName="selectretailer"
+                                class="fw-semibold rounded-pill">
+                                <ng-template ng-option-tmp let-item="item" >
+                                    <div>
+                                        {{ item.full_name }} ({{ item.username }})
+                                    </div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-group">
+                        <label class="col-md-4 col-form-label">Amount :</label>
+                            <div class="col-md-8">
+                                <input id="amount" placeholder="Amount" inputmode="numeric"
+                                       class="form-control fw-semibold rounded-pill "
+                                       formControlName="amount">
+                                <div *ngIf="isFundSubmit && ff['amount'].errors" class="text-danger mt-1">
+                                    <div *ngIf="ff['amount'].errors['required']">Amount is required</div>
+                                    <div *ngIf="ff['amount'].errors['min']">Amount must be at least 100 rupees</div>
+                                </div>
+                                <div *ngIf="ff['amount'].value > 0 && !ff['amount'].errors" class="mt-1">
+                                    <small class="text-muted fw-semibold">{{ convertNumber(ff['amount'].value) }}</small>
+                                </div>
+                            </div>
+                    </div>
+                    
+                    <div class="row mb-3 form-group">
+                        <label class="col-md-4 col-form-label" for="remark">Remark :</label>
+                        <div class="col-md-8">
+                            <input id="remark" placeholder="Remark" inputmode="text"
+                                class="form-control fw-semibold rounded-pill" formControlName="remark">
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-group">
+                        <div class="col-md-8 offset-md-4">
+                            <button type="submit" class="btn btn-primary me-3 btn-rounded">
+                                Submit
+                            </button>
+                            <button type="button" class="btn btn-warning btn-rounded" (click)="onReset()">
+                                Reset
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card rounded-4">
+
+    <div class="card-header pd-3">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-start align-items-center gap-2">
+                    <div class="search-box w-100">
+                        <input type="text" class="form-control rounded-pill"
+                            placeholder="Search Transaction Id, Category, Remark" #search
+                            (keyup)="onSearch(search.value)" />
+                        <i class="ri-search-line search-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center gap-2">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <label for="page" class="me-2">Show</label>
+                        <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <label for="page" class="ms-2">entries</label>
+                    </div>
+                    <button type="button" class="btn btn-success btn-rounded me-2 mb-2" (onclick)="export_to_excel()">
+                        Export To Excel
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body border border-dashed border-start-0 border-end-0">
+        <div class="table-responsive">
+            <table class="table align-middle table-nowrap" id="customerTable">
+                <thead>
+                    <tr>
+                        <th>SR</th>
+                        <th>Transaction Id</th>
+                        <th>Transaction Date</th>
+                        <th>Received By</th>
+                        <th>Transfer From</th>
+                        <th>Amount</th>
+                        <th>Remark</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+
+        </div>
+        <div class="row justify-content-md-between align-items-md-center mt-3">
+            <div class="col col-sm-6">
+                <p class="mb-2">
+                    Showing to of entries
+                </p>
+            </div>
+            <div class="col col-sm-6">
+                <div class="text-sm-right float-sm-end listjs-pagination">
+                    <ngb-pagination [collectionSize]=10 [pageSize]=10 [maxSize]="2">
+                    </ngb-pagination>
+                </div>
+            </div>
+        </div>
+    </div>

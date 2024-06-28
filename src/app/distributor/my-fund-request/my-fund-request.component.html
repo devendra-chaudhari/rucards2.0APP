@@ -1,0 +1,98 @@
+<app-breadcrumbs title="My Fund Request" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+
+<div class="card rounded-4">
+  <div class="card-header">
+      <div class="row align-items-center g-3">
+          <div class="col-md-3">
+              <p class="fs-16 fw-medium">My Balance Request History</p>
+          </div>
+          <div class="col-md-auto ms-auto">
+              <div class="d-flex gap-2">
+                  <div class="search-box">
+                      <input type="text" class="form-control rounded-pill" placeholder="Search..." #search
+                             (keyup)="onSearch(search.value)">
+                      <i class="ri-search-line search-icon"></i>
+                  </div>
+
+                  <button class="btn btn-success btn-rounded" (click)="export_to_excel()">
+                      Export
+                  </button>
+                  <a class="btn btn-primary btn-rounded" routerLink="/manage-balance/add-fund">
+                      Add Fund
+                  </a>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="card-body">
+      <div class="table-responsive table-card">
+          <table class="table align-middle table-nowrap" id="customerTable">
+              <thead>
+              <tr>
+                  <th>SR</th>
+                  <th>Deposit Date</th>
+                  <th>Req.ID</th>
+                  <th>Mode</th>
+                  <th>Amount</th>
+                  <th>UTR/REF No</th>
+                  <th>Wallet Name</th>
+                  <th>Status</th>
+                  <th>Created At</th>
+                  <th>Updated At</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr class="cursor-pointer card-animate"
+                  *ngFor="let myFundRequest of myFundRequests.slice(
+                    (page - 1) * pageSize,
+                    page * pageSize
+                  );
+                  let i = index
+                ">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{myFundRequest?.deposit_date | date: 'dd MMM yyyy'}}</td>
+                  <td>
+                      <div class="d-flex flex-column justify-content-center align-items-start">
+                          <span class="fs-16 mb-1">{{myFundRequest?.fund_request_id}}</span>
+                      </div>
+                  </td>
+                  <td>{{myFundRequest?.payment_mode | uppercase}}</td>
+                  <td>{{myFundRequest?.amount |currency:'INR'}}</td>
+
+                  <td>{{myFundRequest?.ref_no | uppercase}}</td>
+                  <td>{{myFundRequest?.wallet_name | uppercase}}</td>
+                  <td>
+                      <span *ngIf=" myFundRequest?.status=='Processing'"
+                            class="badge bg-primary rounded-pill"> {{myFundRequest?.status | uppercase}}</span>
+                      <span *ngIf=" myFundRequest?.status=='Accepted'"
+                            class="badge bg-success rounded-pill"> {{myFundRequest?.status | uppercase}}</span>
+                      <span *ngIf=" myFundRequest?.status=='Rejected'"
+                            class="badge bg-danger rounded-pill"> {{myFundRequest?.status | uppercase}}</span>
+                  </td>
+
+                  <td>{{myFundRequest.request_date | date: 'dd MMM yyyy'}}</td>
+                  <td>{{myFundRequest.response_at ?? myFundRequest.request_date | date: 'dd MMM yyyy'}}</td>
+
+              </tr>
+              </tbody>
+          </table>
+      </div>
+      <div class="row justify-content-md-between align-items-md-center mt-4">
+          <div class="col col-sm-6">
+              <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                  Showing {{ (page - 1) * pageSize + 1 }} to {{ 100 }} of {{ myFundRequests?.length ?? 0 }} entries
+              </div>
+          </div>
+
+          <div class="col col-sm-6">
+              <div class="text-sm-right float-sm-end listjs-pagination">
+                  <ngb-pagination [collectionSize]=myFundRequests?.length??0 [(page)]="page" [pageSize]=pageSize
+                                  [maxSize]="2">
+                  </ngb-pagination>
+              </div>
+          </div>
+
+      </div>
+  </div>
+</div>

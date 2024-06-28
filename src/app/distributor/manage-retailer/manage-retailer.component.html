@@ -1,0 +1,215 @@
+<app-breadcrumbs title="Manage Retailer" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+
+<div class="row">
+    <div class="col-xl-4 col-md-4">
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                            Total Gift Cards
+                        </p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-4">
+                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                        <span class="counter-value">
+                        0
+                        </span>
+                    </h4>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-white fs-3 rounded">
+                            <i class="ri-gift-2-line display-6 " style="color: #112558;"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-4">
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                            Total GPR CARDS
+                        </p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-4">
+                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                        <span class="counter-value">
+                            0
+                        </span>
+                    </h4>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-white fs-3 rounded">
+                            <i class="bx bx-wallet display-6" style="color: #112558;"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-4">
+        <div class="card card-animate">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1 overflow-hidden">
+                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                            Total RETAILERS
+                        </p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-end justify-content-between mt-4">
+                    <h4 class="fs-22 fw-semibold ff-secondary mb-4">
+                        <span class="counter-value">
+                         {{totalRetailers}}
+                        </span>
+                    </h4>
+                    <div class="avatar-sm flex-shrink-0">
+                        <span class="avatar-title bg-white fs-3 rounded">
+                            <i class="ri-user-line display-6" style="color: #112558;"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card rounded-4 p-3">
+    <div class="card-header border-0">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <h4 class="fw-medium">Manage Retailer</h4>
+            </div>
+            <div class="col-md-6">
+                <div class="float-end">
+                    <a routerLink="/distributor/manage-retailer/create-retailer" [queryParams]="{user_type:'Retailer'}"
+                       class="btn btn-rounded" style="background-color: #3FA5D3; color: white;">
+                       Add Retailer</a>
+                    <a class="btn btn-rounded btn-success" style="margin-left: 10px;" (click)="export_to_excel()">
+                       Export</a>
+                </div>
+            </div>            
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex justify-content-start align-items-center gap-2">
+                    <div class="search-box w-100">
+                        <input type="text" class="form-control rounded-pill search bg-light border-light" placeholder="Search..." #search
+                          (keyup)="onSearch(search.value)" />
+                        <i class="ri-search-line search-icon"></i>
+                      </div>
+                    <button type="button" class="btn btn-primary  btn-rounded me-2 mb-2" >Search</button>
+                    <button class="btn btn-primary btn-rounded me-2 mb-2" (click)="onFilterUser(filter_user)">
+                        Filter
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center gap-2">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <label for="page" class="me-2">Show</label>
+                        <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1">
+                          <option value="10">10</option>
+                          <option value="25">25</option>
+                          <option value="50">50</option>
+                          <option value="100">100</option>
+                        </select>
+                        <label for="page" class="ms-2">entries</label>
+                      </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+                <table class="table align-middle table-nowrap">
+                    <thead>
+                    <tr>
+                        <th>Sr</th>
+                        <th class="cursor-pointer">Retailer Name</th>
+                        <th>Username <i class='bx fs-12'></i></th>
+                        <th>Email <i class='bx fs-12'></i></th>
+                        <th>Mobile <i class='bx  fs-12'></i></th>
+                        <th>Status <i class='bx  fs-12'></i></th>
+                        <th>Created on <i class='bx  fs-12'></i></th>
+                        <th>Action <i class='bx  fs-12'></i></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="
+                        let retailer of retailers.slice(
+                          (page - 1) * pageSize,
+                          page * pageSize
+                        );
+                        let i = index
+                      ">
+                      <tr class="cursor-pointer card-animate">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ retailer.full_name }}</td>
+                        <td>{{ retailer.username }}</td>
+                        <td>{{ retailer.email }}</td>
+                        <td>{{ retailer.mobile }}</td>
+                        <td>{{ retailer.active }}</td>
+                        <td>{{ retailer.created_at | date : "dd-MM-yyyy" }}</td>
+                        <td>
+                          <button routerLink="/admin/manage-users/manage-corporates/{{
+                            retailer?.id
+                          }}/edit" class="btn btn-primary btn-sm me-2 btn-rounded" title="Edit">
+                            <i class="ri-edit-line align-middle text-white"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </ng-container>
+                    </tbody>
+                </table>
+            </div>
+    </div>
+</div>
+
+
+
+<ng-template #filter_user let-offcanvas>
+    <div class="offcanvas-header">
+        <p class="fs-18 fw-medium">Filter User By Date</p>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <div  >
+        <div class="offcanvas-body">
+          <form class="filterUserForm" [formGroup] = "filterUserForm" >
+            
+            
+            <div class="mb-3">
+              <label for="start_date">Start Date <small class="text-muted">(dd-mm-yyyy)</small><span
+                  class="text-danger">*</span></label>
+              <div class="input-group btn-block btn-rounded me-5 w-100">
+                <input type="text" id="start_date" mwlFlatpickr class="form-control rounded-pill" placeholder="dd/MM/yyyy"
+                  formControlName="start_date" />
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="end_date">End Date <small class="text-muted">(dd-mm-yyyy)</small><span
+                  class="text-danger">*</span></label>
+              <div class="input-group btn-block btn-rounded me-5 w-100">
+                <input type="text" id="end_date" mwlFlatpickr class="form-control rounded-pill" placeholder="dd/MM/yyyy"
+                  formControlName="end_date" />
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="text-end">
+                <button type="button" class="btn btn-primary btn-rounded" (click)="onSubmitFilterUser()">
+                  Filter
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+    </div>
+  </ng-template>
+

@@ -407,5 +407,96 @@ export const FULL_ROUTES: Routes = [
         loadComponent: () => import('../../customer/contact-us/contact-us.component').then(m => m.ContactUsComponent)
     },
 
+    // distributor
+    {
+        path: 'distributor/dashboard',
+        data: {
+            title: 'Dashboard',
+            roles: ['distributor'],
+            permission: ['dashboard']
+        },
+        loadComponent: () => import('../../distributor/dashboard/dashboard.component').then(m => m.DashboardComponent)
+    },
+    {
+        path: 'distributor/manage-retailer',
+        data: {
+            title: 'Manage Retailer',
+            roles: ['distributor'],
+            permission: ['manage-retailer']
+        },
+        loadComponent: () => import('../../distributor/manage-retailer/manage-retailer.component').then(m => m.ManageRetailerComponent)
+    },
+    {
+        path: 'distributor/manage-retailer/create-retailer',
+        data: {
+            title: 'Create Retailer',
+            roles: ['distributor'],
+            permission: ['create-retailer']
+        },
+        loadComponent: () => import('../../distributor/manage-retailer/create-retailer/create-retailer.component').then(m => m.CreateRetailerComponent)
+    },
+    {
+        path: 'distributor/downline-fund-request',
+        data: {
+            title: 'Down Line Fund Request',
+            roles: ['distributor'],
+            permission: ['down-line-fund-request']
+        },
+        loadComponent: () => import('../../distributor/downline-fund-request/downline-fund-request.component').then(m => m.DownlineFundRequestComponent)
+    },
+    {
+        path: 'distributor/my-fund-request',
+        data: {
+            title: 'My Fund Request',
+            roles: ['distributor'],
+            permission: ['my-fund-request']
+        },
+        loadComponent: () => import('../../distributor/my-fund-request/my-fund-request.component').then(m => m.MyFundRequestComponent)
+    },
+    {
+        path: 'distributor/tranfer-balance',
+        data: {
+            title: 'Transfer Balance',
+            roles: ['distributor'],
+            permission: ['tranfer-balance']
+        },
+        loadComponent: () => import('../../distributor/transfer-balance/transfer-balance.component').then(m => m.TransferBalanceComponent)
+    },
+    {
+        path: 'distributor/revoke-balance',
+        data: {
+            title: 'Revoke Balance',
+            roles: ['distributor'],
+            permission: ['revoke-balance']
+        },
+        loadComponent: () => import('../../distributor/revoke-balance-request/revoke-balance-request.component').then(m => m.RevokeBalanceRequestComponent)
+    },
+    {
+        path: 'distributor/retailer-fund-request',
+        data: {
+            title: 'Retailer Fund Request',
+            roles: ['distributor'],
+            permission: ['retailer-fund-request']
+        },
+        loadComponent: () => import('../../distributor/retailer-fund-request/retailer-fund-request.component').then(m => m.RetailerFundRequestComponent)
+    },
+    {
+        path: 'distributor/wallet-statement',
+        data: {
+            title: 'Wallet Statement',
+            roles: ['distributor'],
+            permission: ['wallet-statement']
+        },
+        loadComponent: () => import('../../distributor/wallet-statement/wallet-statement.component').then(m => m.WalletStatementComponent)
+    },
+    {
+        path: 'distributor/transaction-history',
+        data: {
+            title: 'Transaction History',
+            roles: ['distributor'],
+            permission: ['transaction-history']
+        },
+        loadComponent: () => import('../../distributor/transaction-history/transaction-history.component').then(m => m.TransactionHistoryComponent)
+    },
 
 ];
