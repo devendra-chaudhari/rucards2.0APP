@@ -6,7 +6,7 @@ import {ToastrService} from "ngx-toastr";
 import {NgxSpinnerService} from "ngx-spinner";
 import {User} from "../../shared/interfaces/user";
 import {MessageService} from "../../shared/services/message.service";
-import {values} from "lodash";
+import { ImageConverterService } from 'src/app/shared/services/image-converter.service';
 
 interface LoginHistory {
     channel: string;
@@ -58,6 +58,8 @@ interface PersonalInfo {
     state: string;
     enable_2fa: boolean;
     join_date: string;
+    signature: string;
+    photo:string;
 }
 
 interface BusinessInfo {
@@ -156,13 +158,18 @@ export class ProfileComponent implements OnInit {
         vpa: ''
     }
 
+    profile_score=0
+    profilePhoto:string ;
+    signaturePhoto: string;
+    image_value:any;
     constructor(
         private offCanvas: NgbOffcanvas,
         private apiService: ApiService,
         private sessionStorage: SessionStorageService,
         private spinner: NgxSpinnerService,
         private toastr: ToastrService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private imageConverterService: ImageConverterService,
     ) {
     }
 
@@ -173,6 +180,9 @@ export class ProfileComponent implements OnInit {
         ];
 
         this.sessionStorage.currentUser.subscribe(user => this.user = user);
+        this.profilePhoto = this.user.photo; // Placeholder or default image
+        this.signaturePhoto = this.user.signature;
+        this.getProfileScore();
         this.getPersonalInfo();
         this.getBusinessInfo();
         this.bankList();
@@ -202,7 +212,14 @@ export class ProfileComponent implements OnInit {
                 this.personalInfo = res.data;
             }
         );
-    }
+    }         
+
+    getProfileScore() {
+        this.apiService.get('user/get_profile_score').subscribe((res) => {
+                this.profile_score = res.data.profile_score;
+            }
+        );
+    }      
 
     getBusinessInfo() {
         this.apiService.get('user/business_info').subscribe((res) => {
@@ -407,6 +424,63 @@ export class ProfileComponent implements OnInit {
 
     updateUpi() {
         // this.spinner.show();
+    }
+
+
+onFileSelected(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.uploadImage(file).then(() => {
+        this.apiService.post('user/upload_profile_photo', { "profile_photo": this.image_value }).subscribe({
+          next: (res) => {
+            this.toastr.success(res.message);
+            this.spinner.hide();
+            const reader = new FileReader();
+            reader.onload = (e: any) => {
+              this.profilePhoto = e.target.result;
+            };
+            reader.readAsDataURL(file);
+            this.sessionStorage.changeUserDetails('photo', res.data.profile_photo)
+          },
+          error: (error) => {
+            this.toastr.error(error.error.error);
+            this.spinner.hide();
+          }
+        });
+      });
+    }
+  }
+  
+
+    uploadImage(file): Promise<void> {
+        return this.imageConverterService.convertBlobToBase64(file).then(value => {
+        this.image_value = value;
+        });
+    }
+
+
+    onSignatureFileSelected(event: any): void {
+        const file = event.target.files[0];
+        if (file) {
+        this.uploadImage(file).then(() => {
+            this.apiService.post('user/upload_signature', { "signature_photo": this.image_value }).subscribe({
+            next: (res) => {
+                this.toastr.success(res.message);
+                this.spinner.hide();
+                const reader = new FileReader();
+                reader.onload = (e: any) => {
+                this.signaturePhoto = e.target.result;
+                };
+                reader.readAsDataURL(file);
+                this.sessionStorage.changeUserDetails('signature', res.data.signature)
+            },
+            error: (error) => {
+                this.toastr.error(error.error.error);
+                this.spinner.hide();
+            }
+            });
+        });
+        }
     }
 
 }

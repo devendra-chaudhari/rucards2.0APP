@@ -8,34 +8,36 @@
                     <div class="card-body">
                         <div class="text-center">
                             <div class="profile-user position-relative d-inline-block mx-auto mb-4">
-                                <img src="assets/images/avatar.png" class="rounded-circle avatar-lg img-thumbnail"
-                                     alt="User Profile img">
+                                <img [src]="profilePhoto" class="rounded-circle avatar-lg img-thumbnail" alt="User Profile img">
                                 <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
-                                    <input id="profile-img-file-input" type="file" class="profile-img-file-input">
-                                    <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
-                                      <span class="avatar-title rounded-circle bg-light text-body">
-                                          <i class="ri-camera-fill"></i>
-                                      </span>
-                                    </label>
+                                  <input id="profile-img-file-input" type="file" class="profile-img-file-input d-none" (change)="onFileSelected($event)">
+                                  <label for="profile-img-file-input" class="profile-photo-edit avatar-xs">
+                                    <span class="avatar-title rounded-circle bg-light text-body">
+                                      <i class="ri-camera-fill"></i>
+                                    </span>
+                                  </label>
                                 </div>
-                            </div>
+                              </div>
+                              
+                            
                             <h4 class="fs-16 mb-1 text-uppercase">{{user?.name | titlecase}}</h4>
                             <span class="text-muted mb-0 text-capitalize fs-14 fw-bold">&#64; {{personalInfo?.username}}</span>
                             <p class="text-muted mb-0 text-capitalize">{{user?.role | titlecase}}</p>
                             <div class="d-flex justify-content-center align-items-center mt-3 flex-column">
                                 <div class="profile-user position-relative d-inline-block mx-auto mb-4">
-                                    <img src="assets/images/sign.jpg" alt="sign img" height="50" width="110">
-                                    <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
-                                        <input id="sign-img-file-input" type="file" class="profile-img-file-input">
-                                        <label for="sign-img-file-input" class="profile-photo-edit avatar-xs">
-                                          <span class="avatar-title rounded-circle bg-light text-body ms-4">
-                                              <i class="ri-edit-fill"></i>
-                                          </span>
-                                        </label>
-                                    </div>
+                                  <img [src]="signaturePhoto" alt="sign img" height="50" width="110" >
+                                  <div class="avatar-xs p-0 rounded-circle profile-photo-edit">
+                                    <input id="sign-img-file-input" type="file" class="profile-img-file-input d-none" (change)="onSignatureFileSelected($event)">
+                                    <label for="sign-img-file-input" class="profile-photo-edit avatar-xs">
+                                      <span class="avatar-title rounded-circle bg-light text-body ms-4">
+                                        <i class="ri-edit-fill"></i>
+                                      </span>
+                                    </label>
+                                  </div>
                                 </div>
                                 <p>Authorised Signature</p>
-                            </div>
+                              </div>
+                              
                         </div>
                     </div>
                 </div>
@@ -48,10 +50,10 @@
                     </div>
                     <div class="card-body">
                         <div class="progress animated-progress custom-progress progress-label">
-                            <div class="progress-bar bg-danger" role="progressbar" style="width: 30%"
-                                 aria-valuenow="30"
+                            <div class="progress-bar bg-danger" role="progressbar" [style.width]="profile_score + '%'"
+                                [attr.aria-valuenow]="profileScore"
                                  aria-valuemin="0" aria-valuemax="100">
-                                <div class="label">30%</div>
+                                <div class="label">{{profile_score}}</div>
                             </div>
                         </div>
                     </div>
@@ -109,35 +111,28 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
-                        <div class="card card-animate card-animate mt-3"
-                             *ngIf="!personalInfo?.email_verified">
-                            <div class="card-header border border-top-0 border-start-0 border-end-0">
-                                <h5>Email Verification</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="alert alert-warning rounded-4">
-                                    <i class="ri-alert-line fs-24 align-middle"></i>
-                                    Your email address is unverified. If you want to verify, click to verify
-                                    button & fill OTP received on registered email id.
-                                </div>
-                                <input type="text" class="form-control rounded-pill bg-light"
-                                       value="{{personalInfo?.email}}"
-                                       readonly>
-                                <div class="text-start mt-3">
-                                    <button class="btn btn-rounded btn-light">
-                                        <i class="ri-checkbox-circle-line align-middle"></i>
-                                        Verify Email
-                                    </button>
-                                </div>
-                            </div>
+                <div class="card card-animate card-animate mt-3"
+                        *ngIf="!personalInfo?.email_verified">
+                    <div class="card-header border border-top-0 border-start-0 border-end-0">
+                        <h5>Email Verification</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-warning rounded-4">
+                            <i class="ri-alert-line fs-24 align-middle"></i>
+                            Your email address is unverified. If you want to verify, click to verify
+                            button & fill OTP received on registered email id.
                         </div>
-
-
-
+                        <input type="text" class="form-control rounded-pill bg-light"
+                                value="{{personalInfo?.email}}"
+                                readonly>
+                        <div class="text-start mt-3">
+                            <button class="btn btn-rounded btn-light">
+                                <i class="ri-checkbox-circle-line align-middle"></i>
+                                Verify Email
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-md-9">
                 <ul ngbNav #nav="ngbNav" [activeId]="1" class="nav nav-tabs">
@@ -575,7 +570,7 @@
                     </li>
                     <li [ngbNavItem]="5">
                         <a ngbNavLink>
-                            <span class="d-sm-block">Notification</span>
+                            <span class="d-sm-block d-none">Notification</span>
                         </a>
                         <ng-template ngbNavContent>
                             <div class="row">

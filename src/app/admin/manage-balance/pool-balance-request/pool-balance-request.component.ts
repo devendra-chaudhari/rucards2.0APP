@@ -202,6 +202,8 @@ export class PoolBalanceRequestComponent implements OnInit, DoCheck {
                 color: '#fff',
                 fullScreen: true
             });
+        console.log(this.ff['receipt'].value)
+        console.log(this.avatar)
 
         this.apiService.post('wallet/add-pool-balance', {
             "wallet_id": this.ff['wallet_name'].value.id,
@@ -210,6 +212,7 @@ export class PoolBalanceRequestComponent implements OnInit, DoCheck {
             'ref_no': this.ff['ref_no'].value,
             'remark': this.ff['remark'].value,
             'current_balance': this.ff['wallet_name'].value.balance,
+            'receipt': this.avatar,
             'product_wise_balance': this.fundForm.value.services
         }).subscribe({
             next: () => {

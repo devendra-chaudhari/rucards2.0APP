@@ -12,7 +12,7 @@ export class ImageConverterService {
     public convertBlobToBase64(file: File): Promise<string> {
         return new Promise<string>((resolve, reject) => {
             const reader = new FileReader();
-            reader.readAsDataURL(file);
+            
             reader.onload = () => {
                 const base64String = reader.result?.toString();
                 if (base64String) {
@@ -21,9 +21,12 @@ export class ImageConverterService {
                     reject('Unable to convert file to base64');
                 }
             };
+    
             reader.onerror = (error) => {
-                reject(error);
+                reject(`FileReader error: ${error}`);
             };
+    
+            reader.readAsDataURL(file);
         });
     }
 

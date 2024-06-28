@@ -12,4 +12,5 @@ export interface User {
     role?: string;
     token?: string;
     verified?: boolean;
+    signature?:string;
 }
