@@ -429,24 +429,35 @@ export class ProfileComponent implements OnInit {
     onFileSelected(event: any): void {
         const file = event.target.files[0];
         if (file) {
-        this.uploadImage(file).then(() => {
-            this.apiService.post('user/upload_profile_photo', { "profile_photo": this.image_value }).subscribe({
-            next: (res) => {
-                this.toastr.success(res.message);
-                this.spinner.hide();
-                const reader = new FileReader();
-                reader.onload = (e: any) => {
-                this.profilePhoto = e.target.result;
-                };
-                reader.readAsDataURL(file);
-                this.sessionStorage.changeUserDetails('photo', res.data.profile_photo)
-            },
-            error: (error) => {
-                this.toastr.error(error.error.error);
-                this.spinner.hide();
+            const validTypes = ['image/jpeg', 'image/png'];
+            if (!validTypes.includes(file.type)) {
+                this.toastr.error('Only JPEG and PNG files are allowed.');
+                return;
             }
+            // Validate file size (50KB = 50 * 1024 bytes)
+            const maxSize = 50 * 1024;
+            if (file.size > maxSize) {
+                this.toastr.error('File size must be less than 50KB.');
+                return;
+            }
+            this.uploadImage(file).then(() => {
+                this.apiService.post('user/upload_profile_photo', { "profile_photo": this.image_value }).subscribe({
+                next: (res) => {
+                    this.toastr.success(res.message);
+                    this.spinner.hide();
+                    const reader = new FileReader();
+                    reader.onload = (e: any) => {
+                    this.profilePhoto = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                    this.sessionStorage.changeUserDetails('photo', res.data.profile_photo)
+                },
+                error: (error) => {
+                    this.toastr.error(error.error.error);
+                    this.spinner.hide();
+                }
+                });
             });
-        });
         }
     }
   
@@ -461,24 +472,35 @@ export class ProfileComponent implements OnInit {
     onSignatureFileSelected(event: any): void {
         const file = event.target.files[0];
         if (file) {
-        this.uploadImage(file).then(() => {
-            this.apiService.post('user/upload_signature', { "signature_photo": this.image_value }).subscribe({
-            next: (res) => {
-                this.toastr.success(res.message);
-                this.spinner.hide();
-                const reader = new FileReader();
-                reader.onload = (e: any) => {
-                this.signaturePhoto = e.target.result;
-                };
-                reader.readAsDataURL(file);
-                this.sessionStorage.changeUserDetails('signature', res.data.signature)
-            },
-            error: (error) => {
-                this.toastr.error(error.error.error);
-                this.spinner.hide();
+            const validTypes = ['image/jpeg', 'image/png'];
+            if (!validTypes.includes(file.type)) {
+                this.toastr.error('Only JPEG and PNG files are allowed.');
+                return;
             }
+            // Validate file size (50KB = 50 * 1024 bytes)
+            const maxSize = 50 * 1024;
+            if (file.size > maxSize) {
+                this.toastr.error('File size must be less than 50KB.');
+                return;
+            }
+            this.uploadImage(file).then(() => {
+                this.apiService.post('user/upload_signature', { "signature_photo": this.image_value }).subscribe({
+                next: (res) => {
+                    this.toastr.success(res.message);
+                    this.spinner.hide();
+                    const reader = new FileReader();
+                    reader.onload = (e: any) => {
+                    this.signaturePhoto = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                    this.sessionStorage.changeUserDetails('signature', res.data.signature)
+                },
+                error: (error) => {
+                    this.toastr.error(error.error.error);
+                    this.spinner.hide();
+                }
+                });
             });
-        });
         }
     }
 
