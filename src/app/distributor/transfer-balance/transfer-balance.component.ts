@@ -124,42 +124,6 @@ export class TransferBalanceComponent {
     }
   }
 
-  resendMobileOtp() {
-    console.log(this.transferBalanceForm);
-    const mobile = this.transferBalanceForm.get('selectretailer').value?.mobile || null;
-    if (mobile) {
-      console.log(mobile);
-      this.apiService.post("auth/generate_register_otp", { mobile: mobile.toString() })
-        .subscribe({
-          next: (res) => {
-            this.otp_msg = res.message;
-            this.otp_ref_id = res.data.ref_id;
-            this.retailer_mobile_otp = "";
-            this.resendRetailerMobileOTP = true;
-          },
-          error: (error) => {
-            this.toaster.error(error.error.error);
-          }
-        });
-    } else {
-      this.toaster.error('Mobile number is required.');
-    }
-  }
-
-  confirmTerm() {
-    this.apiService.post('auth/generate_register_otp', {mobile: this.ff['mobile'].value}).subscribe({
-        next: (res) => {
-            this.otp_msg = res.message;
-            this.otp_ref_id = res.data.ref_id;
-            this.needRetailerMobileOtp = true;
-            this.resendRetailerMobileOTP = true;
-        },
-        error: (error) => {
-            this.toaster.error(error.error.error);
-        }
-    });
-}
-
   convertNumber(amount: number) {
     return this.toWords.convert(amount);
   }
@@ -198,23 +162,7 @@ export class TransferBalanceComponent {
 
   onSubmit() {
     console.log(this.transferBalanceForm);
-    const mobile = this.transferBalanceForm.get('selectretailer').value?.mobile || null;
-    if (mobile) {
-      console.log(mobile);
-      this.apiService.post('auth/generate_register_otp', { mobile: mobile.toString() }).subscribe({
-        next: (res) => {
-          this.otp_msg = res.message;
-          this.otp_ref_id = res.data.ref_id;
-          this.needRetailerMobileOtp = true;
-          this.resendRetailerMobileOTP = true;
-        },
-        error: (error) => {
-          this.toaster.error(error.error.error);
-        }
-      });
-    } else {
-      this.toaster.error('Mobile number is required.');
-    }
+    
   }
 
   onReset() {

@@ -75,7 +75,7 @@ export class WalletStatementComponent {
       private spinner: NgxSpinnerService,
       private excelService: ExcelService,
       private sortService: SortService,
-      private sessionStorageService: SessionStorageService
+      private sessionStorage: SessionStorageService
   ) {
   }
 
@@ -92,7 +92,8 @@ export class WalletStatementComponent {
   }
   
     getWallets(){
-        this.apiService.post('wallet/rucards-wallet-list',{"user_id":"d7f329a9-6b13-4625-96e9-d658f4d86e12"}).subscribe({
+        const user_id = this.sessionStorage.getCurrentUser()
+        this.apiService.post('wallet/rucards-wallet-list',{"user_id":user_id.id}).subscribe({
             next: (res) => {
                 this.wallets = res.data.result
                 this.total = res.data.total
