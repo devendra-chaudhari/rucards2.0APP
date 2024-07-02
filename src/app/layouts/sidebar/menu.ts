@@ -524,7 +524,7 @@ export const MENU: MenuItem[] = [
         label: 'Dashboard',
         icon: 'ri-dashboard-2-line',
         role: [Roles.distributor],
-        link: '/distributor/dashboard',
+        link: '/dashboard/distributor',
     },
     {
         label: 'Manage Retailer',
@@ -559,25 +559,10 @@ export const MENU: MenuItem[] = [
         
     },
     {
-        label: 'Retailer Fund Request',
-        icon: 'ri-bank-card-2-line',
-        role: [Roles.distributor],
-        link: '/distributor/retailer-fund-request'
-    },
-    {
-        label: 'Transaction Report',
+        label: 'Wallet Statement',
         icon: 'mdi mdi-bank-transfer',
         role: [Roles.distributor],
-        subItems: [
-            {
-                label: 'Wallet Statement',
-                link: '/distributor/wallet-statement'
-            },
-            {
-                label: 'Transaction History',
-                link: '/distributor/transaction-history',
-            },
-        ]
+        link: '/distributor/wallet-statement'
     },
     {
         label: 'Help',

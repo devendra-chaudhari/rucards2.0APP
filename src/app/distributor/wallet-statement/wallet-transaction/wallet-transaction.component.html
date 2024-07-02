@@ -1,0 +1,106 @@
+<app-breadcrumbs *ngIf="role!= 'admin'" title="Fund Balance Transactions" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
+
+<div class="card rounded-4">
+    <div class="card-header">
+        <div class="row align-items-center g-3">
+            <div class="col-md-3">
+                <p *ngIf="role!= 'admin'" class="fs-16 fw-medium">Add Fund Balance Transactions</p>
+            </div>
+            <div class="col-md-9">
+                <button type="button" class="btn btn-primary float-end btn-rounded">Filters</button>
+
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row my-4">
+            <div class="d-flex justify-content-between align-items-center gap-2">
+                <div class="d-flex align-items-center justify-content-center">
+                    <label for="page" class="me-2">Show</label>
+                    <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1" [(ngModel)]="pageSize" (change)="onChange()">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    <label for="page" class="ms-2">entries</label>
+                </div>
+                <button type="button" class="btn btn-success float-end btn-rounded" (click)="export_to_excel()">
+                    Export
+                </button>
+            </div>
+        </div>
+        <ngx-simplebar class="table-responsive table-card">
+            <table class="table align-middle table-nowrap" id="customerTable">
+                <thead>
+                <tr>
+                    <th>SR</th>
+                    <th>Transaction ID</th>
+                    <th *ngIf="role== 'admin'">Category</th>
+                    <th>Deposit Date</th>
+                    <th>Old Bal.</th>
+                    <th>Amount</th>
+                    <th>Current Bal.</th>
+                    <th >UTR/REF No</th>
+                    <th >Receiver</th>
+                    <th >Updated At</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="cursor-pointer card-animate"
+                    *ngFor="let transaction of transactions ; let i = index;">
+                    <td>{{(page - 1) * pageSize + i + 1}}</td>
+                    <td>
+                        <div class="d-flex flex-column justify-content-center align-items-start">
+                            <span class="fs-16 mb-1">{{transaction?.fund_transaction_id }}</span>
+                            <span *ngIf="transaction?.transaction_type=='ADD'" class="badge bg-success rounded-pill">{{transaction?.fund_request_id}}</span>
+                            <span *ngIf="transaction?.transaction_type=='DEDUCT'" class="badge bg-danger rounded-pill">{{transaction?.fund_request_id}}</span>
+                        </div>
+                    </td>
+                    <td >
+                        <span *ngIf=" transaction?.receipt=='ADD'"
+                              class="badge bg-success rounded-pill"> CREDIT</span>
+                        <span *ngIf=" transaction?.receipt=='DEDUCT'"
+                              class="badge bg-danger rounded-pill"> DEBIT</span>
+                    </td>
+                    <td>{{transaction?.deposit_date | date: 'dd MMM yyyy'}}</td>
+                    <td>{{transaction?.old_balance |currency:'INR'}}</td>
+                    <td class="fw-bold">
+                        <span *ngIf="transaction?.receipt=='DEDUCT'">-</span>
+                        <span *ngIf="transaction?.receipt=='ADD'"> </span>
+                        {{transaction?.amount |currency:'INR'}}
+                    </td>
+                    <td>{{transaction?.current_balance |currency:'INR'}}</td>
+                    <td *ngIf="role== 'admin'">{{transaction?.ref_no | uppercase}}</td>
+                    <td>{{transaction.request_date | date: 'dd MMM yyyy'}}</td>
+                    <th *ngIf="role== 'admin'">
+                        <div class="d-flex flex-column justify-content-center align-items-start">
+                            <span class="fs-16 mb-1">{{transaction?.receiver_name | uppercase}}</span>
+                            <span class="text-muted mb-0">{{transaction?.receiver_profile_id | uppercase}}</span>
+                        </div>
+                    </th>
+                    <td *ngIf="role!= 'admin'">{{transaction.response_at ?? transaction.request_date | date: 'dd MMM yyyy'}}</td>
+
+                </tr>
+                </tbody>
+            </table>
+        </ngx-simplebar>
+        <div class="row justify-content-md-between align-items-md-center mt-2">
+            <div class="col col-sm-4">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    Showing {{ (page - 1) * pageSize + 1 }} to {{ getMax() }} of {{ total }} entries
+                </div>
+            </div>
+
+            <div class="col col-sm-4">
+                <div class="text-sm-right float-sm-end listjs-pagination">
+                    <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="pageSize" [maxSize]="2" (pageChange)="onPageChange($event)">
+                    </ngb-pagination>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+

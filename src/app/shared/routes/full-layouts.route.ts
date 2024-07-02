@@ -409,7 +409,7 @@ export const FULL_ROUTES: Routes = [
 
     // distributor
     {
-        path: 'distributor/dashboard',
+        path: 'dashboard/distributor',
         data: {
             title: 'Dashboard',
             roles: ['distributor'],
@@ -472,15 +472,6 @@ export const FULL_ROUTES: Routes = [
         loadComponent: () => import('../../distributor/revoke-balance-request/revoke-balance-request.component').then(m => m.RevokeBalanceRequestComponent)
     },
     {
-        path: 'distributor/retailer-fund-request',
-        data: {
-            title: 'Retailer Fund Request',
-            roles: ['distributor'],
-            permission: ['retailer-fund-request']
-        },
-        loadComponent: () => import('../../distributor/retailer-fund-request/retailer-fund-request.component').then(m => m.RetailerFundRequestComponent)
-    },
-    {
         path: 'distributor/wallet-statement',
         data: {
             title: 'Wallet Statement',
@@ -490,13 +481,13 @@ export const FULL_ROUTES: Routes = [
         loadComponent: () => import('../../distributor/wallet-statement/wallet-statement.component').then(m => m.WalletStatementComponent)
     },
     {
-        path: 'distributor/transaction-history',
+        path: 'distributor/wallet-statement/wallet-transaction',
         data: {
-            title: 'Transaction History',
+            title: 'Wallet Transaction',
             roles: ['distributor'],
-            permission: ['transaction-history']
+            permission: ['wallet-transaction']
         },
-        loadComponent: () => import('../../distributor/transaction-history/transaction-history.component').then(m => m.TransactionHistoryComponent)
+        loadComponent: () => import('../../distributor/wallet-statement/wallet-transaction/wallet-transaction.component').then(m => m.WalletTransactionComponent)
     },
 
 ];

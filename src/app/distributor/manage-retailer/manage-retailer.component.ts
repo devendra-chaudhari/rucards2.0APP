@@ -7,8 +7,6 @@ import { NgbModule, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { NgbDatepickerModule} from '@ng-bootstrap/ng-bootstrap';
 import { ApiService } from 'src/app/shared/services/api.service';
 import {  ToastrService } from 'ngx-toastr';
-import { FlatpickrModule } from 'angularx-flatpickr';
-import { random } from 'lodash';
 import { ExcelService } from 'src/app/shared/services/excel.service';
 
 interface RetailerListByDistributorId {
@@ -24,7 +22,7 @@ interface RetailerListByDistributorId {
 @Component({
   selector: 'app-manage-retailer',
   standalone: true,
-  providers: [],
+  providers: [DatePipe],
   imports: [SharedModule, CommonModule, NgbModule, RouterModule, FormsModule, ReactiveFormsModule, DatePipe, NgbDatepickerModule],
   templateUrl: './manage-retailer.component.html',
   styleUrls: ['./manage-retailer.component.scss']
@@ -49,7 +47,7 @@ export class ManageRetailerComponent {
     private apiService: ApiService,
     private toaster: ToastrService,
     private excelService:ExcelService,
-    // private dt: DatePipe,
+    private dt: DatePipe,
   ) {}
   options = {
     series: [{
@@ -130,27 +128,27 @@ onSearch(searchText: string): void {
   }
 
   export_to_excel() {
-    // this.excelFields();
-    // const sortByField = null;
-    // const excludeFields = [];
-    // const columnOrder = ['Sr', 'Name', 'email', 'mobile',,'status', 'created_at']
-    // this.excelService.exportAsExcelFile(this.retailers, 'masterData', sortByField, excludeFields, columnOrder);
+    this.excelFields();
+    const sortByField = null;
+    const excludeFields = [];
+    const columnOrder = ['Sr', 'Name', 'email', 'mobile',,'status', 'created_at']
+    this.excelService.exportAsExcelFile(this.retailers, 'masterData', sortByField, excludeFields, columnOrder);
   }
 
-  // private excelFields() {
-  //   let tempExcelData: any[] = [];
-  //   for (let i = 0; i < this.retailers.length; i++) {
-  //     const row = {
-  //       'Sr': i + 1,
-  //       'Name': this.retailers[i].full_name,
-  //       'Email': this.retailers[i].email,
-  //       'Mobile': this.retailers[i].mobile,
-  //       'created_at': this.dt.transform(this.retailers[i].created_at, 'dd/MM/yyyy H:m:s'),
+  private excelFields() {
+    let tempExcelData: any[] = [];
+    for (let i = 0; i < this.retailers.length; i++) {
+      const row = {
+        'Sr': i + 1,
+        'Name': this.retailers[i].full_name,
+        'Email': this.retailers[i].email,
+        'Mobile': this.retailers[i].mobile,
+        'created_at': this.dt.transform(this.retailers[i].created_at, 'dd/MM/yyyy H:m:s'),
 
-  //     }
-  //     tempExcelData.push(row);
-  //   }
-  //   this.retailers = tempExcelData;
-  // }
+      }
+      tempExcelData.push(row);
+    }
+    this.retailers = tempExcelData;
+  }
   
 }
