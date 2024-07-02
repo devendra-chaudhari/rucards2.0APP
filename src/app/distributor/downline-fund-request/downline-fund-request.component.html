@@ -42,7 +42,29 @@
                 </tr>
                 </thead>
                 <tbody>
-                
+                    <ng-container *ngFor="
+                    let transaction of transactions.slice(
+                      (page - 1) * pageSize,
+                      page * pageSize
+                    );
+                    let i = index
+                  ">
+                  <tr class="cursor-pointer card-animate">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ transaction.name }}</td>
+                    <td>{{ transaction.fund_request_id }}</td>
+                    <td>{{ transaction.wallet_name }}</td>
+                    <td> {{ transaction.request_date |  date: 'dd MMM yyyy' }}</td>
+                    <td>{{ transaction.current_balance }}</td>
+                    <td>{{ transaction.current_balance }}</td>
+                    <td>{{ transaction.amount }}</td>
+                    <td>
+                      <button *ngIf="transaction?.status=='Processing'" class="btn btn-primary btn-sm" (click)="onViewBalanceRequest(viewBalanceRequest,transaction)">Action</button>
+                      <span *ngIf="transaction?.status=='Accepted'" class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Accepted</span>
+                      <span *ngIf="transaction?.status=='Rejected'" class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span>
+                  </td>
+                  </tr>
+                </ng-container>
                 </tbody>
             </table>
         </ngx-simplebar>
@@ -50,34 +72,6 @@
             <div class="col col-sm-6">
                 <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
                     Showing {{ (page - 1) * pageSize + 1 }} to {{ transactions.length }} of {{ transactions?.length ?? 0 }} entries
-                </div>
-            </div>
-
-            <div class="col col-sm-6">
-                <div class="text-sm-right float-sm-end listjs-pagination">
-                    <ng-container *ngFor="
-                        let transaction of transactions.slice(
-                          (page - 1) * pageSize,
-                          page * pageSize
-                        );
-                        let i = index
-                      ">
-                      <tr class="cursor-pointer card-animate">
-                        <td>{{ i + 1 }}</td>
-                        <td>{{ transaction.name }}</td>
-                        <td>{{ transaction.fund_request_id }}</td>
-                        <td>{{ transaction.wallet_name }}</td>
-                        <td> {{ transaction.request_date}}</td>
-                        <td>{{ transaction.current_balance }}</td>
-                        <td>{{ transaction.current_balance }}</td>
-                        <td>{{ transaction.amount }}</td>
-                        <td>
-                          <button *ngIf="transaction?.status=='Processing'" class="btn btn-primary btn-sm" (click)="onViewBalanceRequest(viewBalanceRequest,transaction)">Action</button>
-                          <span *ngIf="transaction?.status=='Accepted'" class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Accepted</span>
-                          <span *ngIf="transaction?.status=='Rejected'" class="badge badge-label bg-danger"><i class="mdi mdi-circle-medium"></i> Rejected</span>
-                      </td>
-                      </tr>
-                    </ng-container>
                 </div>
             </div>
 

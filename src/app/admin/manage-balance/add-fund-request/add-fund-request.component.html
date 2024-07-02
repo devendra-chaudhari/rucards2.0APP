@@ -47,9 +47,9 @@
                                                 <label class="form-check-label" for="company">Company</label>
                                             </div>
                                             <div class="form-check" *ngIf="user_details.parent_type=='super_distributor'">
-                                                <input class="form-check-input" type="radio" id="distributor"  name="receiver"
-                                                       value="distributor" formControlName="receiver">
-                                                <label class="form-check-label" for="distributor">Distributor</label>
+                                                <input class="form-check-input" type="radio" id="super_distributor"  name="receiver"
+                                                       value="super_distributor" formControlName="receiver">
+                                                <label class="form-check-label" for="super_distributor">Super Distributor</label>
                                             </div>
                                             <div class="form-check" *ngIf="user_details.parent_type=='distributor'">
                                                 <input class="form-check-input" type="radio" id="distributor"  name="receiver"
@@ -57,19 +57,19 @@
                                                 <label class="form-check-label" for="distributor">Distributor</label>
                                             </div>
                                             <div class="form-check" *ngIf="user_details.parent_type=='merchant'">
-                                                <input class="form-check-input" type="radio" id="distributor"  name="receiver"
-                                                       value="distributor" formControlName="receiver">
-                                                <label class="form-check-label" for="distributor">Distributor</label>
+                                                <input class="form-check-input" type="radio" id="merchant"  name="receiver"
+                                                       value="merchant" formControlName="receiver">
+                                                <label class="form-check-label" for="merchant">Merchant</label>
                                             </div>
                                             <div class="form-check" *ngIf="user_details.parent_type=='retailer'">
-                                                <input class="form-check-input" type="radio" id="distributor"  name="receiver"
-                                                       value="distributor" formControlName="receiver">
-                                                <label class="form-check-label" for="distributor">Distributor</label>
+                                                <input class="form-check-input" type="radio" id="retailer"  name="receiver"
+                                                       value="retailer" formControlName="receiver">
+                                                <label class="form-check-label" for="retailer">Retailer</label>
                                             </div>
                                             <div class="form-check" *ngIf="user_details.parent_type=='customer'">
-                                                <input class="form-check-input" type="radio" id="distributor"  name="receiver"
-                                                       value="distributor" formControlName="receiver">
-                                                <label class="form-check-label" for="distributor">Distributor</label>
+                                                <input class="form-check-input" type="radio" id="customer"  name="receiver"
+                                                       value="customer" formControlName="receiver">
+                                                <label class="form-check-label" for="customer">Customer</label>
                                             </div>
 
 

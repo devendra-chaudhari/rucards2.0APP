@@ -1,7 +1,7 @@
 <app-breadcrumbs title="Transfer Balance" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
 
-<div>
-    <div class="card rounded-4 ">
+<div class="d-flex justify-content-center align-items-center">
+    <div class="card col-md-8 rounded-4 ">
         <div class="card-header">
             <div class="row align-items-center g-3">
                 <div class="col-md-3">
@@ -9,12 +9,12 @@
                 </div>
             </div>
         </div>
-        <div class="card-body mt-3">
-            <div class="row g-4">
+        <div class="card-body mt-3 ">
+            <div class="row g-5 ">
                 <form class="transferBalanceForm" [formGroup]="transferBalanceForm" (ngSubmit)="onSubmit()">
-                    <div class="row mb-3 form-group">
-                        <label class="col-md-4 col-form-label" for="transfer_to">Transfer To :</label>
-                        <div class="col-md-8">
+                    <div class="row form-group">
+                        <label class="col-md-2 col-form-label" for="transfer_to">Transfer To :</label>
+                        <div class="col-md-10">
                             <ng-select [items]="retailers" [searchFn]="customSearchFn" bindLabel="full_name"
                                 placeholder="Select retailer" formControlName="selectretailer"
                                 class="fw-semibold rounded-pill">
@@ -26,9 +26,9 @@
                             </ng-select>
                         </div>
                     </div>
-                    <div class="row mb-3 form-group">
-                        <label class="col-md-4 col-form-label">Amount :</label>
-                            <div class="col-md-8">
+                    <div class="row mt-3 form-group">
+                        <label class="col-md-2 col-form-label">Amount :</label>
+                            <div class="col-md-10">
                                 <input id="amount" placeholder="Amount" inputmode="numeric"
                                        class="form-control fw-semibold rounded-pill "
                                        formControlName="amount">
@@ -42,22 +42,45 @@
                             </div>
                     </div>
                     
-                    <div class="row mb-3 form-group">
-                        <label class="col-md-4 col-form-label" for="remark">Remark :</label>
-                        <div class="col-md-8">
+                    <div class="row mt-3 form-group">
+                        <label class="col-md-2 col-form-label" for="remark">Remark :</label>
+                        <div class="col-md-10">
                             <input id="remark" placeholder="Remark" inputmode="text"
                                 class="form-control fw-semibold rounded-pill" formControlName="remark">
                         </div>
                     </div>
-                    <div class="row mb-3 form-group">
-                        <div class="col-md-8 offset-md-4">
-                            <button type="submit" class="btn btn-primary me-3 btn-rounded">
+                    <div class="row mt-5 form-group">
+                        <div class="col-md-10 offset-md-4">
+                            <button type="submit" class="btn btn-primary me-3 btn-rounded" (click)="onSubmit()">
                                 Submit
                             </button>
                             <button type="button" class="btn btn-warning btn-rounded" (click)="onReset()">
                                 Reset
                             </button>
                         </div>
+                    </div>
+                    <div class="row mt-5 form-group">
+                        <div class="col-md-12" *ngIf="needRetailerMobileOtp">
+                                                <label for="mobile_otp">OTP <span class="text-danger">*</span></label>
+                                                <input type="text" id="mobile_otp" class="form-control rounded-pill"
+                                                       placeholder="Enter OTP" name="mobile_otp" maxlength="6"
+                                                       appNumberOnly [(ngModel)]="retailer_mobile_otp">
+                                            </div>
+                                            <div class="col-md-12" *ngIf="needRetailerMobileOtp">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <span class="alert alert-success rounded-pill">{{ otp_msg | titlecase }}</span>
+                                                    <div>
+                                                        <a *ngIf="!resendRetailerMobileOTP" (click)="resendMobileOtp()"
+                                                           class="text-secondary cursor-pointer">Resend OTP</a>
+                                                        <countdown *ngIf="resendRetailerMobileOTP" #cd [config]="config"
+                                                                   (event)="handleEvent($event)"></countdown>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button class="btn btn-primary btn-rounded"
+                                            *ngIf="needRetailerMobileOtp" (click)="confirmTerm()">
+                                                Submit
+                                            </button>
                     </div>
                 </form>
             </div>
