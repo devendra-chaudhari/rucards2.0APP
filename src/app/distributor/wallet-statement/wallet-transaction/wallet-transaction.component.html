@@ -36,14 +36,14 @@
                 <tr>
                     <th>SR</th>
                     <th>Transaction ID</th>
-                    <th *ngIf="role== 'admin'">Category</th>
+                    <th>Category</th>
                     <th>Deposit Date</th>
                     <th>Old Bal.</th>
                     <th>Amount</th>
                     <th>Current Bal.</th>
                     <th >UTR/REF No</th>
                     <th >Receiver</th>
-                    <th >Updated At</th>
+                    <th >Created At</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -58,28 +58,26 @@
                         </div>
                     </td>
                     <td >
-                        <span *ngIf=" transaction?.receipt=='ADD'"
+                        <span *ngIf=" transaction?.transaction_type=='ADD'"
                               class="badge bg-success rounded-pill"> CREDIT</span>
-                        <span *ngIf=" transaction?.receipt=='DEDUCT'"
+                        <span *ngIf=" transaction?.transaction_type=='DEDUCT'"
                               class="badge bg-danger rounded-pill"> DEBIT</span>
                     </td>
-                    <td>{{transaction?.deposit_date | date: 'dd MMM yyyy'}}</td>
+                    <td>{{transaction?.created_at | date: 'dd MMM yyyy'}}</td>
                     <td>{{transaction?.old_balance |currency:'INR'}}</td>
                     <td class="fw-bold">
-                        <span *ngIf="transaction?.receipt=='DEDUCT'">-</span>
-                        <span *ngIf="transaction?.receipt=='ADD'"> </span>
+                        <span *ngIf="transaction?.transaction_type=='DEDUCT'">-</span>
+                        <span *ngIf="transaction?.transaction_type=='ADD'"> </span>
                         {{transaction?.amount |currency:'INR'}}
                     </td>
                     <td>{{transaction?.current_balance |currency:'INR'}}</td>
-                    <td *ngIf="role== 'admin'">{{transaction?.ref_no | uppercase}}</td>
-                    <td>{{transaction.request_date | date: 'dd MMM yyyy'}}</td>
-                    <th *ngIf="role== 'admin'">
+                    <td>{{transaction?.ref_no  | uppercase}}</td>
+                    <th>
                         <div class="d-flex flex-column justify-content-center align-items-start">
-                            <span class="fs-16 mb-1">{{transaction?.receiver_name | uppercase}}</span>
-                            <span class="text-muted mb-0">{{transaction?.receiver_profile_id | uppercase}}</span>
+                            <span class="fs-16 mb-1">{{transaction?.receiver_profile_id | uppercase}}</span>
                         </div>
                     </th>
-                    <td *ngIf="role!= 'admin'">{{transaction.response_at ?? transaction.request_date | date: 'dd MMM yyyy'}}</td>
+                    <td>{{transaction.created_at | date: 'dd MMM yyyy'}}</td>
 
                 </tr>
                 </tbody>

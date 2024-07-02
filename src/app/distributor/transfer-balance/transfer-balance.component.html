@@ -59,29 +59,6 @@
                             </button>
                         </div>
                     </div>
-                    <div class="row mt-5 form-group">
-                        <div class="col-md-12" *ngIf="needRetailerMobileOtp">
-                                                <label for="mobile_otp">OTP <span class="text-danger">*</span></label>
-                                                <input type="text" id="mobile_otp" class="form-control rounded-pill"
-                                                       placeholder="Enter OTP" name="mobile_otp" maxlength="6"
-                                                       appNumberOnly [(ngModel)]="retailer_mobile_otp">
-                                            </div>
-                                            <div class="col-md-12" *ngIf="needRetailerMobileOtp">
-                                                <div class="d-flex justify-content-between align-items-center">
-                                                    <span class="alert alert-success rounded-pill">{{ otp_msg | titlecase }}</span>
-                                                    <div>
-                                                        <a *ngIf="!resendRetailerMobileOTP" (click)="resendMobileOtp()"
-                                                           class="text-secondary cursor-pointer">Resend OTP</a>
-                                                        <countdown *ngIf="resendRetailerMobileOTP" #cd [config]="config"
-                                                                   (event)="handleEvent($event)"></countdown>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <button class="btn btn-primary btn-rounded"
-                                            *ngIf="needRetailerMobileOtp" (click)="confirmTerm()">
-                                                Submit
-                                            </button>
-                    </div>
                 </form>
             </div>
         </div>
