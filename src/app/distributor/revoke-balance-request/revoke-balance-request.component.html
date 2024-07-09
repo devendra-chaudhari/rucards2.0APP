@@ -1,65 +1,103 @@
 <app-breadcrumbs title="Revoke Balance" [breadcrumbItems]="breadCrumbItems"></app-breadcrumbs>
-
-<div>
-    <div class="card rounded-4 ">
-        <div class="card-header">
+<div class="d-flex justify-content-center align-items-center ">
+    <div class="card col-md-10 col-lg-8 col-xl-6  rounded-4">
+        <div class="card-header bg-light rounded-top-4">
             <div class="row align-items-center g-3">
-                <div class="col-md-3">
-                    <p class="fs-16 fw-medium">Revoke Balance Request</p>
+                <div class="col-md-12">
+                    <p class="fs-16 fw-medium mb-0">Revoke Balance</p>
                 </div>
             </div>
         </div>
         <div class="card-body mt-3">
-            <div class="row g-4">
-                <form class="transferBalanceForm" [formGroup]="transferBalanceForm" (ngSubmit)="onSubmit()">
-                    <div class="row mb-3 form-group">
-                        <label class="col-md-4 col-form-label" for="transfer_to">Revoke From :</label>
-                        <div class="col-md-8">
-                            <ng-select [items]="retailers" [searchFn]="customSearchFn" bindLabel="full_name"
-                                placeholder="Select retailer" formControlName="selectretailer"
-                                class="fw-semibold rounded-pill">
-                                <ng-template ng-option-tmp let-item="item" >
-                                    <div>
-                                        {{ item.full_name }} ({{ item.username }})
-                                    </div>
-                                </ng-template>
-                            </ng-select>
+            <form class="transferBalanceForm" [formGroup]="transferBalanceForm" (ngSubmit)="onSubmit()">
+                <div class="row form-group mb-3">
+                    <label class="col-md-3 col-form-label" for="transfer_to">Revoke From:</label>
+                    <div class="col-md-9">
+                        <ng-select [items]="retailers" [searchFn]="customSearchFn" bindLabel="full_name"
+                                   placeholder="Select retailer" formControlName="selectretailer"
+                                   class="fw-semibold rounded-pill">
+                            <ng-template ng-option-tmp let-item="item">
+                                <div>
+                                    {{ item.full_name }} ({{ item.username }})
+                                </div>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="row form-group mb-3">
+                    <label class="col-md-3 col-form-label" for="transfer_to">Wallet:</label>
+                    <div class="col-md-9">
+                        <ng-select [items]="wallets" [searchFn]="customSearchFn" bindLabel="name"
+                        placeholder="Select Wallet" formControlName="wallet"
+                        class="fw-semibold rounded-pill">
+                            <ng-template ng-option-tmp let-item="item">
+                                <div>
+                                    {{ item.name }}
+                                </div>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="row form-group mb-3">
+                    <label class="col-md-3 col-form-label">Amount:</label>
+                    <div class="col-md-9">
+                        <input id="amount" placeholder="Amount" inputmode="numeric"
+                               class="form-control fw-semibold rounded-pill"
+                               formControlName="amount">
+                        <div *ngIf="isFundSubmit && ff['amount'].errors" class="text-danger mt-1">
+                            <div *ngIf="ff['amount'].errors['required']">Amount is required</div>
+                            <div *ngIf="ff['amount'].errors['min']">Amount must be at least 100 rupees</div>
+                        </div>
+                        <div *ngIf="ff['amount'].value > 0 && !ff['amount'].errors" class="mt-1">
+                            <small class="text-muted fw-semibold">{{ convertNumber(ff['amount'].value) }}</small>
                         </div>
                     </div>
-                    <div class="row mb-3 form-group">
-                        <label class="col-md-4 col-form-label">Amount :</label>
-                            <div class="col-md-8">
-                                <input id="amount" placeholder="Amount" inputmode="numeric"
-                                       class="form-control fw-semibold rounded-pill "
-                                       formControlName="amount">
-                                <div *ngIf="isFundSubmit && ff['amount'].errors" class="text-danger mt-1">
-                                    <div *ngIf="ff['amount'].errors['required']">Amount is required</div>
-                                    <div *ngIf="ff['amount'].errors['min']">Amount must be at least 100 rupees</div>
-                                </div>
-                                <div *ngIf="ff['amount'].value > 0 && !ff['amount'].errors" class="mt-1">
-                                    <small class="text-muted fw-semibold">{{ convertNumber(ff['amount'].value) }}</small>
-                                </div>
-                            </div>
+                </div>
+                <div class="row form-group mb-3">
+                    <label class="col-md-3 col-form-label" for="remark">Remark:</label>
+                    <div class="col-md-9">
+                        <input id="remark" placeholder="Remark" inputmode="text"
+                               class="form-control fw-semibold rounded-pill" formControlName="remark">
                     </div>
+                </div>
+                <div class="row mt-5 form-group" *ngIf="!needOtp">
+                    <div class="col-md-9 offset-md-3">
+                        <button type="submit" class="btn btn-primary me-3 btn-rounded" (click)="onSubmit()">
+                            Submit
+                        </button>
+                        <button type="button" class="btn btn-warning btn-rounded" (click)="onReset()">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div class="row form-group mb-3" *ngIf="needOtp">
+                <label for="mobile_otp" class="col-md-3 col-form-label">OTP <span class="text-danger">*</span></label>
+                <div class="col-md-9" >
+                    <input class="form-control rounded-pill fw-semibold" appNumberOnly maxlength="6"
+                        placeholder="Enter OTP" id="mobile_otp" name="mobile_otp" [(ngModel)]="otpData.otp">
+                </div>
+                <div class="row form-group mt-3 justify-content-end" >
                     
-                    <div class="row mb-3 form-group">
-                        <label class="col-md-4 col-form-label" for="remark">Remark :</label>
-                        <div class="col-md-8">
-                            <input id="remark" placeholder="Remark" inputmode="text"
-                                class="form-control fw-semibold rounded-pill" formControlName="remark">
+                    <div class="col-md-3 col-form-label">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <a *ngIf="!resendOtp"
+                                (click)="resendCustomerMobileOtp()"
+                                class="text-secondary cursor-pointer col-md-3 col-form-label">Resend</a>
+                                <countdown *ngIf="resendOtp" #cd [config]="config"
+                                        (event)="handleEvent($event)"></countdown>
+                            </div>
                         </div>
                     </div>
-                    <div class="row mb-3 form-group">
-                        <div class="col-md-8 offset-md-4">
-                            <button type="submit" class="btn btn-primary me-3 btn-rounded">
-                                Submit
-                            </button>
-                            <button type="button" class="btn btn-warning btn-rounded" (click)="onReset()">
-                                Reset
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                    <span class="alert alert-success rounded-pill col-md-9">{{otp_msg | titlecase}}</span>
+                </div>
+                <div class="text-center mb-2">
+                    <button class="btn btn-primary fs-16 w-50 btn-rounded" [disabled]="otpData.otp == ''" (click)="verifyOtp()"
+                            >
+                        Pay
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -101,39 +139,84 @@
             </div>
         </div>
     </div>
-    <div class="card-body border border-dashed border-start-0 border-end-0">
-        <div class="table-responsive">
+    <div class="card-body">
+        <div class="row my-4">
+            <div class="d-flex justify-content-between align-items-center gap-2">
+                <div class="d-flex align-items-center justify-content-center">
+                    <label for="page" class="me-2">Show</label>
+                    <select name="page" id="page" class="form-select rounded-4 bg-light px-4 py-1" [(ngModel)]="pageSize">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    <label for="page" class="ms-2">entries</label>
+                </div>
+                <button type="button" class="btn btn-success float-end btn-rounded" (click)="export_to_excel()">
+                    Export
+                </button>
+            </div>
+        </div>
+        <ngx-simplebar class="table-responsive table-card">
             <table class="table align-middle table-nowrap" id="customerTable">
                 <thead>
-                    <tr>
-                        <th>SR</th>
-                        <th>Transaction Id</th>
-                        <th>Transaction Date</th>
-                        <th>Received By</th>
-                        <th>Transfer From</th>
-                        <th>Amount</th>
-                        <th>Remark</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
+                <tr>
+                    <th>SR</th>
+                    <th>Transaction ID</th>
+                    <th>Category</th>
+                    <th >Revoke From</th>
+                    <th>Amount</th>
+                    <th>Current Bal.</th>
+                    <th>Deposit Date</th>
+                </tr>
                 </thead>
                 <tbody>
+                <tr class="cursor-pointer card-animate"
+                    *ngFor="let transaction of transactions ; let i = index;">
+                    <td>{{(page - 1) * pageSize + i + 1}}</td>
+                    <td>
+                        <div class="d-flex flex-column justify-content-center align-items-start">
+                            <span class="fs-16 mb-1">{{transaction?.fund_transaction_id }}</span>
+                            <span *ngIf="transaction?.transaction_type=='ADD'" class="badge bg-success rounded-pill">{{transaction?.fund_request_id}}</span>
+                            <span *ngIf="transaction?.transaction_type=='DEDUCT'" class="badge bg-danger rounded-pill">{{transaction?.fund_request_id}}</span>
+                        </div>
+                    </td>
+                    <td >
+                        <span *ngIf=" transaction?.transaction_type=='ADD'"
+                              class="badge bg-success rounded-pill"> CREDIT</span>
+                        <span *ngIf=" transaction?.transaction_type=='DEDUCT'"
+                              class="badge bg-danger rounded-pill"> DEBIT</span>
+                    </td>
+                    <th>
+                        <div class="d-flex flex-column justify-content-center align-items-start">
+                            <span class="fs-16 mb-1">{{transaction?.sender_profile_id | uppercase}}</span>
+                        </div>
+                    </th>
+                    <td class="fw-bold">
+                        <span *ngIf="transaction?.transaction_type=='DEDUCT'">-</span>
+                        <span *ngIf="transaction?.transaction_type=='ADD'"> </span>
+                        {{transaction?.amount |currency:'INR'}}
+                    </td>
+                    <td>{{transaction?.current_balance |currency:'INR'}}</td>
+                    <td>{{transaction?.created_at | date: 'dd MMM yyyy'}}</td>
 
+                </tr>
                 </tbody>
             </table>
-
-        </div>
-        <div class="row justify-content-md-between align-items-md-center mt-3">
-            <div class="col col-sm-6">
-                <p class="mb-2">
-                    Showing to of entries
-                </p>
+        </ngx-simplebar>
+        <div class="row justify-content-md-between align-items-md-center mt-2">
+            <div class="col col-sm-4">
+                <div class="dataTables_info mb-2" id="tickets-table_info" role="status" aria-live="polite">
+                    Showing {{ (page - 1) * pageSize + 1 }} to {{ getMax() }} of {{ total }} entries
+                </div>
             </div>
-            <div class="col col-sm-6">
+
+            <div class="col col-sm-4">
                 <div class="text-sm-right float-sm-end listjs-pagination">
-                    <ngb-pagination [collectionSize]=10 [pageSize]=10 [maxSize]="2">
+                    <ngb-pagination [collectionSize]="total" [(page)]="page" [pageSize]="pageSize" [maxSize]="2" (pageChange)="onPageChange($event)">
                     </ngb-pagination>
                 </div>
             </div>
+
         </div>
     </div>

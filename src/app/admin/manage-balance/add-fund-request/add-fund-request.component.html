@@ -88,7 +88,7 @@
                                                 <option value="{{product?.id}}"
                                                          [ngValue]="{ id: product.id, name: product.product_name, wallet_id:product.wallet_id }"
                                                 [disabled]="product.active == false || product.wallet_id == null" >
-                                                        {{product?.product_code}} | {{product?.product_series}}
+                                                        {{product?.product_name}} | {{product?.product_series}}
                                                 </option>
                                             </ng-container>
                                         </select>

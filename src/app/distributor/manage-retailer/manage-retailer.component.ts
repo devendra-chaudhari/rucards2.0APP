@@ -8,6 +8,7 @@ import { NgbDatepickerModule} from '@ng-bootstrap/ng-bootstrap';
 import { ApiService } from 'src/app/shared/services/api.service';
 import {  ToastrService } from 'ngx-toastr';
 import { ExcelService } from 'src/app/shared/services/excel.service';
+import { SessionStorageService } from 'src/app/shared/services/session-storage.service';
 
 interface RetailerListByDistributorId {
   id: string;
@@ -31,6 +32,8 @@ export class ManageRetailerComponent {
 
   breadCrumbItems!: Array<{}>;
   totalRetailers: number = 0;
+  totalGPR: number = 0;
+  totalGIFT: number = 0;
   retailers: RetailerListByDistributorId[] = [];
   tempRetailers: RetailerListByDistributorId[] = [];
   page:number= 1;
@@ -48,6 +51,7 @@ export class ManageRetailerComponent {
     private toaster: ToastrService,
     private excelService:ExcelService,
     private dt: DatePipe,
+    private sessionStorage:SessionStorageService,
   ) {}
   options = {
     series: [{
@@ -105,6 +109,7 @@ export class ManageRetailerComponent {
     }
 );
 }
+
   
 onSearch(searchText: string): void {
   const searchTextLower = searchText.toLowerCase();
