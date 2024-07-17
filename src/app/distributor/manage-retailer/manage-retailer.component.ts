@@ -9,6 +9,9 @@ import { ApiService } from 'src/app/shared/services/api.service';
 import {  ToastrService } from 'ngx-toastr';
 import { ExcelService } from 'src/app/shared/services/excel.service';
 import { SessionStorageService } from 'src/app/shared/services/session-storage.service';
+import { NgxSpinner, NgxSpinnerService, Spinner } from 'ngx-spinner';
+import { random } from 'lodash';
+
 
 interface RetailerListByDistributorId {
   id: string;
@@ -39,6 +42,9 @@ export class ManageRetailerComponent {
   page:number= 1;
   pageSize:number = 10;
   tempExcelData:[];
+
+  gpr_card:number;
+  gift_card:number;
   
   filterUserForm = new UntypedFormGroup({
     start_date: new UntypedFormControl('', [Validators.required]),
@@ -52,6 +58,7 @@ export class ManageRetailerComponent {
     private excelService:ExcelService,
     private dt: DatePipe,
     private sessionStorage:SessionStorageService,
+    private spinner: NgxSpinnerService,
   ) {}
   options = {
     series: [{
@@ -88,6 +95,7 @@ export class ManageRetailerComponent {
       { label: 'Manage Retailer', active: true },
     ];
     this.getRetailerListByDistributorId(this.page, this.pageSize)
+    this.getCardsCount()
 
   }
 
@@ -110,6 +118,16 @@ export class ManageRetailerComponent {
 );
 }
 
+  getCardsCount() {
+    this.apiService.get('paypoint_gift_card/total_cards_under_distributor').subscribe(res => {
+      this.gpr_card = res.data.gpr_card;
+      this.gift_card = res.data.gift_cards;
+    },(error) => {
+        this.toaster.error(error.error.error);
+    }
+);
+}
+
   
 onSearch(searchText: string): void {
   const searchTextLower = searchText.toLowerCase();
@@ -121,7 +139,7 @@ onSearch(searchText: string): void {
     this.retailers = filteredMiscs;
 }
 
-  onSubmitFilterUser(){
+onSubmitFilterUser(){
     const {start_date, end_date} = this.filterUserForm.value
     console.log(start_date, end_date)
     this.getRetailerListByDistributorId(this.page,this.pageSize, start_date, end_date);
@@ -133,27 +151,10 @@ onSearch(searchText: string): void {
   }
 
   export_to_excel() {
-    this.excelFields();
-    const sortByField = null;
-    const excludeFields = [];
-    const columnOrder = ['Sr', 'Name', 'email', 'mobile',,'status', 'created_at']
-    this.excelService.exportAsExcelFile(this.retailers, 'masterData', sortByField, excludeFields, columnOrder);
-  }
+    this.spinner.show();
+    this.excelService.exportAsExcelFile(this.retailers, 'Retailers-' + random() * 56413216544 + '.xlsx', 'request_date', ['receipt', 'user_id', 'receiver_id'], ['full_name', 'username', 'email', 'active', 'created_at']);
+    this.spinner.hide();
+}
 
-  private excelFields() {
-    let tempExcelData: any[] = [];
-    for (let i = 0; i < this.retailers.length; i++) {
-      const row = {
-        'Sr': i + 1,
-        'Name': this.retailers[i].full_name,
-        'Email': this.retailers[i].email,
-        'Mobile': this.retailers[i].mobile,
-        'created_at': this.dt.transform(this.retailers[i].created_at, 'dd/MM/yyyy H:m:s'),
-
-      }
-      tempExcelData.push(row);
-    }
-    this.retailers = tempExcelData;
-  }
   
 }

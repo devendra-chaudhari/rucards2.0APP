@@ -24,6 +24,7 @@ import {
 } from "ngx-countdown";
 import { SessionStorageService } from "src/app/shared/services/session-storage.service";
 import { User } from "src/app/shared/interfaces/user";
+import { random } from "lodash";
 
 export interface RucardsWallet {
   id: string;
@@ -342,30 +343,7 @@ protected readonly Math = Math;
   }
 
   export_to_excel() {
-    this.excelFields();
-    const sortByField = null;
-    const excludeFields = [];
-    const columnOrder = [
-      "serial_no",
-      "message",
-      "status",
-      "visible_at",
-      "start_date",
-      "end_date",
-      "created_at",
-      "updated_at",
-    ];
-    this.excelService.exportAsExcelFile(
-      this.tempExcelData,
-      "masterData",
-      sortByField,
-      excludeFields,
-      columnOrder
-    );
-  }
+    this.excelService.exportAsExcelFile(this.transactions, 'Revoke-fund-request-' + random() * 56413216544 + '.xlsx', 'request_date', ['receipt', 'user_id', 'receiver_id'], ['fund_transaction_id', 'transaction_type', 'receiver_profile_id ', 'amount', 'current_balance', 'created_at'])
 
-  private excelFields() {
-    let tempExcelData: any[] = [];
-    // Custom Excel data logic
-  }
+}
 }

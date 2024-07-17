@@ -59,7 +59,7 @@ export class MyFundRequestComponent {
   }
 
   export_to_excel() {
-      this.excelService.exportAsExcelFile(this.myFundRequests, 'Fund-request-' + random() * 56413216544 + '.xlsx', 'request_date', ['receipt', 'user_id', 'receiver_id'], ['request_date', 'amount', 'deposit_date', 'ref_no', 'status', 'wallet_name', 'response_at', 'response_remark', 'remark'])
+      this.excelService.exportAsExcelFile(this.myFundRequests, 'Fund-request-' + random() * 56413216544 + '.xlsx', 'request_date', ['receipt', 'user_id', 'receiver_id'], ['deposit_date', 'fund_request_id', '.payment_mode', 'amount', 'ref_no', 'wallet_name', 'status','remark'])
 
   }
 

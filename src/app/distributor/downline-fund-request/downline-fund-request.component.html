@@ -9,8 +9,8 @@
             <div class="col-md-auto ms-auto">
                 <div class="d-flex gap-2">
                     <div class="search-box">
-                        <input type="text" class="form-control rounded-pill" placeholder="Search..." #search
-                               (keyup)="onSearch(search.value)">
+                        <input type="text" class="form-control rounded-pill search bg-light border-light" placeholder="Search..." #search
+                          (keyup)="onSearch(search.value)" />
                         <i class="ri-search-line search-icon"></i>
                     </div>
 
@@ -34,10 +34,9 @@
                     <th>Customer Name</th>
                     <th>Transaction ID</th>
                     <th>Wallet/Product</th>
+                    <th>Current Balance</th>
+                    <th>Amount </th>
                     <th>Date</th>
-                    <th>Admin Ope/Clo. Balance</th>
-                    <th>User Ope/Clo. Balance</th>
-                    <th>Amount & Date</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -54,10 +53,9 @@
                     <td>{{ transaction.name }}</td>
                     <td>{{ transaction.fund_request_id }}</td>
                     <td>{{ transaction.wallet_name }}</td>
-                    <td> {{ transaction.request_date |  date: 'dd MMM yyyy' }}</td>
-                    <td>{{ transaction.current_balance }}</td>
                     <td>{{ transaction.current_balance }}</td>
                     <td>{{ transaction.amount }}</td>
+                    <td> {{ transaction.request_date |  date: 'dd MMM yyyy' }}</td>
                     <td>
                       <button *ngIf="transaction?.status=='Processing'" class="btn btn-primary btn-sm" (click)="onViewBalanceRequest(viewBalanceRequest,transaction)">Action</button>
                       <span *ngIf="transaction?.status=='Accepted'" class="badge badge-label bg-success"><i class="mdi mdi-circle-medium"></i> Accepted</span>

@@ -67,6 +67,7 @@ export class DownlineFundRequestComponent {
     breadCrumbItems!: Array<{}>;
     user:User;
     transactions: TransactionDetails[] = [];
+    tempTransactions: TransactionDetails[] = [];
     temp_transactions={
         amount:null,
         current_balance:null,
@@ -148,29 +149,26 @@ export class DownlineFundRequestComponent {
     }
 
 
-    onSearch(value: string) {
-
-    }
 
     export_to_excel() {
         this.spinner.show();
-        this.excelService.exportAsExcelFile(this.transactions, 'Fund-request-' + random() * 56413216544 + '.xlsx', 'request_date', ['receipt', 'user_id', 'receiver_id'], ['request_date', 'amount', 'deposit_date', 'ref_no', 'status', 'wallet_name', 'response_at', 'response_remark', 'remark']);
+        this.excelService.exportAsExcelFile(this.transactions, 'Downloading-fund-request-' + random() * 56413216544 + '.xlsx', 'request_date', ['receipt', 'user_id', 'receiver_id'], ['name', 'fund_request_id', 'wallet_name', 'request_date', 'current_balance', 'amount','status', 'remark']);
         this.spinner.hide();
     }
 
-    getDownlineFundRequest(page:number, pageSize:number, start_date:Date=null, end_date:Date=null) {
+    getDownlineFundRequest(page:number, page_size:number, start_date:Date=null, end_date:Date=null) {
         this.spinner.show();
         const data ={
-            'page': page, 
-            'page_size': pageSize, 
+            'page_no': page, 
+            'page_size': page_size, 
             'start_date': start_date,
             'end_date': end_date
         }
-        console.log(data)
         this.apiService.post('fund_request/downline_fund_request',data).subscribe({
             next: (res) => {
                 console.log(res.data.result)
                 this.transactions = res.data.result;
+                this.tempTransactions = res.data.result;
                 this.total = res.data.total
                 for (let i = 0; i < this.transactions.length; i++) {
                     for (const wallet of this.Wallets) {
@@ -371,5 +369,15 @@ export class DownlineFundRequestComponent {
       
       onFilterUser(filter_user: any) {
         this.offCanvas.open(filter_user, {position: 'end', animation: true});
+      }
+      
+    onSearch(searchText: string): void {
+        const searchTextLower = searchText.toLowerCase();
+        const filteredMiscs = this.tempTransactions.filter(x => x.name.toLowerCase().includes(searchTextLower) || x.fund_request_id.toLowerCase().includes(searchTextLower));
+      
+        if (searchTextLower == '') {
+          this.transactions = this.tempTransactions;
+        } else
+          this.transactions = filteredMiscs;
       }
 }

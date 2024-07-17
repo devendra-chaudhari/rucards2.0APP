@@ -47,7 +47,13 @@ export class CreateRetailerComponent implements OnInit {
     otp_ref_id = '';
     maxDate = new Date();
 
-
+    panCardData: PanCardData = {
+        pan_no: '',
+        name: '',
+        aadhaar_seeding: '',
+        category: '',
+        valid: false
+    }
     //retailer
     needRetailerMobileOtp = false;
     resendRetailerMobileOTP = false;
@@ -61,19 +67,7 @@ export class CreateRetailerComponent implements OnInit {
     retailer_mobile_otp = '';
     ref_id = '';
     showPassword: boolean = false;
-
-
-    //customer registration
-    showConfirmPassword: boolean = false;
-    customer_confirm_password: string = null;
-    customer_password: string = null;
-    panCardData: PanCardData = {
-        pan_no: '',
-        name: '',
-        aadhaar_seeding: '',
-        category: '',
-        valid: false
-    }
+    otp:'';
 
     aadhaarCardData: AadhaarCardData | undefined;
     retailerData: RetailerData = {
@@ -95,20 +89,6 @@ export class CreateRetailerComponent implements OnInit {
         ref_id: '',
     };
 
-    //customer
-    otp = '';
-    needCustomerMobileOtp = false;
-    resendCustomerMobileOTP = false;
-    customerCurrentStep = 1;
-    isCustomerSubmit = false;
-    customer_terms = false;
-    customer_mobile_otp = '';
-    isPincodeData = false;
-    state = '';
-    state_name = '';
-    district = '';
-
-
     //retailer form
     retailerForm: FormGroup = new FormGroup({
         pan: new FormControl('', [Validators.required, Validators.pattern('^[A-Za-z]{5}[0-9]{4}[A-Za-z]{1}$')]),
@@ -116,27 +96,6 @@ export class CreateRetailerComponent implements OnInit {
         mobile: new FormControl('', [Validators.required, Validators.pattern('^[6789]\\d{9}$')]),
         email: new FormControl('', [Validators.required, Validators.email])
     });
-
-    //customer form
-    customerForm = new FormGroup({
-        name: new FormControl('', [Validators.required]),
-        father_name: new FormControl('', [Validators.required]),
-        mobile_no: new FormControl('', [Validators.required, Validators.pattern('^[6789]\\d{9}$')]),
-        email: new FormControl('', [Validators.required, Validators.email]),
-        role: new FormControl(''),
-        otp: new FormControl(''),
-        ref_id: new FormControl(''),
-        pan_no: new FormControl(''),
-        aadhaar_no: new FormControl(''),
-        dob: new FormControl('', [Validators.required]),
-        gender: new FormControl('', [Validators.required]),
-        state: new FormControl('', [Validators.required]),
-        district: new FormControl('', [Validators.required]),
-        city: new FormControl('', [Validators.required]),
-        pincode: new FormControl('', [Validators.required, Validators.minLength(6)]),
-        address: new FormControl('', [Validators.required])
-    });
-
 
     private toaster = inject(ToastrService)
     private spinner = inject(NgxSpinnerService)
@@ -155,15 +114,11 @@ export class CreateRetailerComponent implements OnInit {
         return this.retailerForm.controls;
     }
 
-    get sf() {
-        return this.customerForm.controls;
-    }
 
     handleEvent($event: CountdownEvent) {
         if ($event.status === 3) {
             this.resendRetailerMobileOTP = false;
             this.resendAadharOtp = false;
-            this.resendCustomerMobileOTP = false;
             this.countdown.stop();
         }
     }
@@ -172,9 +127,7 @@ export class CreateRetailerComponent implements OnInit {
         this.showPassword = !this.showPassword;
     }
 
-    toggleConfirmPassword() {
-        this.showConfirmPassword = !this.showConfirmPassword;
-    }
+
 
 
     openPan(panContent: TemplateRef<any>) {
@@ -403,175 +356,6 @@ export class CreateRetailerComponent implements OnInit {
 
             }
         });
-    }
-
-
-    onPincode(pincode) {
-        if (pincode.length == 6) {
-            this.spinner.show();
-            this.apiService.post('auth/get_pincode_detail', {pincode: pincode}).subscribe({
-                next: (res) => {
-                    if (res.data[0].Status == 'Success') {
-                        this.state = res.data[0].PostOffice[0].State;
-                        this.district = res.data[0].PostOffice[0].District;
-                        this.sf['state'].setValue(this.state);
-                        this.sf['district'].setValue(this.district);
-                        this.isPincodeData = false;
-                    } else {
-                        this.isPincodeData = true;
-                        this.sf['state'].setValue('');
-                        this.sf['district'].setValue('');
-                    }
-                    this.spinner.hide();
-
-                },
-                error: () => {
-                    this.isPincodeData = true;
-                    this.sf['state'].setValue('');
-                    this.sf['district'].setValue('');
-                    this.spinner.hide();
-
-                }
-            });
-        }
-    }
-
-
-    onCustomerStepOne() {
-        this.isCustomerSubmit = true;
-        if (this.customerForm.invalid) {
-            return;
-        }
-        if (this.isPincodeData) {
-            this.state_name = this.sf['state'].value;
-        }
-        const data = {
-            mobile: this.sf['mobile_no'].value,
-            email: this.sf['email'].value,
-            user_type: 'customer'
-        }
-        this.apiService.post('auth/check_user_exist', data).subscribe({
-            next: (res) => {
-                if (res.data.user_found) {
-                    this.toaster.error('User Already Exist.');
-                } else {
-                    this.customerCurrentStep = 2;
-                }
-            }
-        });
-    }
-
-    validateCustomerRegistration() {
-        const data = {
-            password: this.customer_password,
-            confirm_password: this.customer_confirm_password,
-        }
-        if (data.password == '' || data.password == null) {
-            this.toaster.warning('Enter Password')
-            return;
-        } else if (data.confirm_password == '' || data.confirm_password == null) {
-            this.toaster.warning('Enter Confirm Password')
-            return;
-        } else if (data.password != data.confirm_password) {
-            this.toaster.warning('Password and Confirm Password Not Match')
-            return;
-        } else if (data.password.length < 8) {
-            this.toaster.warning('Password must be 8 Character Long.')
-            return;
-        } else {
-            this.apiService.post('auth/generate_register_otp', {
-                mobile: this.sf['mobile_no'].value
-
-            }).subscribe({
-                next: (res) => {
-                    this.otp_msg = res.message;
-                    this.otp_ref_id = res.data.ref_id;
-                    this.needCustomerMobileOtp = true;
-                    this.resendCustomerMobileOTP = true;
-                },
-                error: (error) => {
-                    this.toaster.error(error.error.error);
-                }
-            });
-        }
-    }
-
-    resendCustomerMobileOtp() {
-        this.spinner.show();
-        this.apiService.post('auth/generate_register_otp', {mobile: this.sf['mobile_no'].value}).subscribe({
-            next: (res) => {
-                this.otp_msg = res.message;
-                this.otp_ref_id = res.data.ref_id;
-                this.customer_mobile_otp = '';
-                this.spinner.hide();
-
-                this.resendCustomerMobileOTP = true;
-            },
-            error: (error) => {
-                this.toaster.error(error.error.error);
-                this.spinner.hide();
-            }
-        });
-    }
-
-    changeCustomerDetails() {
-        this.needCustomerMobileOtp = false;
-        this.customer_mobile_otp = '';
-        this.customerCurrentStep = 2;
-    }
-
-    registerCustomer() {
-        if (this.isPincodeData) {
-            const stateName = this.sf['state'].value;
-            this.sf['state'].setValue(stateName);
-        }
-        const data = {
-            name: this.sf['name'].value,
-            father_name: this.sf['father_name'].value,
-            mobile_no: this.sf['mobile_no'].value,
-            email: this.sf['email'].value,
-            otp: this.customer_mobile_otp,
-            ref_id: this.otp_ref_id,
-            dob: this.sf['dob'].value,
-            gender: this.sf['gender'].value,
-            state: this.sf['state'].value,
-            district: this.sf['district'].value,
-            city: this.sf['city'].value,
-            pincode: this.sf['pincode'].value,
-            address: this.sf['address'].value,
-            role: this.role,
-            password: this.customer_password,
-            confirm_password: this.customer_confirm_password,
-        }
-        if (data.password == '' || data.password == null) {
-            this.toaster.warning('Enter Password')
-            return;
-        } else if (data.confirm_password == '' || data.confirm_password == null) {
-            this.toaster.warning('Enter Confirm Password')
-            return;
-        } else if (data.password != data.confirm_password) {
-            this.toaster.warning('Password and Confirm Password Not Match')
-            return;
-        } else if (data.password.length < 8) {
-            this.toaster.warning('Password must be 8 Character Long.')
-            return;
-        } else {
-            this.spinner.show();
-            this.apiService.post('auth/signup', data).subscribe({
-                next: (res) => {
-                    this.customerForm.reset();
-                    this.isCustomerSubmit = false;
-                    this.customerCurrentStep = 3;
-                    this.toaster.success(res.message);
-                    this.spinner.hide();
-
-                }, error: (error) => {
-                    this.customerCurrentStep = 2;
-                    this.toaster.error(error.error.error);
-                    this.spinner.hide();
-                }
-            });
-        }
     }
 
     validatePanNumber(panNo: string): boolean {

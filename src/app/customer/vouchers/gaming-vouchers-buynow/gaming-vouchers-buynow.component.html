@@ -1,0 +1,157 @@
+<!-- app.component.html -->
+
+<!-- Main navigation -->
+<header class="main-menu">
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand">
+        <img src="assets/images/gaming/logo.png" alt="logo" routerLink="/dashboard/customer" />
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse main-menu-item" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/dashboard/customer">Dashboard</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/vouchers/gaming-vouchers">Gaming Vouchers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/vouchers/subscription-vouchers">Subscription Vouchers</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<section id="call-to-action" class="call-to-action section dark-background justify-content-center">
+  <img src="assets/images/gaming/cta-bg.jpg" alt="" />
+
+  <div class="container">
+    <div class="row justify-content-center" data-aos="zoom-in" data-aos-delay="100">
+      <div class="col-xl-10">
+        <div class="text-center">
+          <h3>Call To Action</h3>
+          <p>
+            Duis aute irure dolor in reprehenderit in voluptate velit esse
+            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+            cupidatat non proident, sunt in culpa qui officia deserunt mollit
+            anim id est laborum.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- /Call To Action Section -->
+
+
+<div class="container-fluid mt-8">
+  <div class="col-md-12">
+    <div class="row justify-content-center ">
+      <!-- Left Side Column -->
+      <div class="col-md-6 mt-4">
+        <div class="row align-items-center">
+          <div class="col-md-6" *ngFor="let item of leftItems; let i = index">
+            <div class="card mb-3">
+              <div class="card-body">
+                <div class="row ">
+                  <div class="col">
+                    <img class="card-img-top" src="assets/images/gaming/xbox-sm-logo.jpg" alt="Logo"
+                      style="width: 50%" />
+                  </div>
+                  <div class="col mt-4 ">
+                    <h5 class="card-title fs-5">{{ item.title }}</h5>
+                  </div>
+                  <div class="col mt-4">
+                    <p class="card-text text-right fs-5">Price: &#8377; {{ item.price }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Right Side Column -->
+      <div class="col-md-3 mt-4">
+        <div class="card mb-3">
+          <div class="card-body">
+            <div class="row justify-content-between">
+              <div class="col-auto px-5">
+                <p class="text-dark mb-0 fs-5">Quantity</p>
+              </div>
+              <div class="col justify-content-end">
+                <div class="input-group bg-light">
+                  <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary button-minus" type="button"
+                      (click)="decrement()">-</button>
+                  </div>
+                  <input type="text" class="form-control text-center bg-light" [value]="quantity" readonly>
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary button-plus" type="button" (click)="increment()">+</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-3">
+          <div class="card-body">
+            <div class="row ">
+              <div class="col mt-2 px-5">
+                <h5 class="card-title fs-3 fw-bold">Total</h5>
+              </div>
+              <div class="col mt-2">
+                <p class="card-text text-right text-danger fs-4 fw-bold">Price: &#8377; 124</p>
+              </div>
+              <div class="row px-5 mt-5">
+                <button type="button" class="btn bg-warning offcanvas-btn btn-rounded mb-1 mt-6 fs-3">Buy Now </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="container-fluid d-flex justify-content-center align-items-center full-height mt-5">
+  <div class="col-md-9">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-muted">Discription : </h5>
+        <hr>
+        <p class="card-text mt-4"><b class="fs-5 font-bold mb-2">Xbox Live Gold (US) Overview</b> <br>
+          <br>With an Xbox Live, take your Xbox 360 online to play Kinect and controller games with friends wherever they are. Instantly watch HD movies, TV shows and sports, and with Kinect, your voice is the remote control. Not sure what to play or watch
+          <br>Quickly find new movies, songs or games with your voice. Even use your phone or tablet as a second screen to control and interact with what you’re watching. Plus, now you can explore the web on your TV with Internet Explorer for Xbox. Entertainment is more amazing with Xbox.
+          <br>
+          <br><b>Features : </b><br>
+          <br> <b class="text-dark " style="font-size: 1rem;">&#183;</b> Play Kinect and controller games online with friends<br>
+          <b class="text-dark " style="font-size: 1rem;">&#183;</b> Watch TV from Sky, Netflix, BBC iPlayer**, YouTube and many more<br>
+          <b class="text-dark " style="font-size: 1rem;">&#183;</b> Use your voice to easily find movies, TV shows, music and games on Xbox 360 with Kinect<br>
+          <b class="text-dark " style="font-size: 1rem;">&#183;</b> Use your phone or tablet as a second screen for an enhanced game and entertainment experience</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid d-flex justify-content-center align-items-center full-height mt-2">
+  <div class="col-md-9">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title text-muted">Guide : </h5>
+        <hr>
+        <p class="card-text mt-4"><b class="fs-5 font-bold mb-2">Xbox Live Gold Card Redemption Guide on PC</b> <br>
+          <br>Xbox Live and Xbox Music Pass Cards on a computer and have them applied to your account immediately. Here's the guide:
+          <br>1. On a computer, go to Redeem Code and click Sign In.
+          <br>2. Sign in with your Microsoft account.
+          <br>3. Click Redeem.
+          <br>4. Enter the 25-character prepaid code and click Confirm.
+          <br>
+        </p> 
+      </div>
+    </div>
+  </div>
+</div>

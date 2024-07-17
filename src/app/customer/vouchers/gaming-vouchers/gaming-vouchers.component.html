@@ -1,0 +1,100 @@
+<!-- app.component.html -->
+
+<!-- Main navigation -->
+<header class="main-menu">
+    <nav class="navbar navbar-expand-lg ">
+        <div class="container">
+            <a class="navbar-brand">
+                <img src="assets/images/gaming/logo.png" alt="logo" routerLink="/dashboard/customer" />            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse main-menu-item" id="navbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/dashboard/customer">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/vouchers/gaming-vouchers">Gaming Vouchers</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/vouchers/subscription-vouchers">Subscription Vouchers</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+<!-- Hero section -->
+<div class="hero-section">
+    <owl-carousel-o [options]="carouselOptions">
+        <ng-container *ngFor="let image of images">
+            <ng-template carouselSlide>
+              <div class="hero-item set-bg" [ngStyle]="{'background-image': 'url(' + image.image + ')'}">
+                  <div class="container">
+                      <div class="row justify-content-center text-center" data-aos="fade-up" data-aos-delay="100">
+                          <div class="col-xl-6 col-lg-8">
+                              <h2 class="hero-title">Game On!<span>.</span></h2>
+                              <p class="hero-description">We are a team of talented digital marketers</p>
+                              <button class="btn d-inline-block text-center font-weight-medium text-dark bg-warning cursor-pointer rounded-pill px-4 py-2" style="min-width: auto; font-size: 15px;" (click)="scrollToSection()">Read More</button>
+                          </div>
+    
+                      </div>
+                  </div>
+              </div>
+              
+            </ng-template>
+        </ng-container>
+    </owl-carousel-o>
+  </div>
+  
+<!-- Intro section -->
+<section class="intro-section" #targetSection id="target-section">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-3 mb-4">
+                <div class="card card-animate h-100 d-flex flex-column justify-content-center align-items-center px-2 py-3"
+                     style="background: linear-gradient(90deg,#0E7D11,#004702); border-radius: 1rem;">
+                    <div class="position-relative">
+                        <img src="assets/images/gaming/xbox-og-logo.png" alt="Xbox logo"
+                             class="img-fluid custom-rounded-card-ps" style="max-width: 100%;">
+                    </div>
+                    <div class="d-flex flex-column align-items-center text-center mt-3">
+                        <div class="text-white">
+                            <p class="text-center mb-3">Boost productivity with<br>Microsoft Office vouchers<br>for essential software tools.</p>
+                        </div>
+                        <button type="button"
+                                class="btn btn-outline-secondari-ps offcanvas-btn btn-rounded text-white mb-1 mt-2 " routerLink="/vouchers/gaming-vouchers-buynow">Buy
+                            Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1 mb-4">
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card card-animate h-100 d-flex flex-column justify-content-center align-items-center px-2 py-3"
+                     style="background: linear-gradient(90deg,#0052B6,#00256b); border-radius: 1rem;">
+                    <div class="position-relative">
+                        <img src="assets/images/gaming/psn-logo.png" alt="PlayStation logo"
+                             class="img-fluid custom-rounded-card-ps" style="max-width: 100%;">
+                    </div>
+                    <div class="d-flex flex-column align-items-center text-center mt-3">
+                        <div class="text-white">
+                            <p class="text-center mb-3">Enhance your gaming experience with<br>PlayStation vouchers<br>for exciting adventures.</p>
+                        </div>
+                        <button type="button"
+                                class="btn btn-outline-secondari-ps offcanvas-btn btn-rounded text-white mb-1 mt-2" routerLink="/vouchers/gaming-vouchers-buynow">Buy
+                            Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

@@ -361,24 +361,24 @@ export const FULL_ROUTES: Routes = [
         },
         loadChildren: () => import('../../customer/bill-payments/bill-payments.module').then(m => m.BillPaymentsModule)
     },
-    {
-        path: 'ru-gaming-vouchers',
-        data: {
-            title: 'Vouchers',
-            roles: ['admin', 'retailer', 'customer'],
-            permission: ['vouchers']
-        },
-        loadComponent: () => import('../../customer/vouchers/ru-gaming-vouchers/ru-gaming-vouchers.component').then(m => m.RuGamingVouchersComponent)
-    },
-    {
-        path: 'ru-subscriptions',
-        data: {
-            title: 'Vouchers',
-            roles: ['admin', 'retailer', 'customer'],
-            permission: ['vouchers']
-        },
-        loadComponent: () => import('../../customer/vouchers/ru-subscriptions/ru-subscriptions.component').then(m => m.RuSubscriptionsComponent)
-    },
+    // {
+    //     path: 'ru-gaming-vouchers',
+    //     data: {
+    //         title: 'Vouchers',
+    //         roles: ['admin', 'retailer', 'customer'],
+    //         permission: ['vouchers']
+    //     },
+    //     loadComponent: () => import('../../customer/vouchers/ru-gaming-vouchers/ru-gaming-vouchers.component').then(m => m.RuGamingVouchersComponent)
+    // },
+    // {
+    //     path: 'ru-subscriptions',
+    //     data: {
+    //         title: 'Vouchers',
+    //         roles: ['admin', 'retailer', 'customer'],
+    //         permission: ['vouchers']
+    //     },
+    //     loadComponent: () => import('../../customer/vouchers/ru-subscriptions/ru-subscriptions.component').then(m => m.RuSubscriptionsComponent)
+    // },
     {
         path: 'gift-card',
         data: {

@@ -6,14 +6,11 @@
             <div class="col-md-3">
                 <p *ngIf="role!= 'admin'" class="fs-16 fw-medium">Add Fund Balance Transactions</p>
             </div>
-            <div class="col-md-9">
-                <button type="button" class="btn btn-primary float-end btn-rounded">Filters</button>
-
-            </div>
+            
         </div>
     </div>
     <div class="card-body">
-        <div class="row my-4">
+        <div class="row ">
             <div class="d-flex justify-content-between align-items-center gap-2">
                 <div class="d-flex align-items-center justify-content-center">
                     <label for="page" class="me-2">Show</label>
@@ -25,12 +22,25 @@
                     </select>
                     <label for="page" class="ms-2">entries</label>
                 </div>
-                <button type="button" class="btn btn-success float-end btn-rounded" (click)="export_to_excel()">
-                    Export
-                </button>
+                <div class="col-md-auto ms-auto">
+                    <div class="d-flex gap-2">
+                        <div class="search-box">
+                            <input type="text" class="form-control rounded-pill search bg-light border-light" placeholder="Search..." #search
+                          (keyup)="onSearch(search.value)" />
+                        <i class="ri-search-line search-icon"></i>
+                        </div>
+                        <button class="btn btn-success btn-rounded" (click)="export_to_excel()">
+                            Export
+                        </button>
+                        
+                        <button class="btn btn-primary btn-rounded" (click)="onFilterUser(filter_user)" >
+                            Filter
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-        <ngx-simplebar class="table-responsive table-card">
+        <ngx-simplebar class="table-responsive table-card py-3">
             <table class="table align-middle table-nowrap" id="customerTable">
                 <thead>
                 <tr>
@@ -97,4 +107,41 @@
     </div>
 </div>
 
+<ng-template #filter_user let-offcanvas>
+    <div class="offcanvas-header">
+        <p class="fs-18 fw-medium">Filter User By Date</p>
+        <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss()"></button>
+    </div>
+    <div  >
+        <div class="offcanvas-body">
+          <form class="filterUserForm" [formGroup] = "filterUserForm" >
+            
+            
+            <div class="mb-3">
+              <label for="start_date">Start Date <small class="text-muted">(dd-mm-yyyy)</small><span
+                  class="text-danger">*</span></label>
+              <div class="input-group btn-block btn-rounded me-5 w-100">
+                <input type="text" id="start_date" mwlFlatpickr class="form-control rounded-pill" placeholder="dd/MM/yyyy"
+                  formControlName="start_date" />
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="end_date">End Date <small class="text-muted">(dd-mm-yyyy)</small><span
+                  class="text-danger">*</span></label>
+              <div class="input-group btn-block btn-rounded me-5 w-100">
+                <input type="text" id="end_date" mwlFlatpickr class="form-control rounded-pill" placeholder="dd/MM/yyyy"
+                  formControlName="end_date" />
+              </div>
+            </div>
+            <div class="mb-3">
+              <div class="text-end">
+                <button type="button" class="btn btn-primary btn-rounded" (click)="onSubmitFilterUser()">
+                  Filter
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+    </div>
+  </ng-template>
 

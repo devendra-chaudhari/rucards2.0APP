@@ -477,11 +477,11 @@ export const MENU: MenuItem[] = [
         subItems: [
             {
                 label: 'Gaming Vouchers',
-                link: '/ru-gaming-vouchers'
+                link: 'vouchers/gaming-vouchers'
             },
             {
                 label: 'Subscription Vouchers',
-                link: '/ru-subscriptions',
+                link: 'vouchers/subscription-vouchers',
             }
         ]
     },

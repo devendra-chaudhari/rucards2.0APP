@@ -5,12 +5,13 @@ import {ExcelService} from "../../../shared/services/excel.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {ActivatedRoute, RouterModule} from "@angular/router";
 import {CommonModule, DatePipe} from "@angular/common";
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { FlatpickrModule } from 'angularx-flatpickr';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { NgbPagination } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerModule, NgbModule, NgbOffcanvas, NgbPagination } from '@ng-bootstrap/ng-bootstrap';
 import { UiSwitchModule } from 'ngx-ui-switch';
 import { SimplebarAngularModule } from 'simplebar-angular';
+import { random } from 'lodash';
 
 export interface Transactions{
   receiver_profile_id: string;
@@ -49,19 +50,10 @@ export interface Transactions{
   role:string;
 }
 
-
 @Component({
   selector: 'app-wallet-transaction',
   standalone: true,
-  imports: [ReactiveFormsModule,
-    CommonModule,
-    ReactiveFormsModule,
-    FlatpickrModule,
-    SharedModule,
-    NgbPagination,
-    UiSwitchModule,
-    SimplebarAngularModule,
-    RouterModule
+  imports: [SharedModule, CommonModule, NgbModule, RouterModule, FormsModule, ReactiveFormsModule, DatePipe, NgbDatepickerModule,SimplebarAngularModule
 ],
 providers:[DatePipe],
   templateUrl: './wallet-transaction.component.html',
@@ -70,6 +62,7 @@ providers:[DatePipe],
 export class WalletTransactionComponent {
     breadCrumbItems!: Array<{}>;
     transactions: Transactions[] = [];
+    tempTransaction: Transactions[] = [];
     total:number=0;
     page: number = 1;
     pageSize: number = 10;
@@ -77,6 +70,12 @@ export class WalletTransactionComponent {
     const_wallet_id = null;
     role:string=null;
     tempExcelData = [];
+
+
+    filterUserForm = new UntypedFormGroup({
+      start_date: new UntypedFormControl('', [Validators.required]),
+      end_date: new UntypedFormControl('', [Validators.required]),
+    });
   
     constructor(
         private route: ActivatedRoute,
@@ -84,7 +83,8 @@ export class WalletTransactionComponent {
         private toaster: ToastrService,
         private excelService: ExcelService,
         private spinner: NgxSpinnerService,
-        private dt: DatePipe
+        private dt: DatePipe,
+        private offCanvas:NgbOffcanvas,
     ) {
       this.route.queryParams.subscribe(params => {
         this.const_wallet_id = params['wallet_id'];
@@ -97,13 +97,20 @@ export class WalletTransactionComponent {
         {label: 'Manage Balance'},
         {label: 'My Fund Request', active: true}
       ];
-      this.getTransactions();
+      this.getTransactions(this.page,this.pageSize);
     }
   
-    getTransactions(){
+    getTransactions(page:number, page_size:number, start_date:Date=null, end_date:Date=null){
+      const data ={
+        'page_no': page, 
+        'page_size': page_size, 
+        'start_date': start_date,
+        'end_date': end_date
+    }
       this.apiService.post('transaction/distributor_pool_transaction',{'wallet_id':this.const_wallet_id,'page_size':this.pageSize,'page_no':this.page}).subscribe({
         next: (res) => {
           this.transactions = res.data.result;
+          this.tempTransaction = res.data.result;
           this.total=res.data.total;
           this.totalRecords=res.data.total;
           this.role= res.data.role;
@@ -115,79 +122,43 @@ export class WalletTransactionComponent {
       return Math.min(this.page * this.pageSize, this.totalRecords);
     }
   
+ 
+    onSearch(searchText: string): void {
+      const searchTextLower = searchText.toLowerCase();
+      const filteredMiscs = this.tempTransaction.filter(x => x.fund_transaction_id.toLowerCase().includes(searchTextLower) || x.receiver_profile_id.toLowerCase().includes(searchTextLower));
+    
+      if (searchTextLower == '') {
+        this.transactions = this.tempTransaction;
+      } else
+        this.transactions = filteredMiscs;
+    }
+
+
     export_to_excel() {
-      this.excelFields();
-      const sortByField = null;
-      const excludeFields = [];
-      const columnOrder = [
-        'serial_no',
-          // 'activated_on':this.dt.transform(this.giftCardList[i].activated_on, 'dd/MM/yyyy H:m:s'),
-          'receiver_profile_id',
-          'receiver_name',
-          // 'name':this.transactions[i].name,
-          // // 'expiry_date':this.giftCardList[i].expiry_date,
-          // 'mobile':this.transactions[i].mobile,
-          // 'email':this.transactions[i].email,
-          'user_id',
-          'request_date',
-          'payment_mode',
-          'amount',
-          'old_balance',
-          'current_balance',
-          'transaction_type',
-          'ref_no',
-          'wallet_name',
-          'wallet_id',
-          'remark',
-          'receiver_id',
-          'response_at',
-          // 'receipt':this.transactions[i].receipt,
-          'status'
-      ]
-      this.excelService.exportAsExcelFile(this.tempExcelData, 'walletList', sortByField, excludeFields, columnOrder);
+        this.spinner.show();
+        this.excelService.exportAsExcelFile(this.transactions, 'Fund-request-' + random() * 56413216544 + '.xlsx', 'request_date', ['receipt', 'user_id', 'receiver_id'], ['fund_transaction_id', 'transaction_type', 'created_at', 'current_balance', 'ref_no', 'receiver_profile_id']);
+        this.spinner.hide();
     }
-  
-    private excelFields() {
-      let tempExcelData: any[] = [];
-      for (let i = 0; i < this.transactions.length; i++) {
-        const row = {
-          'serial_no': i + 1,
-          // 'activated_on':this.dt.transform(this.giftCardList[i].activated_on, 'dd/MM/yyyy H:m:s'),
-          'receiver_profile_id':this.transactions[i].receiver_profile_id,
-          'receiver_name':this.transactions[i].receiver_name,
-          // 'name':this.transactions[i].name,
-          // 'expiry_date':this.giftCardList[i].expiry_date,
-          // 'mobile':this.transactions[i].mobile,
-          // 'email':this.transactions[i].email,
-          // 'user_id':this.transactions[i].user_id,
-          'request_date' :this.transactions[i].request_date,
-          // 'payment_mode' :this.transactions[i].payment_mode,
-          'amount' :this.transactions[i].amount,
-          'opening_balance' :this.transactions[i].old_balance,
-          'closing_balance' :this.transactions[i].balance,
-          'transaction_type':this.transactions[i].receipt,
-          'ref_no':this.transactions[i].ref_no,
-          'wallet_name':this.transactions[i].wallet_name,
-          'wallet_id':this.transactions[i].wallet_id,
-          'remark':this.transactions[i].remark,
-          'receiver_id':this.transactions[i].receiver_id,
-          'response_at':this.dt.transform(this.transactions[i].response_at, 'dd/MM/yyyy H:m:s'),
-          // 'receipt':this.transactions[i].receipt,
-          'status':this.transactions[i].status
-        }
-        tempExcelData.push(row);
-      }
-      this.tempExcelData = tempExcelData;
-    }
-  
+
     onChange() {
-      this.getTransactions();
+      this.getTransactions(this.page,this.pageSize);
     }
   
     onPageChange(event: any){
       this.page = event
-      this.getTransactions()
+      this.getTransactions(this.page,this.pageSize)
+    }
+    onSubmitFilterUser(){
+      const {start_date, end_date} = this.filterUserForm.value
+      console.log(start_date, end_date)
+      this.getTransactions(this.page,this.pageSize, start_date, end_date);
+      this.offCanvas.dismiss();
+    }
+    
+    onFilterUser(filter_user: any) {
+      this.offCanvas.open(filter_user, {position: 'end', animation: true});
     }
   
-  }
+}
+
   
